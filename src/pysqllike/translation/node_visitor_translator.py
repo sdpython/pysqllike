@@ -11,11 +11,14 @@ class CodeNodeVisitor(ast.NodeVisitor):
     Defines a visitor which walks though the syntax tree of the code.
     
     @example(get the tree of a simple function)
+    
+    The following code uses Python syntax but follows a SQL logic.
+    
     @code
     def myjob(input):
         iter = input.select (input.age, input.nom, age2 = input.age2*input.age2)
         wher = iter.where( (iter.age > 60).Or(iter.age < 25))
-        return where    
+        return wher
     
     code = inspect.getsource(myjob)
     node = ast.parse(code)
@@ -25,7 +28,7 @@ class CodeNodeVisitor(ast.NodeVisitor):
         print("{0}{1}: {2}".format("    " * r["indent"], r["type"], r["str"]))
     @endcode
     
-    The previous will produce the following:
+    The previous will produce the following output.
     
     @code
     Module: 
@@ -54,7 +57,7 @@ class CodeNodeVisitor(ast.NodeVisitor):
                             Lt: 
                             Num: 25
             Return: 
-                Name: where
+                Name: wher
     @endcode
     @endexample
     
