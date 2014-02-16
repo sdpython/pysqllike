@@ -1,6 +1,6 @@
 """     
 @file
-@brief This file was inspired by the following one `transbits.py <https://github.com/chrishumphreys/p2j/blob/master/translator/>`_
+@brief One class which visits a syntax tree.
 """
 
 import ast
