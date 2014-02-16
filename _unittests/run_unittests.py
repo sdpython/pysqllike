@@ -9,9 +9,8 @@ import unittest, os, sys, io
 try :
     import pyquickhelper
 except ImportError :
-    path = os.path.abspath(os.path.join(os.path.split(__file__)[0], "..", ".." ))
+    path = os.path.abspath(os.path.join(os.path.split(__file__)[0], "..", "..", "pyquickhelper", "src" ))
     sys.path.append(path)
-    import fixpath
     import pyquickhelper
     
 

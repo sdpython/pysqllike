@@ -6,12 +6,12 @@
 #
 
 import sys, os, datetime
-import sphinx_bootstrap_theme
+import cloud_sptheme as csp
 
 
 project_var_name = "pysqllike"
 author           = "Xavier Dupré"
-version          = '0.2'
+version          = '0.1'
 
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
@@ -34,6 +34,7 @@ extensions = [  'sphinx.ext.autodoc',
                 'sphinx.ext.ifconfig', 
                 'sphinx.ext.viewcode',
                 'sphinxcontrib.fancybox',
+                'cloud_sptheme',
                 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -110,8 +111,8 @@ modindex_common_prefix = [
 # a list of builtin themes.
 #html_theme = 'default'
 #html_theme = 'agogo' # 'sphinxdoc'
-html_theme = 'bootstrap'
-html_theme_path = sphinx_bootstrap_theme.get_html_theme_path()
+html_theme = 'cloud'
+html_theme_path = [csp.get_theme_dir()]
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the

@@ -11,6 +11,7 @@ class CodeNodeVisitor(ast.NodeVisitor):
     Defines a visitor which walks though the syntax tree of the code.
     
     @example(get the tree of a simple function)
+    @code
     def myjob(input):
         iter = input.select (input.age, input.nom, age2 = input.age2*input.age2)
         wher = iter.where( (iter.age > 60).Or(iter.age < 25))

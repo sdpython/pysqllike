@@ -15,11 +15,43 @@ README
 Description
 -----------
 
+Writing a map/reduce job
+(using `PIG <https://pig.apache.org/>`_ for example),
+usually requires to switch from local files to remote files
+(on `Hadoop <http://hadoop.apache.org/>`_). 
+On way to work is extract a small sample of the data which will be processed
+by a map/reduce job. The job is then locally developped. And when it works,
+it is run on a parallized environment.
 
+The goal of this extension is allow the implementation of 
+this job using Python syntax as follows:
+
+
+::
+
+    def myjob(input):
+        iter = input.select (input.age, input.nom, age2 = input.age2*input.age2)
+        wher = iter.where( (iter.age > 60).Or(iter.age < 25))
+        return where 
+        
+    input = IterRow (None, [ {"nom": 10}, {"jean": 40} ] )
+    output = myjob(input)
+    
+When the job is ready, it can be translated into a `PIG <https://pig.apache.org/>`_
+job::
+
+    input = LOAD '...' USING PigStorage('\t') AS (nom, age);
+    iter = FOREACH input GENERATE age, nom, age*age AS age2 ;
+    wher = FILTER iter BY age > 60 or age < 25 ;
+    STORE wher INTO '...' USING PigStorage();
+
+It should also be translated into 
+`SQL <http://fr.wikipedia.org/wiki/Structured_Query_Language>`_.
 
 Functionalities
 ---------------
 
+* not yet ready
 
 
 Design

@@ -29,6 +29,7 @@ class IterRow(object):
         l = [ {"nom": 10}, {"jean": 40} ]
         tbl = IterRow (None, l)
         @endcode
+        @endexample
         
         @example(IterRow with a schema)
         @code
@@ -36,6 +37,7 @@ class IterRow(object):
         schema = [ ("nom", str), ("age", int) ]
         tbl = IterRow (schema, l)
         @endcode
+        @endexample
         """
         if schema == None :
             if len(anyset) == 0:
@@ -123,7 +125,7 @@ class IterRow(object):
 
     def print_schema(self):
         """
-        calls @see meth print_parent on each column
+        calls @see me print_parent on each column
         """
         rows = [ "number of columns={0}".format(len(self._schema))]
         for i,sch in enumerate(self._schema):
@@ -140,6 +142,7 @@ class IterRow(object):
         tbl = IterRow( ... )
         it  = tbl.select ( tbl.name, tbl.age * 2, old = tbl.age )
         @endcode
+        @endexample
 
         @example(chained select)
         @code
@@ -148,6 +151,7 @@ class IterRow(object):
         iter2 = iter.select(iter.nom, age4=iter.age2*iter.age3)
         l = list ( iter2 )
         @endcode
+        @endexample
         
         @param      nochange    list of fields to keep
         @param      changed     list of custom fields
@@ -207,6 +211,7 @@ class IterRow(object):
         iter = tbl.where(tbl.age == 40)
         res = list(iter)
         @endcode
+        @endexample
         
         @warning For operator ``or``, ``and``, ``not``, the syntax is different because they cannot be overriden in Python.
         
@@ -216,6 +221,7 @@ class IterRow(object):
         iter = tbl.where( ( tbl.age == 2).Or( tbl.age == 40))
         iter2 = tbl.where((tbl.age == 10).Not())
         @endcode
+        @endexample
         """
         if not isinstance(condition,ColumnType):
             raise TypeError("condition should a ColumnType: {0}".format(str(condition)))
