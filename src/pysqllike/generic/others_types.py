@@ -25,3 +25,4 @@ class NA :
     def __add__(self, y) : return NA()
     def __sub__(self, y) : return NA()
     def __div__(self, y) : return NA()
+

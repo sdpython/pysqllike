@@ -10,6 +10,10 @@ from .others_types import long, NA
 from .column_operator import OperatorId, OperatorMul, ColumnOperator, OperatorAdd, OperatorDiv, OperatorPow, OperatorSub, OperatorDivN, OperatorMod
 from .column_operator import OperatorEq, OperatorNe, OperatorGe, OperatorLe, OperatorGt, OperatorLt
 from .column_operator import OperatorNot, OperatorOr, OperatorAnd
+from .column_operator import OperatorFunc
+
+def private_function_type():
+    pass
 
 class ColumnType :
     """
@@ -88,8 +92,8 @@ class ColumnType :
         for p in parent :
             p.IsColumnType()
 
-        if typ not in [int,float,long,str,None,NA] :
-            raise IterException("type should in [int,float,str,long,function]")
+        if typ not in [int,float,long,str,None,NA,type(private_function_type)] :
+            raise IterException("type should in [int,float,str,long,function]: " + str(typ))
         
         if isfunction(func):
             self._func = func
@@ -122,7 +126,7 @@ class ColumnType :
                 else :
                     res = self._value
             elif self._op is None :
-                raise ValueError("there parents but no operator for column {0}\nParents:\n{1}".format(str(self), self.print_parent()))
+                raise ValueError("there are parents but no operator for column {0}\nParents:\n{1}".format(str(self), self.print_parent()))
             else :
                 try :
                     res = self._op( self._parent )
@@ -448,7 +452,6 @@ class ColumnType :
             return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorAnd())
         else:
             return self.__and__( ColumnConstantType(column) )
-            
 
 
 class ColumnConstantType(ColumnType):
@@ -506,7 +509,7 @@ class ColumnConstantType(ColumnType):
 
 class ColumnTableType(ColumnType):
     """
-    defines a constant as a column
+    defines a table column (not coming from an expression)
     """
     def __init__(self, name, typ, owner):
         """
@@ -549,3 +552,46 @@ class ColumnTableType(ColumnType):
         usual
         """
         return "col({0},{1})".format(self._name, ColumnType._str_type[self._type])
+        
+class CFT(ColumnType):
+    """
+    defines a function
+    """
+    def __init__(self, func, *l):
+        """
+        constructor (a function cannot accept keywords)
+
+        @param      func        contained function
+        @param      l           list of ColumnType
+        """
+        self._name = None
+        self._func = None
+        self._parent = None
+        self._op = OperatorFunc(func)
+        self._type = type(private_function_type)
+        self._owner = None
+        self._thisfunc = func
+        self._parent = tuple(l)
+        
+        for _ in l:
+            if not isinstance(_,ColumnType): 
+                raise TypeError("expecting a column type, not " + str(type(_)))
+
+    @property
+    def ShortName(self):
+        """
+        a short name (tells the column type)
+        """
+        return "func"
+
+    def set_none(self):
+        """
+        after a loop on a database, we should put None back as a value
+        """
+        self._value = None
+
+    def __str__(self):
+        """
+        usual
+        """
+        return "func({0},{1})".format(self._name, ColumnType._str_type[self._type])

@@ -364,6 +364,30 @@ class OperatorNot(ColumnOperator):
         for c in columns: c.IsColumnType()
         return not (columns[0]())
 
+class OperatorFunc(ColumnOperator):
+    """
+    defines a function call
+    """
+    def __init__ (self, func):
+        """
+        constructor
+        """
+        self._func = func
+    
+    def __str__(self):
+        """
+        usual
+        """
+        return "func"
+
+    def __call__(self, columns):
+        """
+        returns the results of this operation between a list of columns
+        """
+        if not isinstance(columns,tuple): raise TypeError("we expect a tuple here")
+        for c in columns: c.IsColumnType()
+        return self._func(* [ c() for c in columns ] )
+
 
 
 

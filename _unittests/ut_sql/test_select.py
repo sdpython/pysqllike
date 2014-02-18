@@ -15,9 +15,8 @@ except ImportError :
 try :
     import pyquickhelper
 except ImportError :
-    path = os.path.abspath(os.path.join(os.path.split(__file__)[0], "..", "..", ".."))
+    path = os.path.abspath(os.path.join(os.path.split(__file__)[0], "..", "..", "..", "pyquickhelper","src"))
     sys.path.append(path)
-    import fixpath
     import pyquickhelper
     
 
@@ -41,7 +40,6 @@ class TestSelect (unittest.TestCase):
         assert len(l) == 2
         if l != [('nom', 10), ('jean', 40)]:
             raise ValueError(str(l))
-
 
     def test_iter_simple_dict(self) :
         fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")

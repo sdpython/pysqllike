@@ -159,6 +159,16 @@ class IterRow(object):
         @return                 IterRow
 
         @warning The function does not guarantee the order of the output columns.
+        
+        @example(example with a function)
+        @code
+        def myf(x,y) : 
+            return x*2.5 + y
+        tbl = IterRow ( ... )
+        iter = tbl.select(tbl.nom, age0= CFT(myf, tbl.age, tbl.age) )
+        res = list(iter)
+        @endcode
+        @endexample
         """
         newschema = list(nochange) + [ (k,None) for k in changed.keys() ]
         
