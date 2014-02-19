@@ -15,15 +15,17 @@ except ImportError :
 try :
     import pyquickhelper
 except ImportError :
-    path = os.path.abspath(os.path.join(os.path.split(__file__)[0], "..", "..", ".."))
+    path = os.path.abspath(os.path.join(os.path.split(__file__)[0], "..", "..", "..", "pyquickhelper", "src"))
     sys.path.append(path)
-    import fixpath
     import pyquickhelper
     
 
 from pyquickhelper import fLOG
 from src.pysqllike.generic.iter_rows import IterRow, IterException
 from src.pysqllike.translation.node_visitor_translator import CodeNodeVisitor
+from src.pysqllike.translation.translation_class import TranslateClass
+from src.pysqllike.translation.translation_to_python import Translate2Python
+from src.pysqllike.translation.code_exception import CodeException
 
 
 def myjob(input):
@@ -55,9 +57,30 @@ class TestCode (unittest.TestCase):
         node = ast.parse(code)
         v = CodeNodeVisitor()
         v.visit(node)        
-        for r in v.Rows :
-            fLOG("{0}{1}: {2}".format("    " * r["indent"], r["type"], r["str"]))
         assert len(v.Rows)==27
+        
+    def test_translate_class(self):
+        fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
+        trans = TranslateClass(myjob)
+        #fLOG(trans)
+        s = str(trans)
+        assert len(s)>0
+        assert "input.age2" in s
+
+    def test_translate_class_code(self):
+        fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
+        trans = TranslateClass(myjob)
+        try :
+            code = trans.Code()
+            assert False
+        except CodeException as e :
+            assert "not implemented" in str(e)
+        
+    def test_translate_2_python(self):
+        fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
+        trans = Translate2Python(myjob)
+        code = trans.Code()
+        assert "def myjob(input)" in code
 
 
 if __name__ == "__main__"  :
