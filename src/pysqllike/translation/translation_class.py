@@ -96,7 +96,7 @@ class TranslateClass :
         @param  field       field to add to the message exception
         @param  code_rows   list of rows to display
         
-        @exception  CodeException
+        :raises: CodeException
         """
         raise CodeException(message + "\n---tree:\n" + \
                         self.to_str(["processed"]) + "\n\n---so far:\n" + \
