@@ -98,9 +98,19 @@ class TranslateClass :
         
         :raises: CodeException
         """
-        raise CodeException(message + "\n---tree:\n" + \
-                        self.to_str(["processed"]) + "\n\n---so far:\n" + \
-                        "\n".join(code_rows))
+        if len(code_rows) > 0 :
+            if "_status" in self.__dict__ and len(self._status)> 0 :
+                code_rows = code_rows + [ "", "-- STATUS --", ""] + self._status
+            raise CodeException(message + "\n---tree:\n" + \
+                            self.to_str(["processed"]) + "\n\n---so far:\n" + \
+                            "\n".join(code_rows))
+        elif "_status" in self.__dict__ :
+            raise CodeException(message + "\n---tree:\n" + \
+                            self.to_str(["processed"]) + "\n\n-- STATUS --\n" + \
+                            "\n".join(self._status))
+        else :
+            raise CodeException(message + "\n---tree:\n" + \
+                            self.to_str(["processed"]))
                                 
     def interpretFunction(self, obj):
         """
@@ -132,6 +142,7 @@ class TranslateClass :
         if sign is not  None and len(sign) > 0 : code_rows.extend(sign)
         
         # the rest
+        self._status = code_rows  # for debugging purpose
         assi = [ _ for _ in chil if _["type"] == "Assign" ]
         for an in assi :
             one = self.Intruction(an)
@@ -167,35 +178,57 @@ class TranslateClass :
         name["processed"] = True
         
         call = call[0]
-        call["prcessed"] = True
+        call["processed"] = True
         
         varn = name["str"]
         kind = call["str"]
+        
+        # the first attribute gives the name the table
+        method = call["children"][0]
+        method["processed"] = True
+        table,meth = method["str"].split(".")
+        if meth != kind :
+            self.RaiseCodeException("cannot go further, expects: {0}=={1}".format(kind,meth)) 
+        
         if kind == "select":
-            return self.Select(varn, call["children"])
+            top = call["children"][1:]
+            return self.Select(varn, table, top)
         elif kind == "where":
-            return self.Where(varn, call["children"])
+            top = call["children"][1:]
+            return self.Where(varn, table, top)
         else:
             self.RaiseCodeException("not implemented for: " + kind) 
         
-    def Select(self, name, rows):
+    def Select(self, name, table, rows):
         """
         interpret a select statement
         
-        @param      name        name of the table to consider
+        @param      name        name of the table which receives the results
+        @param      table       name of the table it applies to
         @param      rows        rows to consider
         @return                 list of strings (code)
         """
         self.RaiseCodeException("not implemented")
         
-    def Where(self, name, rows):
+    def Where(self, name, table, rows):
         """
         interpret a select statement
         
-        @param      name        name of the table to consider
+        @param      name        name of the table which receives the results
+        @param      table       name of the table it applies to
         @param      rows        rows to consider
         @return                 list of strings (code)
         """
         self.RaiseCodeException("not implemented")
+
+    def ResolveExpression(self, node):
+        """
+        produces an expression based on a node and its children
+        
+        @param      node        node
+        @return                 a string, and the used fields
+        """
+        #return "exp", []
+        self.RaiseCodeException("not implemented (expression)")
         
 

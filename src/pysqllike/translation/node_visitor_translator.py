@@ -101,7 +101,20 @@ class CodeNodeVisitor(ast.NodeVisitor):
         visitor = getattr(self, method, None)
         if visitor == None :
             raise TypeError("unable to find a method: " + method)
-        return visitor(node)        
+        res = visitor(node)        
+        #print(method, CodeNodeVisitor.print_node(node))
+        return res
+        
+    @staticmethod
+    def print_node(node):
+        """
+        debugging purpose
+        """
+        r = [ ]
+        for att in ["s", "name", "str", "id", "body", "n", "arg", "targets", "attr", "returns", "ctx"]:
+            if att in node.__dict__ :
+                r.append( "{0}={1}".format(att, str(node.__dict__[att])))
+        return " ".join(r)
         
     @property
     def Rows(self):

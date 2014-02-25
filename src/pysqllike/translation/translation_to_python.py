@@ -29,26 +29,58 @@ class Translate2Python(TranslateClass) :
         code_rows = [ "def {0}({1}):".format (name, ", ".join(args)) ]
         return code_rows
         
-    def Select(self, name, rows):
+    def Select(self, name, table, rows):
         """
         interpret a select statement
         
-        @param      name        name of the table to consider
+        @param      name        name of the table which receives the results
+        @param      table       name of the table it applies to
         @param      rows        rows to consider
         @return                 list of strings (code)
         """
-        #self.RaiseCodeException("not implemented")
-        pass
+        code_rows = [ ]
+        code_rows.append("{0} = [ ]".format(name))
+        code_rows.append("for row in {0}:".format(table))
+
+        done = { }
+        code_exp = []
+        code_exp.append("    newr = {")
+        for r in rows :
+            if r["type"] == "Attribute" :
+                tbl,att = r["str"].split(".")
+                if tbl != table :
+                    self.RaiseCodeException("an attribute comes from an unexpected table {0}!={1}".format(table,tbl))
+                if att not in done :
+                    code_rows.append("    _{0}=row['{0}']".format(att))
+                    done[att] = att
+                code_exp.append("      '{0}':_{0},".format(att))
+            elif r["type"] == "keyword" :
+                # it has to be an expression
+                att = r["str"]
+                exp, fields = self.ResolveExpression( r )
+                for att in fields:
+                    if att not in done :
+                        code_rows.append("    _{0}=row['{0}']".format(att))
+                        done[att] = att
+                code_exp.append("      '{0}':{1},".format(att, exp))
+            else :
+                self.RaiseCodeException("type expected {0}".format(r["type"]))
+            r["processed"] = True
+                
+        code_rows.extend(code_exp)
+        code_rows.append("      }")
+        code_rows.append("    {0}.append(newr)".format(name))
+        return [ "    " + _ for _ in code_rows ]
         
-    def Where(self, name, rows):
+    def Where(self, name, table, rows):
         """
         interpret a select statement
         
-        @param      name        name of the table to consider
+        @param      name        name of the table which receives the results
+        @param      table       name of the table it applies to
         @param      rows        rows to consider
         @return                 list of strings (code)
         """
-        #self.RaiseCodeException("not implemented")
-        pass
+        self.RaiseCodeException("not implemented where")
         
 
