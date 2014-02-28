@@ -220,6 +220,9 @@ class TranslateClass :
         @return                 list of strings (code)
         """
         self.RaiseCodeException("not implemented")
+        
+    _symbols = {  "Lt":"<", "Gt":">", "Mult":"*", }
+                    
 
     def ResolveExpression(self, node):
         """
@@ -228,7 +231,36 @@ class TranslateClass :
         @param      node        node
         @return                 a string, and the used fields
         """
-        #return "exp", []
-        self.RaiseCodeException("not implemented (expression)")
+        if node["type"] == "keyword":
+            chil = node["children"]
+            if len(chil) == 1 :
+                node["processed"] = True
+                return self.ResolveExpression(chil[0])
+            else :
+                self.RaiseCodeException("not implemented for type: " + node["type"])
+        elif node["type"] == "BinOp":
+            chil = node["children"]
+            if len(chil) == 3 :
+                node["processed"] = True
+                ex1,fi1 = self.ResolveExpression(chil[0])
+                ex2,fi2 = self.ResolveExpression(chil[1])
+                ex3,fi3 = self.ResolveExpression(chil[2])
+                fi1.update(fi2)
+                fi1.update(fi3)
+                ex = "{0}{1}{2}".format(ex1,ex2,ex3)
+                return ex,fi1
+            else :
+                self.RaiseCodeException("not implemented for type: " + node["type"])
+        elif node["type"] in TranslateClass._symbols:
+            node["processed"] = True
+            return TranslateClass._symbols[node["type"]], { }
+        elif node["type"] == "Attribute":
+            node["processed"] = True
+            return node["str"], { node["str"]: node }
+        elif node["type"] == "Num":
+            node["processed"] = True
+            return node["str"], { }
+        else: 
+            self.RaiseCodeException("not implemented for type: " + node["type"])
         
 

@@ -121,7 +121,7 @@ class CodeNodeVisitor(ast.NodeVisitor):
         """
         returns a list of dictionaries with all the elements of the code
         """
-        return self._rows
+        return [ _ for _ in self._rows if not _.get("remove",False) ]
         
     def visit_Str(self, node):
         cont = { "indent":self._indent, "type": "Str", "str":node.s, "node":node, "value":node.s } 
@@ -182,14 +182,12 @@ class CodeNodeVisitor(ast.NodeVisitor):
         last = len(self._rows)
         res = self.generic_visit(node, cont)
         
-        cont["belongs"] = self._rows[last:]
-        del self._rows[last:]
-        
-        names = [ r for r in cont["belongs"] if r["type"] in ("Name", "Attribute") ]
-        names = [ (r["node"].id if r["type"]=="Name" else r["node"].attr) for r in names ]
-        names.reverse()
-        cont["str"] = "{0}.{1}".format(".".join(names), cont["str"])
-        
+        if len(cont["children"]) > 0 :
+            fir = cont["children"][0]
+            if fir["type"] == "Name":
+                parent = fir["node"].id
+                cont["str"] = "{0}.{1}".format(parent, cont["str"])
+                cont["children"][0]["remove"] = True
         return res
 
     def visit_Load(self, node):

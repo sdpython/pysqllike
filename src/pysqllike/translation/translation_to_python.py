@@ -56,13 +56,20 @@ class Translate2Python(TranslateClass) :
                 code_exp.append("      '{0}':_{0},".format(att))
             elif r["type"] == "keyword" :
                 # it has to be an expression
-                att = r["str"]
+                att0 = r["str"]
                 exp, fields = self.ResolveExpression( r )
-                for att in fields:
+                for att_ in fields:
+                    spl = att_.split(".")
+                    if len(spl) != 2 :
+                        self.RaiseCodeException("unexpected field name: " + att)
+                    if spl[0] != table :
+                        self.RaiseCodeException("unexpected table name: " + att)
+                    att = spl[1]
                     if att not in done :
                         code_rows.append("    _{0}=row['{0}']".format(att))
                         done[att] = att
-                code_exp.append("      '{0}':{1},".format(att, exp))
+                    exp = exp.replace(att_,att)
+                code_exp.append("      '{0}':{1},".format(att0, exp))
             else :
                 self.RaiseCodeException("type expected {0}".format(r["type"]))
             r["processed"] = True

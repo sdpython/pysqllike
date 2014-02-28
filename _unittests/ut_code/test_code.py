@@ -29,7 +29,7 @@ from src.pysqllike.translation.code_exception import CodeException
 
 
 def myjob(input):
-    iter = input.select (input.age, input.nom, age2 = input.age2*input.age2)
+    iter = input.select (input.age, input.nom, age2 = input.age*input.age)
     wher = iter.where( (iter.age > 60).Or(iter.age < 25))
     return where
 
@@ -68,7 +68,8 @@ class TestCode (unittest.TestCase):
         assert "60" in trad
         assert "Gt" in trad
         assert len(s)>0
-        assert "input.age2" in s
+        assert "input.age2" not in s
+        assert "input.age" in s
 
     def test_translate_class_code(self):
         fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
