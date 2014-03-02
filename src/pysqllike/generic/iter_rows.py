@@ -110,9 +110,9 @@ class IterRow(object):
         if self._as_dict:
             for _ in self._thisset :
                 if isinstance(_,dict):
-                    yield _
+                    yield { k.Name:_[k.Name]  for k in self._schema }
                 else :
-                    yield { k.Name:v  for k,v in zip(self._schema,_) }
+                    yield { k.Name:v for k,v in zip(self._schema,_) }
         else :
             for _ in self._thisset :
                 if isinstance(_,dict):
@@ -194,16 +194,21 @@ class IterRow(object):
         
         def itervalues():
             for row in self._thisset :
-                for col,r in zip(self._schema, row) :
-                    col.set(r)
+                if isinstance(row,dict):
+                    for col in self._schema :
+                        col.set(row[col.Name])
+                else :
+                    for col,r in zip(self._schema, row) :
+                        col.set(r)
+                        
                 if as_dict :
-                    yield  {_.Name:  _() for _ in schema  }
+                    yield {_.Name:  _() for _ in schema }
                 else :
                     yield tuple([ _() for _ in schema ])
 
         tbl = IterRow(schema, anyset = itervalues(), as_dict = as_dict )
         for c in schema :
-            c.set_owner (self)
+            c.set_owner (tbl)
         return tbl
 
     def where(self, condition, as_dict = True, append_condition = False) :
@@ -242,8 +247,12 @@ class IterRow(object):
 
         def itervalues():
             for row in self._thisset :
-                for col,r in zip(self._schema, row) :
-                    col.set(r)
+                if isinstance(row,dict):
+                    for col in self._schema :
+                        col.set(row[col.Name])
+                else :
+                    for col,r in zip(self._schema, row) :
+                        col.set(r)
                     
                 if condition() :
                     if as_dict :
@@ -253,5 +262,5 @@ class IterRow(object):
 
         tbl = IterRow(schema, anyset = itervalues(), as_dict = as_dict )
         for c in schema :
-            c.set_owner (self)
+            c.set_owner (tbl)
         return tbl

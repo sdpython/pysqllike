@@ -57,7 +57,9 @@ class Translate2Python(TranslateClass) :
             elif r["type"] == "keyword" :
                 # it has to be an expression
                 att0 = r["str"]
-                exp, fields = self.ResolveExpression( r )
+                exp, fields, functions = self.ResolveExpression( r, "_" )
+                if len(functions) > 0 :
+                    self.RaiseCodeException("not implemented yet")
                 for att_ in fields:
                     spl = att_.split(".")
                     if len(spl) != 2 :
@@ -88,6 +90,53 @@ class Translate2Python(TranslateClass) :
         @param      rows        rows to consider
         @return                 list of strings (code)
         """
-        self.RaiseCodeException("not implemented where")
+        """
+        interpret a select statement
+        
+        @param      name        name of the table which receives the results
+        @param      table       name of the table it applies to
+        @param      rows        rows to consider
+        @return                 list of strings (code)
+        """
+        code_rows = [ ]
+        code_rows.append("{0} = [ ]".format(name))
+        code_rows.append("for row in {0}:".format(table))
+
+        done = { }
+        first = True
+        for r in rows :
+            if not first:
+                self.RaiseCodeException("SyntaxError, only one clause where is allowed")
+            att0 = r["str"]
+            exp, fields, functions = self.ResolveExpression( r, "_")
+            for att_ in fields:
+                spl = att_.split(".")
+                if len(spl) != 2 :
+                    self.RaiseCodeException("unexpected field name: " + att)
+                if spl[0] != table :
+                    self.RaiseCodeException("unexpected table name: " + att)
+                att = spl[1]
+                if att not in done :
+                    code_rows.append("    _{0}=row['{0}']".format(att))
+                    done[att] = att
+                exp = exp.replace(att_,att)
+            code_rows.append("    _exp={0}".format(exp))
+            code_rows.append("    if _exp: {0}.append(row)".format(name))
+            r["processed"] = True
+            first = False
+                
+        return [ "    " + _ for _ in code_rows ]
+        
+    def setReturn(self, nodes):
+        """
+        indicates all nodes containing information about returned results
+        
+        @param      node        list of nodes
+        @return                 list of string
+        """
+        for node in nodes :
+            node["processed"] = True
+        names = [ node["str"] for node in nodes ]
+        return [ "    return " + ",".join(names) ]
         
 

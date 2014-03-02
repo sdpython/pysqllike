@@ -43,11 +43,23 @@ class TestSelect (unittest.TestCase):
 
     def test_iter_simple_dict(self) :
         fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
-        l = [ {"nom": 10}, {"jean": 40} ]
-        tbl = IterRow (None, l)
+        l0 = [ {"nom": "jean", "age": 10}, 
+              {"nom":"j", "age":20} ]
+        tbl = IterRow (None, l0)
         l = list (tbl)
         assert len(l) == 2
-        if l !=  [{'nom': 10}, {'jean': 40}]:
+        if l !=  l0 :
+            raise ValueError(str(l))
+
+    def test_iter_simple_dict2(self) :
+        fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
+        l0 = [ {"nom": "jean", "age": 10}, 
+              {"nom":"j", "age":20} ]
+        tbl = IterRow (None, l0)
+        tbl2 = tbl.select(tbl.nom)
+        l = list (tbl2)
+        assert len(l) == 2
+        if l != [{"nom":"jean"}, {"nom":"j"} ] :
             raise ValueError(str(l))
 
     def test_select_simple(self) :

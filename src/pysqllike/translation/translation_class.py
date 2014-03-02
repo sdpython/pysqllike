@@ -144,10 +144,17 @@ class TranslateClass :
         # the rest
         self._status = code_rows  # for debugging purpose
         assi = [ _ for _ in chil if _["type"] == "Assign" ]
-        for an in assi :
-            one = self.Intruction(an)
-            if one is not None and len(one) > 0 : code_rows.extend(one)
-        
+        for an in chil :
+            if an["type"] == "Assign":
+                one = self.Intruction(an)
+                if one is not None and len(one) > 0 : code_rows.extend(one)
+            elif an["type"] == "Return":
+                one = self.interpretReturn(an)
+                if one is not None and len(one) > 0 : code_rows.extend(one)
+            elif an["type"] == "arguments":
+                pass
+            else :
+                self.RaiseCodeException("unexpected type: " + an["type"])
         return code_rows
         
     def Signature(self, name, rows):
@@ -223,44 +230,106 @@ class TranslateClass :
         
     _symbols = {  "Lt":"<", "Gt":">", "Mult":"*", }
                     
-
-    def ResolveExpression(self, node):
+    def ResolveExpression(self, node, prefixAtt):
         """
-        produces an expression based on a node and its children
+        produces an expression based on a a node and its children
         
         @param      node        node
-        @return                 a string, and the used fields
+        @param      prefixAtt   prefix to add before an attribute (usually _)   
+        @return                 a string, the used fields, the called functions
         """
         if node["type"] == "keyword":
             chil = node["children"]
             if len(chil) == 1 :
                 node["processed"] = True
-                return self.ResolveExpression(chil[0])
+                return self.ResolveExpression(chil[0], prefixAtt)
             else :
                 self.RaiseCodeException("not implemented for type: " + node["type"])
-        elif node["type"] == "BinOp":
+                
+        elif node["type"] == "BinOp" or node["type"] == "Compare":
             chil = node["children"]
             if len(chil) == 3 :
                 node["processed"] = True
-                ex1,fi1 = self.ResolveExpression(chil[0])
-                ex2,fi2 = self.ResolveExpression(chil[1])
-                ex3,fi3 = self.ResolveExpression(chil[2])
+                ex1,fi1,fu1 = self.ResolveExpression(chil[0], prefixAtt)
+                ex2,fi2,fu2 = self.ResolveExpression(chil[1], prefixAtt)
+                ex3,fi3,fu3 = self.ResolveExpression(chil[2], prefixAtt)
                 fi1.update(fi2)
                 fi1.update(fi3)
+                fu1.update(fu2)
+                fu1.update(fu3)
                 ex = "{0}{1}{2}".format(ex1,ex2,ex3)
-                return ex,fi1
+                return ex,fi1,fu1
             else :
                 self.RaiseCodeException("not implemented for type: " + node["type"])
+                
         elif node["type"] in TranslateClass._symbols:
             node["processed"] = True
-            return TranslateClass._symbols[node["type"]], { }
+            return TranslateClass._symbols[node["type"]], { }, { }
+            
         elif node["type"] == "Attribute":
             node["processed"] = True
-            return node["str"], { node["str"]: node }
+            return prefixAtt + node["str"], { node["str"]: node }, { }
+            
         elif node["type"] == "Num":
             node["processed"] = True
-            return node["str"], { }
+            return node["str"], { }, { }
+            
+        elif node["type"] == "Call":
+            node["processed"] = True
+            
+            expre = []
+            field = { }
+            funcs = { }
+            
+            if node["str"] in ["Or", "And", "Not"] :
+                for chil in node["children"]:
+                    if chil["type"] == "Attribute" :
+                        if chil["str"] != node["str"]:
+                            self.RaiseCodeException("incoherence")
+                        elif len(chil["children"]) != 1 :
+                            self.RaiseCodeException("incoherence")
+                        else :
+                            chil["processed"]=True
+                            ex,fi,fu = self.ResolveExpression(chil["children"][0], prefixAtt)
+                            expre.append("({0})".format(ex))
+                            field.update(fi)
+                            funcs.update(funcs)
+                            expre.append(node["str"].lower())
+                    else:
+                        ex,fi,fu = self.ResolveExpression(chil, prefixAtt)
+                        expre.append("({0})".format(ex))
+                        field.update(fi)
+                        funcs.update(funcs)
+            else :
+                self.RaiseCodeException("not implemented for function: " + node["str"])
+            return " ".join(expre), field, funcs
+            
         else: 
             self.RaiseCodeException("not implemented for type: " + node["type"])
         
-
+    def interpretReturn(self, obj):
+        """
+        starts the interpretation of a node which sets a return
+        
+        @param      obj     obj to begin with (a function)
+        @return             list of strings
+        """
+        if "children" not in obj : self.RaiseCodeException("children key is missing")
+        allret = [ ]
+        obj["processed"] = True
+        for node in obj["children"] :
+            if node["type"] == "Name" :
+                allret.append(node)
+            else :
+                self.RaiseCodeException("unexpected type: " + node["type"])
+        return self.setReturn(allret)
+                
+    def setReturn(self, nodes):
+        """
+        indicates all nodes containing information about returned results
+        
+        @param      node        list of nodes
+        @return                 list of string
+        """
+        self.RaiseCodeException("not implemented")
+        

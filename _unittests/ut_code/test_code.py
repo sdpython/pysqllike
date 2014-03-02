@@ -31,11 +31,11 @@ from src.pysqllike.translation.code_exception import CodeException
 def myjob(input):
     iter = input.select (input.age, input.nom, age2 = input.age*input.age)
     wher = iter.where( (iter.age > 60).Or(iter.age < 25))
-    return where
+    return wher
 
 class TestCode (unittest.TestCase):
     
-    def _test_tree_job(self) :
+    def test_tree_job(self) :
         fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
         code = inspect.getsource(myjob)
         node = ast.parse(code)

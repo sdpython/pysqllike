@@ -21,7 +21,7 @@ class ColumnType :
     """
     
     _default_name = "__unk__"
-    _str_type = { int:'int', long:'long', NA:'NA', float:'float', str:'str' }
+    _str_type = { int:'int', long:'long', NA:'NA', float:'float', str:'str', type(private_function_type):'func' }
 
     def IsColumnType(self):
         """
