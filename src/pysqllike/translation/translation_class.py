@@ -300,6 +300,29 @@ class TranslateClass :
                         expre.append("({0})".format(ex))
                         field.update(fi)
                         funcs.update(funcs)
+                        
+            elif node["str"] == "CFT" :
+                # we need to look further as CFT is a way to call a function
+                funcName = None
+                subexp = [ ]
+                atts = [ ]
+                for chil in node["children"]:
+                    if chil["type"] == "Attribute" :
+                        chil["processed"]=True
+                        ex,fi,fu = self.ResolveExpression(chil, prefixAtt)
+                        subexp.append(ex)
+                        field.update(fi)
+                        funcs.update(funcs)
+                    elif chil["type"] == "Name" and chil["str"] == "CFT":
+                        pass
+                    elif chil["type"] == "Name":
+                        # we call function chil["str"]
+                        funcName = chil["str"]
+                        funcs [ chil["str"] ] = chil["str"]
+                    else :
+                        self.RaiseCodeException("unexpected configuration: " + node["type"])
+                    chil["processed"] = True
+                expre.append( "{0}({1})".format(funcName, ",".join(subexp)))
             else :
                 self.RaiseCodeException("not implemented for function: " + node["str"])
             return " ".join(expre), field, funcs

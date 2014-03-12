@@ -58,8 +58,12 @@ class Translate2Python(TranslateClass) :
                 # it has to be an expression
                 att0 = r["str"]
                 exp, fields, functions = self.ResolveExpression( r, "_" )
+                
                 if len(functions) > 0 :
-                    self.RaiseCodeException("not implemented yet")
+                    # we do nothing here, we assume the function is known
+                    # when it will be called
+                    pass
+                    
                 for att_ in fields:
                     spl = att_.split(".")
                     if len(spl) != 2 :

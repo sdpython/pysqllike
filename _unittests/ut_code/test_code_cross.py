@@ -26,12 +26,20 @@ from src.pysqllike.translation.node_visitor_translator import CodeNodeVisitor
 from src.pysqllike.translation.translation_class import TranslateClass
 from src.pysqllike.translation.translation_to_python import Translate2Python
 from src.pysqllike.translation.code_exception import CodeException
+from src.pysqllike.generic.column_type import CFT
 
 
 def myjob1(input):
     iter = input.select(input.ext, input.num, num2 = input.num*input.num)
     wher = iter.where( (iter.num2 < 8).And(iter.num2 > 1))
     return wher
+    
+def cube(x) : return x*x*x
+    
+def myjob2(input):
+    iter = input.select(input.ext, input.num, num2 = input.num*input.num)
+    sele = iter.select(iter.ext, iter.num, iter.num2, num3 = CFT(cube, iter.num))
+    return sele
     
 data1 = [ {"ext":"pysqllike", "num":3 },
           {"ext":"pyquickhelper", "num":1 },
@@ -44,7 +52,7 @@ class TestCodeCross (unittest.TestCase):
     def test_translation(self):
         fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
         data = [ data1 ]
-        functions = [ myjob1 ]
+        functions = [ myjob1, myjob2 ]
         translate = [ Translate2Python ]
         
         nb = 0
@@ -58,13 +66,22 @@ class TestCodeCross (unittest.TestCase):
             for tr in translate :
                 obj = tr(f)
                 code = obj.Code()
-                co = exec(code)
                 
+                if i == len(functions)-1 :
+                    fLOG("\n"+code)
+                
+                try:
+                    co = exec(code)
+                except Exception as e :
+                    raise Exception("unable to compile code\n" + code) from e
+                    
                 try :
                     exe = eval("%s(it)" % fname)
                 except Exception as e :
-                    raise Exception("\n" + code) from e
+                    raise Exception("unable to execute\n" + code) from e
                     
+                if i == len(functions)-1 :
+                    fLOG("\nEXE:\n",exe, "\nEXP:\n", exp)
                 assert exe == exp
                 
                 nb += 1

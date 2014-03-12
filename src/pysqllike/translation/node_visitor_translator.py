@@ -116,6 +116,16 @@ class CodeNodeVisitor(ast.NodeVisitor):
                 r.append( "{0}={1}".format(att, str(node.__dict__[att])))
         return " ".join(r)
         
+    def print_tree(self):
+        """
+        display the tree of instruction
+        @return     string
+        """
+        rows = [ ]
+        for r in self.Rows :
+            rows.append( ("{0}{1}: {2}".format("    " * r["indent"], r["type"], r["str"])) )
+        return "\n".join(rows)
+        
     @property
     def Rows(self):
         """
@@ -170,8 +180,12 @@ class CodeNodeVisitor(ast.NodeVisitor):
         return self.generic_visit(node, cont)
 
     def visit_Call(self, node):
-        cont = { "indent":self._indent, "type": "Call", "str": node.func.attr , 
-                    "node":node, "func":node.func } 
+        if "attr" in node.func.__dict__ :
+            cont = { "indent":self._indent, "type": "Call", "str": node.func.attr , 
+                        "node":node, "func":node.func } 
+        else :
+            cont = { "indent":self._indent, "type": "Call", "str": node.func.id , 
+                        "node":node, "func":node.func } 
         self.push(cont)
         return self.generic_visit(node, cont)
 
