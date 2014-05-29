@@ -1,0 +1,48 @@
+"""
+@brief      test log(time=1s)
+"""
+
+import sys, os, unittest, operator
+
+try :
+    import src
+except ImportError :
+    path = os.path.normpath(os.path.abspath( os.path.join( os.path.split(__file__)[0], "..", "..")))
+    if path not in sys.path : sys.path.append (path)
+    import src
+    
+try :
+    import pyquickhelper
+except ImportError :
+    path = os.path.abspath(os.path.join(os.path.split(__file__)[0], "..", "..", "..", "pyquickhelper","src"))
+    sys.path.append(path)
+    import pyquickhelper
+    
+
+from pyquickhelper import fLOG
+from src.pysqllike.generic.iter_rows import IterRow, IterException
+from src.pysqllike.generic.column_type import CFT
+
+class TestSelectGroupBy (unittest.TestCase):    
+
+    def test_select_function2(self) :
+        fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
+
+        l = [   { "nom":"j", "age": 10, "gender":"M"} , 
+                {"nom":"jean", "age":40, "gender":"M"}, 
+                {"nom":"jeanne", "age":2, "gender":"F"} ]
+        tbl = IterRow (None, l)
+        
+        def myf(x,y) : return x*2.5 + y
+        iter = tbl.groupby(tbl.gender, len_nom=len(tbl.nom), avg_age=avg(tbl.age) )
+        res = list(iter)
+
+        exp = [ {'gender': 'M', 'len_nom': 2, 'avg_age':25.0}, 
+                {'gender': 'F', 'len_nom': 1, 'avg_age':2.0}, ]
+
+        if res != exp :
+            raise ValueError(str(res))
+
+
+if __name__ == "__main__"  :
+    unittest.main ()    

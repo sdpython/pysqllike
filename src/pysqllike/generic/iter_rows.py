@@ -264,3 +264,43 @@ class IterRow(object):
         for c in schema :
             c.set_owner (tbl)
         return tbl
+
+    def orderby(self, *nochange, as_dict = True, ascending = True) :
+        """
+        This function sorts elements from an IterRow instance.
+        
+        @param      nochange            list of columns used to sort
+        @param      ascending           order
+        @param      as_dict             returns results as a list of dictionaries [ { "colname": value, ... } ]
+        @return                         IterRow
+        """
+        schema = [ v.copy(None) for v in self._schema ]  # we do not know the owner yet
+
+        def itervalues():
+            colsi = None
+            for row in self._thisset :
+                if isinstance(row,dict):
+                    for col in self._schema :
+                        col.set(row[col.Name])
+                    key = tuple ( row [k.Name] for k in nochange )
+                else :
+                    for col,r in zip(self._schema, row) :
+                        col.set(r)
+                    if colsi is None:
+                        colsi = [ self._schema.index(k.Name) for k in nochange ]
+                    key = tuple ( row [k] for k in colsi)
+                    
+                if as_dict :
+                    yield key, { _.Name: _() for _ in schema  }
+                else :
+                    yield key, tuple([ _() for _ in schema ])
+
+        def itervalues_sort():
+            for key,row in sorted(itervalues(), reverse = not ascending):
+                yield row
+        
+        tbl = IterRow(schema, anyset = itervalues_sort(), as_dict = as_dict )
+        for c in schema :
+            c.set_owner (tbl)
+        return tbl
+
