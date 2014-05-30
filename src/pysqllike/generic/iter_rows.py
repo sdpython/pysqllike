@@ -273,6 +273,18 @@ class IterRow(object):
         @param      ascending           order
         @param      as_dict             returns results as a list of dictionaries [ { "colname": value, ... } ]
         @return                         IterRow
+        
+        @example(order by)
+        @code
+        l = [   { "nom":"j", "age": 10, "gender":"M"} , 
+                {"nom":"jean", "age":40, "gender":"M"}, 
+                {"nom":"jeanne", "age":2, "gender":"F"} ]
+        tbl = IterRow (None, l)
+        
+        iter = tbl.orderby(tbl.nom, tbl.age, ascending=False )
+        @endcode
+        @endexample
+        
         """
         schema = [ v.copy(None) for v in self._schema ]  # we do not know the owner yet
 
@@ -445,6 +457,22 @@ class IterRow(object):
         tbl = IterRow (None, l)
         
         iter = tbl.unionall(tbl)
+        @endcode
+        @endexample
+        
+        @example(union all with different schema)
+        @code
+        l = [   { "nom":"j", "age": 10, "gender":"M"} , 
+                {"nom":"jean", "age":40, "gender":"M"}, 
+                {"nom":"jeanne", "age":2, "gender":"F"} ]
+        tbl = IterRow (None, l)
+        
+        l = [   { "nom":"j", "newage": 10, "gender":"M"} , 
+                {"nom":"jean", "newage":40, "gender":"M"}, 
+                {"nom":"jeanne", "newage":2, "gender":"F"} ]
+        tbl2 = IterRow (None, l)
+        
+        iter = tbl.unionall(tbl2, merge_schema = True)        
         @endcode
         @endexample
         """

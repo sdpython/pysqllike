@@ -32,7 +32,6 @@ class TestSelectOrderBy (unittest.TestCase):
                 {"nom":"jeanne", "age":2, "gender":"F"} ]
         tbl = IterRow (None, l)
         
-        def myf(x,y) : return x*2.5 + y
         iter = tbl.orderby(tbl.nom, tbl.age, ascending=False )
         res = list(iter)
 
