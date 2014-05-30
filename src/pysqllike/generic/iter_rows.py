@@ -6,7 +6,7 @@
 
 from .iter_exceptions import IterException, NotAllowedOperation, SchemaException
 from .column_type import ColumnType, ColumnTableType, ColumnGroupType
-from .others_types import NoSortClass, GroupByContainer
+from .others_types import NoSortClass, GroupByContainer, NA
 
 class IterRow(object):
     """
@@ -287,7 +287,7 @@ class IterRow(object):
                     for col,r in zip(self._schema, row) :
                         col.set(r)
                     if colsi is None:
-                        colsi = [ self.findschema(self._schema, k.Name) for k in nochange ]
+                        colsi = [ self._findschema(self._schema, k.Name) for k in nochange ]
                     key = tuple ( row [k] for k in colsi)
                     
                 if as_dict :
@@ -304,7 +304,7 @@ class IterRow(object):
             c.set_owner (tbl)
         return tbl
         
-    def findschema(self, schema, name):
+    def _findschema(self, schema, name):
         """
         look for column index whose name is name
         
@@ -368,7 +368,7 @@ class IterRow(object):
             if isinstance(mat[0],dict):
                 res = {}
                 for k in mat[0]:
-                    i = self.findschema(schema, k)
+                    i = self._findschema(schema, k)
                     col = schema[i]
                     if isinstance(col, ColumnGroupType):
                         temp = GroupByContainer( m[k] for m in mat )
@@ -398,7 +398,7 @@ class IterRow(object):
                     for col,r in zip(self._schema, row) :
                         col.set(r)
                     if colsi is None:
-                        colsi = [ self.findschema(self._schema, k.Name) for k in nochange ]
+                        colsi = [ self._findschema(self._schema, k.Name) for k in nochange ]
                     key = tuple ( row [k] for k in colsi)
                     
                 if as_dict :
@@ -437,7 +437,7 @@ class IterRow(object):
         @param      as_dict         returns results as a list of dictionaries [ { "colname": value, ... } ]
         @return                     IterRow
         
-        @example(Concatenate an IterRow with itself)
+        @example(union all)
         @code
         l = [   { "nom":"j", "age": 10, "gender":"M"} , 
                 {"nom":"jean", "age":40, "gender":"M"}, 
@@ -450,7 +450,26 @@ class IterRow(object):
         """
             
         if merge_schema :
-            raise NotImplementedError()
+            names = set( a.Name for a in self._schema )
+            name2 = set( a.Name for a in iter._schema )
+            common = names & name2
+
+            schema = []
+            for c in common :
+                i = self._findschema(self._schema, c)
+                col = self._schema[i]
+                schema.append ( col.copy(None) )
+                
+            for col in self._schema :
+                if col.Name not in common :
+                    schema.append ( col.copy(None) )
+            for col in iter._schema :
+                if col.Name not in common :
+                    schema.append ( col.copy(None) )
+                    
+            not_in_self = set ( c.Name for c in iter._schema if c.Name not in common )
+            not_in_iter = set ( c.Name for c in self._schema if c.Name not in common )
+                    
         else :
             if len(self._schema) != len(self._schema):
                 raise SchemaException("cannot concatenate, different schema length")
@@ -462,7 +481,15 @@ class IterRow(object):
 
             schema = [ v.copy(None) for v in self._schema ]  # we do not know the owner yet
             
+            not_in_self = set()
+            not_in_iter = set()
+            
+        not_in_self = [ iter._findschema(iter._schema, c) for c in not_in_self ]
+        not_in_iter = [ self._findschema(self._schema, c) for c in not_in_iter ]
+            
         def iter_union():
+            for i in not_in_self :
+                iter._schema[i].set(NA())
             for row in self._thisset :
                 if isinstance(row,dict):
                     for col in self._schema :
@@ -476,12 +503,14 @@ class IterRow(object):
                 else :
                     yield tuple([ _() for _ in schema ])
                     
+            for i in not_in_iter :
+                self._schema[i].set(NA())
             for row in iter._thisset :
                 if isinstance(row,dict):
-                    for col in self._schema :
+                    for col in iter._schema :
                         col.set(row[col.Name])
                 else :
-                    for col,r in zip(self._schema, row) :
+                    for col,r in zip(iter._schema, row) :
                         col.set(r)
                     
                 if as_dict :
