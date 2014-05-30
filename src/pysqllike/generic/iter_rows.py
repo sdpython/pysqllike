@@ -4,7 +4,7 @@
 @brief An class which iterates on any set.
 """
 
-from .iter_exceptions import IterException
+from .iter_exceptions import IterException, NotAllowedOperation, SchemaException
 from .column_type import ColumnType, ColumnTableType, ColumnGroupType
 from .others_types import NoSortClass, GroupByContainer
 
@@ -326,6 +326,19 @@ class IterRow(object):
         @return                 IterRow
 
         @warning The function does not guarantee the order of the output columns.
+        
+        @example(group by)
+        
+        @code
+        l = [   { "nom":"j", "age": 10, "gender":"M"} , 
+                {"nom":"jean", "age":40, "gender":"M"}, 
+                {"nom":"jeanne", "age":2, "gender":"F"} ]
+        tbl = IterRow (None, l)
+        
+        iter = tbl.groupby(tbl.gender, len_nom=tbl.nom.len(), avg_age=tbl.age.avg())
+        @endexample
+        
+        @endexample
         """
         selftbl = self.orderby(nochange, as_dict = as_dict)
         
@@ -413,3 +426,71 @@ class IterRow(object):
         for c in schema :
             c.set_owner (tbl)
         return tbl
+        
+    def unionall(self, iter, merge_schema = False, as_dict = True):
+        """
+        Concatenates this table with another one
+        
+        @param      iter            IterRow
+        @param      merge_schema    if False, the function expects you find the same schema,
+                                    otherwise, it merges them (same column name are not duplicated)
+        @param      as_dict         returns results as a list of dictionaries [ { "colname": value, ... } ]
+        @return                     IterRow
+        
+        @example(Concatenate an IterRow with itself)
+        @code
+        l = [   { "nom":"j", "age": 10, "gender":"M"} , 
+                {"nom":"jean", "age":40, "gender":"M"}, 
+                {"nom":"jeanne", "age":2, "gender":"F"} ]
+        tbl = IterRow (None, l)
+        
+        iter = tbl.unionall(tbl)
+        @endcode
+        @endexample
+        """
+            
+        if merge_schema :
+            raise NotImplementedError()
+        else :
+            if len(self._schema) != len(self._schema):
+                raise SchemaException("cannot concatenate, different schema length")
+            names = sorted( a.Name for a in self._schema )
+            name2 = sorted( a.Name for a in iter._schema )
+            for a,b in zip(names, name2):
+                if a != b :
+                    raise SchemaException("cannot concatenate, different schema column: {0} != {1}".format(a,b))
+
+            schema = [ v.copy(None) for v in self._schema ]  # we do not know the owner yet
+            
+        def iter_union():
+            for row in self._thisset :
+                if isinstance(row,dict):
+                    for col in self._schema :
+                        col.set(row[col.Name])
+                else :
+                    for col,r in zip(self._schema, row) :
+                        col.set(r)
+                    
+                if as_dict :
+                    yield  {_.Name:  _() for _ in schema  }
+                else :
+                    yield tuple([ _() for _ in schema ])
+                    
+            for row in iter._thisset :
+                if isinstance(row,dict):
+                    for col in self._schema :
+                        col.set(row[col.Name])
+                else :
+                    for col,r in zip(self._schema, row) :
+                        col.set(r)
+                    
+                if as_dict :
+                    yield  {_.Name:  _() for _ in schema  }
+                else :
+                    yield tuple([ _() for _ in schema ])
+                    
+        tbl = IterRow(schema, anyset = iter_union(), as_dict = as_dict )
+        for c in schema :
+            c.set_owner (tbl)
+        return tbl
+        

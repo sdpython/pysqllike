@@ -5,7 +5,7 @@
 """
 from inspect import isfunction
 import operator, collections
-from .iter_exceptions import IterException
+from .iter_exceptions import IterException, NotAllowedOperation
 from .others_types import long, NA, EmptyGroup, GroupByContainer
 
 from .column_operator import OperatorId, OperatorMul, ColumnOperator, OperatorAdd, OperatorDiv, OperatorPow, OperatorSub, OperatorDivN, OperatorMod
@@ -656,6 +656,49 @@ class ColumnGroupType(ColumnType):
             not isinstance(value, str) and \
             not isinstance(value, GroupByContainer):
             raise IterException("type of value should be GroupByContainer not {0} for the column {1}".format(type(value), str(self)))
+        
+    def __mul__(self, column):
+        """
+        forbidden
+        """
+        raise NotAllowedOperation()
+
+    def __add__(self, column):
+        """
+        forbidden
+        """
+        raise NotAllowedOperation()
+
+    def __sub__(self, column):
+        """
+        forbidden
+        """
+        raise NotAllowedOperation()
+
+    def __truediv__(self, column):
+        """
+        forbidden
+        """
+        raise NotAllowedOperation()
+
+    def __floordiv__(self, column):
+        """
+        forbidden
+        """
+        raise NotAllowedOperation()
+
+    def __mod__(self, column):
+        """
+        forbidden
+        """
+        raise NotAllowedOperation()
+
+    def __pow__(self, column):
+        """
+        forbidden
+        """
+        raise NotAllowedOperation()
+
         
         
 class CFT(ColumnType):

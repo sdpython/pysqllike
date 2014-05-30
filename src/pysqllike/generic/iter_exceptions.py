@@ -8,3 +8,15 @@ class IterException (Exception) :
     custom exception
     """
     pass
+
+class NotAllowedOperation(Exception):
+    """
+    custom exception
+    """
+    pass
+    
+class SchemaException(Exception):
+    """
+    custom exception
+    """
+    pass
