@@ -1,12 +1,12 @@
-# coding: latin-1
+# -*- coding: utf-8 -*-
 """
 @file
 @brief An class which iterates on any set.
 """
 
 from .iter_exceptions import IterException
-from .column_type import ColumnType, ColumnTableType
-
+from .column_type import ColumnType, ColumnTableType, ColumnGroupType
+from .others_types import NoSortClass, GroupByContainer
 
 class IterRow(object):
     """
@@ -39,7 +39,7 @@ class IterRow(object):
         @endcode
         @endexample
         """
-        if schema == None :
+        if schema is None :
             if len(anyset) == 0:
                 raise ValueError("unable to guess a schema from an empty list")
             firstrow = anyset[0]
@@ -287,7 +287,7 @@ class IterRow(object):
                     for col,r in zip(self._schema, row) :
                         col.set(r)
                     if colsi is None:
-                        colsi = [ self._schema.index(k.Name) for k in nochange ]
+                        colsi = [ self.findschema(self._schema, k.Name) for k in nochange ]
                     key = tuple ( row [k] for k in colsi)
                     
                 if as_dict :
@@ -303,4 +303,113 @@ class IterRow(object):
         for c in schema :
             c.set_owner (tbl)
         return tbl
+        
+    def findschema(self, schema, name):
+        """
+        look for column index whose name is name
+        
+        @param      name    column name to search
+        @param      schema  schama
+        @return             position
+        """
+        for i,col in enumerate(schema):
+            if col.Name == name : return i
+        raise IndexError()
 
+    def groupby(self, *nochange, as_dict = True, **changed) :
+        """
+        This function applies a groupby (same behavior as SQL's version)
+        
+        @param      nochange    list of fields to keep
+        @param      changed     list of custom fields
+        @param      as_dict     returns results as a list of dictionaries [ { "colname": value, ... } ]
+        @return                 IterRow
+
+        @warning The function does not guarantee the order of the output columns.
+        """
+        selftbl = self.orderby(nochange, as_dict = as_dict)
+        
+        newschema = list(nochange) + [ (k,None) for k in changed.keys() ]
+        
+        for el in nochange :
+            if not isinstance(el, ColumnType):
+                raise IterException("expecting a ColumnType here not: {0}".format(str(el)))
+            if el._owner != self:
+                raise IterException("mismatch: all columns should belong to this view, check all columns come from this instance")
+
+        arow = [ v.copy(None) for v in nochange ]  # we do not know the owner yet
+        for k,v in changed.items():
+            if not isinstance(v, ColumnType):
+                raise IterException("expecting a ColumnType here not: {0}-{1}".format(type(v),str(v)))
+            v.set_name(k)
+            arow.append(v)
+            
+        schema = arow
+
+        for _ in schema:
+            if not isinstance(_, ColumnType):
+                raise TypeError("we expect a ColumnType for column")
+        
+        def to_matrix(iter):
+            mat = list(iter)
+            if isinstance(mat[0],dict):
+                res = {}
+                for k in mat[0]:
+                    i = self.findschema(schema, k)
+                    col = schema[i]
+                    if isinstance(col, ColumnGroupType):
+                        temp = GroupByContainer( m[k] for m in mat )
+                        col.set(temp)
+                        res[k] = col()
+                    else :
+                        temp = mat[0][k]
+                        col.set(temp)
+                        res[k] = temp
+                return res
+            else:
+                raise NotImplementedError()
+                res = []
+                for i in range(0,len(mat[0])) :
+                    res.append ( GroupByContainer( m[i] for m in mat ) )
+                    self._schema[i].set(res[-1])
+                return res
+
+        def itervalues():
+            colsi = None
+            for row in self._thisset :
+                if isinstance(row,dict):
+                    for col in self._schema :
+                        col.set(row[col.Name])
+                    key = tuple ( row [k.Name] for k in nochange )
+                else :
+                    for col,r in zip(self._schema, row) :
+                        col.set(r)
+                    if colsi is None:
+                        colsi = [ self.findschema(self._schema, k.Name) for k in nochange ]
+                    key = tuple ( row [k] for k in colsi)
+                    
+                if as_dict :
+                    yield key, NoSortClass({ _.Name: _() for _ in schema  })
+                else :
+                    yield key, NoSortClass(tuple([ _() for _ in schema ]))
+                    
+        def itervalues_group():
+            current = [ ]
+            keycur = None
+            for key,row in sorted(itervalues()):
+                if key != keycur :
+                    if len(current) > 0 :
+                        tom = to_matrix(current)
+                        yield tom
+                    current = [ row.value ]
+                    keycur = key
+                else :
+                    current.append(row.value)
+            if len(current) > 0 :
+                tom = to_matrix(current)
+                yield tom
+                
+        tbl = IterRow(schema, anyset = itervalues_group(), as_dict = as_dict )
+        for c in schema :
+            c.set_owner (tbl)
+        return tbl

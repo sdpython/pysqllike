@@ -1,4 +1,3 @@
-# coding: latin-1
 """
 @file
 @brief An class which iterates on any set.

@@ -1,7 +1,7 @@
-# coding: latin-1
+# -*- coding: utf-8 -*-
 """
 @file
-@brief An class which iterates on any set.
+@brief Creates custom classes to interpret Python expression as column operations.
 """
 
 

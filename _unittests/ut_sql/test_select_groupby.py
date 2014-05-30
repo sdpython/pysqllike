@@ -34,12 +34,13 @@ class TestSelectGroupBy (unittest.TestCase):
         tbl = IterRow (None, l)
         
         def myf(x,y) : return x*2.5 + y
-        iter = tbl.groupby(tbl.gender, len_nom=len(tbl.nom), avg_age=avg(tbl.age) )
+        iter = tbl.groupby(tbl.gender, len_nom=tbl.nom.len(), avg_age=tbl.age.avg())
         res = list(iter)
 
-        exp = [ {'gender': 'M', 'len_nom': 2, 'avg_age':25.0}, 
-                {'gender': 'F', 'len_nom': 1, 'avg_age':2.0}, ]
-
+        exp = [ {'gender': 'F', 'len_nom': 1, 'avg_age':2.0},
+                {'gender': 'M', 'len_nom': 2, 'avg_age':25.0}, 
+                 ]
+                
         if res != exp :
             raise ValueError(str(res))
 

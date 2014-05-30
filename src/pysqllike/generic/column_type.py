@@ -1,16 +1,19 @@
-# coding: latin-1
+# -*- coding: utf-8 -*-
 """
 @file
-@brief An class which iterates on any set.
+@brief Classes which defines column for class @see cl IterRow
 """
 from inspect import isfunction
-import operator
+import operator, collections
 from .iter_exceptions import IterException
-from .others_types import long, NA
+from .others_types import long, NA, EmptyGroup, GroupByContainer
+
 from .column_operator import OperatorId, OperatorMul, ColumnOperator, OperatorAdd, OperatorDiv, OperatorPow, OperatorSub, OperatorDivN, OperatorMod
 from .column_operator import OperatorEq, OperatorNe, OperatorGe, OperatorLe, OperatorGt, OperatorLt
 from .column_operator import OperatorNot, OperatorOr, OperatorAnd
 from .column_operator import OperatorFunc
+
+from .column_group_operator import OperatorGroupLen, OperatorGroupAvg
 
 def private_function_type():
     pass
@@ -21,7 +24,10 @@ class ColumnType :
     """
     
     _default_name = "__unk__"
-    _str_type = { int:'int', long:'long', NA:'NA', float:'float', str:'str', type(private_function_type):'func' }
+    _str_type = {   int:'int', long:'long', NA:'NA', 
+                    float:'float', str:'str', 
+                    type(private_function_type):'func',
+                    }
 
     def IsColumnType(self):
         """
@@ -131,9 +137,12 @@ class ColumnType :
                 try :
                     res = self._op( self._parent )
                 except TypeError as e :
-                    raise IterException("unable(1) to apply an operator for column op=<{0}>, col={1}".format(str(self._op), str(self))) from e
+                    raise IterException("unable(1) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3} TYPE_PARENT={4}".format(str(self._op), str(self), type(self), type(self._op), type(self._parent))) from e
                 except AttributeError as ee :
-                    raise IterException("unable(2) to apply an operator for column op=<{0}>, col={1}".format(str(self._op), str(self))) from ee
+                    raise IterException("unable(2) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3} TYPE_PARENT={4}".format(str(self._op), str(self), type(self), type(self._op), type(self._parent))) from ee
+                    
+                if isinstance(res, ColumnType):
+                    raise IterException("this evaluation(*) cannot return a ColumnType for this column: {0}".format(str(self)))
         else :
             # we use a shortcut
             try :
@@ -157,8 +166,14 @@ class ColumnType :
              isinstance(value,float) or isinstance(value,long) or \
              isinstance(value,NA) :
             self._value = value
+        elif isinstance(value,EmptyGroup) :
+            # for an empty group
+            self._value = value
+        elif isinstance(value,list) :
+            # for a group
+            self._value = value
         else :
-            raise IterException("type of func should in [int,float,str,long] not {0} for the column {1}".format(type(value), str(self)))
+            raise IterException("type of value should be in [int,float,str,long] not {0} for the column {1}".format(type(value), str(self)))
 
     def set_none(self):
         """
@@ -453,6 +468,28 @@ class ColumnType :
         else:
             return self.__and__( ColumnConstantType(column) )
 
+    #######################################
+    # group function
+    #######################################
+
+    def len(self):
+        """
+        returns a group columns to count the number of observations
+        """
+        return ColumnGroupType( ColumnType._default_name, int, parent=(self,), op=OperatorGroupLen())
+
+    def count(self):
+        """
+        returns a group columns to count the number of observations
+        """
+        return self.len()
+
+    def avg(self):
+        """
+        returns a group columns to return an average
+        """
+        return ColumnGroupType( ColumnType._default_name, float, parent=(self,), op=OperatorGroupAvg())
+
 
 class ColumnConstantType(ColumnType):
     """
@@ -553,6 +590,74 @@ class ColumnTableType(ColumnType):
         """
         return "col({0},{1})".format(self._name, ColumnType._str_type[self._type])
         
+class ColumnGroupType(ColumnType):
+    """
+    defines a column which processes a group of rows (after a groupby)
+    """
+    def __init__(self, name, typ, parent, op):
+        """
+        constructor
+
+        @param      name        name of the column
+        @param      typ         type of the column
+        @param      owner       owner of this column
+        @param      op          operator
+        """
+        self._name = name
+        self._value = None
+        self._parent = parent
+        self._opgr = op
+        self._op = OperatorId()
+        self._type = typ
+        self._owner = None
+        self._func = None
+
+    @property
+    def ShortName(self):
+        """
+        a short name (tells the column type)
+        """
+        return "group"
+
+    def set_none(self):
+        """
+        after a loop on a database, we should put None back as a value
+        """
+        self._value = None
+
+    def __call__(self):
+        """
+        returns the content
+        """
+        if isinstance(self._value, GroupByContainer):
+            try :
+                return self._opgr( self._value )
+            except TypeError as e :
+                raise IterException("unable(1) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3}".format(str(self._op), str(self), type(self), type(self._op))) from e
+            except AttributeError as ee :
+                raise IterException("unable(2) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3}".format(str(self._op), str(self), type(self), type(self._op))) from ee
+        else:
+            return super().__call__()
+
+    def __str__(self):
+        """
+        usual
+        """
+        return "CGT[{0}]({1})".format(str(self._opgr), self._name)
+
+    def set(self, value):
+        """
+        sets a value for this column
+        
+        @param      value       anything in [int,float,long,str, function ]
+        """
+        self._value = value
+        if isinstance(value,collections.Iterable) and \
+            not isinstance(value, str) and \
+            not isinstance(value, GroupByContainer):
+            raise IterException("type of value should be GroupByContainer not {0} for the column {1}".format(type(value), str(self)))
+        
+        
 class CFT(ColumnType):
     """
     defines a function
@@ -595,3 +700,4 @@ class CFT(ColumnType):
         usual
         """
         return "func({0},{1})".format(self._name, ColumnType._str_type[self._type])
+
