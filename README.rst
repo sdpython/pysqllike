@@ -64,4 +64,10 @@ This project contains various helper about logging functions, unit tests and hel
    * a file ``setup.py`` to build and to install the module
    * a file ``make_help.py`` to build the sphinx documentation
 
+Versions
+--------
 
+* **v0.1 - 2014/??/??**
+    * **new:** first version
+    
+    
