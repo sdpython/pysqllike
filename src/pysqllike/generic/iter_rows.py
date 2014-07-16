@@ -348,8 +348,7 @@ class IterRow(object):
         tbl = IterRow (None, l)
         
         iter = tbl.groupby(tbl.gender, len_nom=tbl.nom.len(), avg_age=tbl.age.avg())
-        @endexample
-        
+        @endcode
         @endexample
         """
         selftbl = self.orderby(nochange, as_dict = as_dict)
