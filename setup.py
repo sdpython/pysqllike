@@ -56,10 +56,10 @@ readme              = 'README.rst'
 
 
 KEYWORDS = \
-project_var_name + ', synchronization, files, Xavier, Dupré'
+project_var_name + ', SQL, Map Reduce, Xavier, Dupré'
 
 DESCRIPTION = \
-"""   """
+""" An intent to write SQL like programs and to translate them in Python, SQL, Hive, PIG."""
 
 CLASSIFIERS = \
 [
