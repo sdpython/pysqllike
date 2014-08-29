@@ -221,9 +221,9 @@ class ColumnType :
                 rows.extend(rs)
             return "\n".join(rows)
 
-    #######################################
-    # functions which create others columns
-    #######################################
+    ######################################
+    # functions which create other columns
+    ######################################
 
     def copy(self, new_owner):
         """
