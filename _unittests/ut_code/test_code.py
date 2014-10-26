@@ -1,4 +1,3 @@
-# coding: latin-1
 """
 @brief      test log(time=1s)
 """
@@ -42,12 +41,11 @@ class TestCode (unittest.TestCase):
         inode = 0
         stack = [(0,node)]
         
-        return
         while len(stack) > 0 :
             ind,n = stack[-1]
             del stack[-1]
             att = { name:ch for name,ch in ast.iter_fields(n) }
-            print ("  " * ind,type(n), att.get("name","--"), att)
+            fLOG ("  " * ind,type(n), att.get("name","--"), att)
             for ch in ast.iter_child_nodes(n) :
                 stack.append( (ind+1,ch) )
                 

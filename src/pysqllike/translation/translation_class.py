@@ -203,6 +203,9 @@ class TranslateClass :
         elif kind == "where":
             top = call["children"][1:]
             return self.Where(varn, table, top)
+        elif kind == "groupby":
+            top = call["children"][1:]
+            return self.GroupBy(varn, table, top)
         else:
             self.RaiseCodeException("not implemented for: " + kind) 
         
@@ -303,6 +306,29 @@ class TranslateClass :
                         
             elif node["str"] == "CFT" :
                 # we need to look further as CFT is a way to call a function
+                funcName = None
+                subexp = [ ]
+                atts = [ ]
+                for chil in node["children"]:
+                    if chil["type"] == "Attribute" :
+                        chil["processed"]=True
+                        ex,fi,fu = self.ResolveExpression(chil, prefixAtt)
+                        subexp.append(ex)
+                        field.update(fi)
+                        funcs.update(funcs)
+                    elif chil["type"] == "Name" and chil["str"] == "CFT":
+                        pass
+                    elif chil["type"] == "Name":
+                        # we call function chil["str"]
+                        funcName = chil["str"]
+                        funcs [ chil["str"] ] = chil["str"]
+                    else :
+                        self.RaiseCodeException("unexpected configuration: " + node["type"])
+                    chil["processed"] = True
+                expre.append( "{0}({1})".format(funcName, ",".join(subexp)))
+                
+            elif node["str"] == "len" :
+                # aggregated function
                 funcName = None
                 subexp = [ ]
                 atts = [ ]

@@ -388,14 +388,3 @@ class OperatorFunc(ColumnOperator):
         for c in columns: c.IsColumnType()
         return self._func(* [ c() for c in columns ] )
 
-
-
-
-
-
-
-
-
-
-
-

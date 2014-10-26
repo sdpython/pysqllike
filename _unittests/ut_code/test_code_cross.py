@@ -1,4 +1,3 @@
-# coding: latin-1
 """
 @brief      test log(time=2s)
 """
@@ -41,10 +40,14 @@ def myjob2(input):
     sele = iter.select(iter.ext, iter.num, iter.num2, num3 = CFT(cube, iter.num))
     return sele
     
-data1 = [ {"ext":"pysqllike", "num":3 },
-          {"ext":"pyquickhelper", "num":1 },
-          {"ext":"pyensae", "num":2 },
-          {"ext":"pyrsslocal", "num":3 }
+def myjob3(input):
+    iter = input.groupby(input.year, size = input.ext.len())
+    return iter
+    
+data1 = [ {"ext":"pysqllike", "num":3, "year":2014 },
+          {"ext":"pyquickhelper", "num":1, "year":2013 },
+          {"ext":"pyensae", "num":2, "year":2013 },
+          {"ext":"pyrsslocal", "num":3, "year":2014 }
           ]
 
 class TestCodeCross (unittest.TestCase):
@@ -52,7 +55,7 @@ class TestCodeCross (unittest.TestCase):
     def test_translation(self):
         fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
         data = [ data1 ]
-        functions = [ myjob1, myjob2 ]
+        functions = [ myjob1, myjob2, myjob3 ]
         translate = [ Translate2Python ]
         
         nb = 0
