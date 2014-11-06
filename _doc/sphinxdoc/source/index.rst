@@ -35,7 +35,7 @@ this job using Python syntax as follows:
     def myjob(input):
         iter = input.select (input.age, input.nom, age2 = input.age2*input.age2)
         wher = iter.where( (iter.age > 60).Or(iter.age < 25))
-        return where 
+        return wher
         
     input = IterRow (None, [ {"nom": 10}, {"jean": 40} ] )
     output = myjob(input)
