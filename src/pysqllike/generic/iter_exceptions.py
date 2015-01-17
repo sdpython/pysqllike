@@ -14,7 +14,7 @@ class NotAllowedOperation(Exception):
     custom exception
     """
     pass
-    
+
 class SchemaException(Exception):
     """
     custom exception

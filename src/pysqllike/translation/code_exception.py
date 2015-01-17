@@ -1,4 +1,4 @@
-"""     
+"""
 @file
 @brief One class which visits a syntax tree.
 """

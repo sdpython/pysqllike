@@ -225,3 +225,4 @@ out_*
 version.txt
 */sphinxdoc/source/pysqllike/*
 */sphinxdoc/source/all*.rst
+*/sphinxdoc/source/coverage/*

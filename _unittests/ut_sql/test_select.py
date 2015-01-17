@@ -11,26 +11,26 @@ except ImportError :
     path = os.path.normpath(os.path.abspath( os.path.join( os.path.split(__file__)[0], "..", "..")))
     if path not in sys.path : sys.path.append (path)
     import src
-    
+
 try :
     import pyquickhelper
 except ImportError :
     path = os.path.abspath(os.path.join(os.path.split(__file__)[0], "..", "..", "..", "pyquickhelper","src"))
     sys.path.append(path)
     import pyquickhelper
-    
+
 
 from pyquickhelper import fLOG
 from src.pysqllike.generic.iter_rows import IterRow, IterException
 
 class TestSelect (unittest.TestCase):
-    
+
     def test_iter_simple(self) :
         fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
         l = [ ("nom", 10), ("jean", 40) ]
         schema = [ ("nom", str), ("age", int) ]
         tbl = IterRow (schema, l)
-        l = list (tbl) 
+        l = list (tbl)
         assert len(l) == 2
         if l != [{'nom': 'nom', 'age': 10}, {'nom': 'jean', 'age': 40}]:
             raise ValueError(str(l))
@@ -43,7 +43,7 @@ class TestSelect (unittest.TestCase):
 
     def test_iter_simple_dict(self) :
         fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
-        l0 = [ {"nom": "jean", "age": 10}, 
+        l0 = [ {"nom": "jean", "age": 10},
               {"nom":"j", "age":20} ]
         tbl = IterRow (None, l0)
         l = list (tbl)
@@ -53,7 +53,7 @@ class TestSelect (unittest.TestCase):
 
     def test_iter_simple_dict2(self) :
         fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
-        l0 = [ {"nom": "jean", "age": 10}, 
+        l0 = [ {"nom": "jean", "age": 10},
               {"nom":"j", "age":20} ]
         tbl = IterRow (None, l0)
         tbl2 = tbl.select(tbl.nom)
@@ -74,40 +74,40 @@ class TestSelect (unittest.TestCase):
 
     def test_select_simple2(self) :
         fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
-        
+
         l = [ ("nom", 10), ("jean", 40) ]
         schema = [ ("nom", str), ("age", int) ]
         tbl = IterRow (schema, l)
-        
+
         iter = tbl.select(tbl.nom, age2=tbl.age*2 , age3=tbl.age*3)
 
         l = list ( iter )
         assert len(l) == 2
         if l != [{'nom': 'nom', 'age2': 20, 'age3': 30}, {'nom': 'jean', 'age2': 80, 'age3': 120}] :
             raise Exception(str(l))
-        
+
         iter = tbl.select(tbl.nom, age2=tbl.age*2)
         sch = iter.Schema
         assert sch[0].Name == "nom"
         assert sch[1].Name == "age2"
-        
+
     def test_select_simple3(self) :
         fLOG (__file__, self._testMethodName, OutputPrint = __name__ == "__main__")
-        
+
         l = [ ("nom", 10), ("jean", 40), ("jeanne", 2) ]
         schema = [ ("nom", str), ("age", int) ]
         tbl = IterRow (schema, l)
-        
+
         iter = tbl.select(tbl.nom, age2=tbl.age*2)
         iter2 = iter.select(iter.nom, age4=iter.age2*2)
-        
+
         l = list ( iter2 )
         assert len(l) == 3
         fLOG(";".join([str(_) for _ in iter2.Schema]))
         fLOG(l)
         if l != [{'age4': 40, 'nom': 'nom'}, {'age4': 160, 'nom': 'jean'}, {'age4': 8, 'nom': 'jeanne'}] :
             raise Exception(str(l))
-        
+
         sch = iter2.Schema
         assert sch[0].Name == "nom"
         assert sch[1].Name == "age4"
@@ -250,11 +250,11 @@ class TestSelect (unittest.TestCase):
         exp = [ {'nom': 'jean', 'age': 40, '__unk__':True},
                 {'nom': "jeanne", 'age': 2, '__unk__':True},   ]
         if res != exp : raise ValueError(str(res) + "\n\n" + iter.print_schema())
-        
+
         iter = tbl.where((tbl.age == 10).Not())
         res = list(iter)
         assert len(res)==2
 
 
 if __name__ == "__main__"  :
-    unittest.main ()    
+    unittest.main ()

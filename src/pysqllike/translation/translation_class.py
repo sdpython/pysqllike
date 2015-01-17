@@ -1,4 +1,4 @@
-"""     
+"""
 @file
 @brief One class which visits a syntax tree.
 """
@@ -16,7 +16,7 @@ class TranslateClass :
     def __init__(self, code_func):
         """
         constructor
-        
+
         @param  code_func   code (str) or function(func)
         """
         if isinstance(code_func, str) :
@@ -24,31 +24,31 @@ class TranslateClass :
         else :
             code = inspect.getsource(code_func)
         self.init(code)
-        
+
     def init(self, code):
         """
         parse the function code and add it the class,
         it complements the constructor
-        
+
         @param  code        function code
         """
         node = ast.parse(code)
         v = CodeNodeVisitor()
         v.visit(node)
-        
+
         self._rows = v.Rows
         self._code = code
-        
+
     def __str__(self):
         """
         return a string representing a tree
         """
         return self.to_str()
-        
+
     def to_str(self, fields = []) :
         """
         return a string representing a tree
-        
+
         @param      fields      additional fields to add at the end of each row
         @return                 string
         """
@@ -59,43 +59,43 @@ class TranslateClass :
             rows = ["{0}{1}: {2} - nbch {3}".format("    " * r["indent"], r["type"], r["str"], len(r.get("children",[]))) + \
                         " --- " + ",".join( [ "%s=%s" % (_,r.get(_,"")) for _ in fields ] ) \
                         for r in self._rows ]
-            
+
         return "\n".join(rows)
-        
+
     def Code(self):
         """
         returns the code of the initial Python function
         into another language
-        
+
         @return     str
         """
         # we add a field "processed" in each rows to tell it was interpreted
         for row in self._rows :
             row["processed"] = row["type"] == "Module"
-            
+
         code_rows = [ ]
-            
+
         for row in self._rows :
             if row["processed"] :
                 continue
-                
+
             if row["type"] == "FunctionDef":
                 res = self.interpretFunction(row)
                 if res is not  None and len(res) > 0 : code_rows.extend( res )
-                
+
         for row in self._rows :
             if not row["processed"] :
                 self.RaiseCodeException("the function was unable to interpret all the lines", code_rows = code_rows)
-                
+
         return "\n".join(code_rows)
-                                
+
     def RaiseCodeException(self, message, field = "processed", code_rows = []):
         """
         raises an exception when interpreting the code
-        
+
         @param  field       field to add to the message exception
         @param  code_rows   list of rows to display
-        
+
         :raises: CodeException
         """
         if len(code_rows) > 0 :
@@ -111,21 +111,21 @@ class TranslateClass :
         else :
             raise CodeException(message + "\n---tree:\n" + \
                             self.to_str(["processed"]))
-                                
+
     def interpretFunction(self, obj):
         """
         starts the interpretation of node which begins a function
-        
+
         @param      obj     obj to begin with (a function)
         @return             list of strings
         """
         if "children" not in obj : self.RaiseCodeException("children key is missing")
         if "name" not in obj : self.RaiseCodeException("name is missing")
-        
+
         obj["processed"] = True
-        chil = obj["children"]        
+        chil = obj["children"]
         code_rows = []
-        
+
         # signature
         name = obj["name"]
         argus = [ _ for _ in chil if _["type"] == "arguments" ]
@@ -137,10 +137,10 @@ class TranslateClass :
                     ch["processed"] = True
                     args.append(ch)
         names = [ _["str"] for _ in args ]
-        
+
         sign = self.Signature(name, names)
         if sign is not  None and len(sign) > 0 : code_rows.extend(sign)
-        
+
         # the rest
         self._status = code_rows  # for debugging purpose
         assi = [ _ for _ in chil if _["type"] == "Assign" ]
@@ -156,21 +156,21 @@ class TranslateClass :
             else :
                 self.RaiseCodeException("unexpected type: " + an["type"])
         return code_rows
-        
+
     def Signature(self, name, rows):
         """
         build the signature of a function based on its name and its children
-        
+
         @param      name        name
         @param      rows        node where type == arguments
         @return                 list of strings (code)
         """
         self.RaiseCodeException("not implemented")
-        
+
     def Intruction(self, rows):
         """
         build an instruction of a function based on its name and its children
-        
+
         @param      rows        node where type == Assign
         @return                 list of strings (code)
         """
@@ -180,23 +180,23 @@ class TranslateClass :
         if len(name)!=1 : self.RaiseCodeException("expecting only one row not %d" % len(call))
         call = [ _ for _ in chil if _["type"] == "Call"]
         if len(call)!=1 : self.RaiseCodeException("expecting only one row not %d" % len(call))
-        
+
         name = name[0]
         name["processed"] = True
-        
+
         call = call[0]
         call["processed"] = True
-        
+
         varn = name["str"]
         kind = call["str"]
-        
+
         # the first attribute gives the name the table
         method = call["children"][0]
         method["processed"] = True
         table,meth = method["str"].split(".")
         if meth != kind :
-            self.RaiseCodeException("cannot go further, expects: {0}=={1}".format(kind,meth)) 
-        
+            self.RaiseCodeException("cannot go further, expects: {0}=={1}".format(kind,meth))
+
         if kind == "select":
             top = call["children"][1:]
             return self.Select(varn, table, top)
@@ -207,38 +207,38 @@ class TranslateClass :
             top = call["children"][1:]
             return self.GroupBy(varn, table, top)
         else:
-            self.RaiseCodeException("not implemented for: " + kind) 
-        
+            self.RaiseCodeException("not implemented for: " + kind)
+
     def Select(self, name, table, rows):
         """
         interpret a select statement
-        
+
         @param      name        name of the table which receives the results
         @param      table       name of the table it applies to
         @param      rows        rows to consider
         @return                 list of strings (code)
         """
         self.RaiseCodeException("not implemented")
-        
+
     def Where(self, name, table, rows):
         """
         interpret a select statement
-        
+
         @param      name        name of the table which receives the results
         @param      table       name of the table it applies to
         @param      rows        rows to consider
         @return                 list of strings (code)
         """
         self.RaiseCodeException("not implemented")
-        
+
     _symbols = {  "Lt":"<", "Gt":">", "Mult":"*", }
-                    
+
     def ResolveExpression(self, node, prefixAtt):
         """
         produces an expression based on a a node and its children
-        
+
         @param      node        node
-        @param      prefixAtt   prefix to add before an attribute (usually _)   
+        @param      prefixAtt   prefix to add before an attribute (usually _)
         @return                 a string, the used fields, the called functions
         """
         if node["type"] == "keyword":
@@ -248,7 +248,7 @@ class TranslateClass :
                 return self.ResolveExpression(chil[0], prefixAtt)
             else :
                 self.RaiseCodeException("not implemented for type: " + node["type"])
-                
+
         elif node["type"] == "BinOp" or node["type"] == "Compare":
             chil = node["children"]
             if len(chil) == 3 :
@@ -264,26 +264,26 @@ class TranslateClass :
                 return ex,fi1,fu1
             else :
                 self.RaiseCodeException("not implemented for type: " + node["type"])
-                
+
         elif node["type"] in TranslateClass._symbols:
             node["processed"] = True
             return TranslateClass._symbols[node["type"]], { }, { }
-            
+
         elif node["type"] == "Attribute":
             node["processed"] = True
             return prefixAtt + node["str"], { node["str"]: node }, { }
-            
+
         elif node["type"] == "Num":
             node["processed"] = True
             return node["str"], { }, { }
-            
+
         elif node["type"] == "Call":
             node["processed"] = True
-            
+
             expre = []
             field = { }
             funcs = { }
-            
+
             if node["str"] in ["Or", "And", "Not"] :
                 for chil in node["children"]:
                     if chil["type"] == "Attribute" :
@@ -303,7 +303,7 @@ class TranslateClass :
                         expre.append("({0})".format(ex))
                         field.update(fi)
                         funcs.update(funcs)
-                        
+
             elif node["str"] == "CFT" :
                 # we need to look further as CFT is a way to call a function
                 funcName = None
@@ -326,7 +326,7 @@ class TranslateClass :
                         self.RaiseCodeException("unexpected configuration: " + node["type"])
                     chil["processed"] = True
                 expre.append( "{0}({1})".format(funcName, ",".join(subexp)))
-                
+
             elif node["str"] == "len" :
                 # aggregated function
                 funcName = None
@@ -352,14 +352,14 @@ class TranslateClass :
             else :
                 self.RaiseCodeException("not implemented for function: " + node["str"])
             return " ".join(expre), field, funcs
-            
-        else: 
+
+        else:
             self.RaiseCodeException("not implemented for type: " + node["type"])
-        
+
     def interpretReturn(self, obj):
         """
         starts the interpretation of a node which sets a return
-        
+
         @param      obj     obj to begin with (a function)
         @return             list of strings
         """
@@ -372,13 +372,12 @@ class TranslateClass :
             else :
                 self.RaiseCodeException("unexpected type: " + node["type"])
         return self.setReturn(allret)
-                
+
     def setReturn(self, nodes):
         """
         indicates all nodes containing information about returned results
-        
+
         @param      node        list of nodes
         @return                 list of string
         """
         self.RaiseCodeException("not implemented")
-        

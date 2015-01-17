@@ -9,11 +9,11 @@ class ColumnOperator :
     """
     defines an operation between two columns
     """
-    
+
     def __init__ (self) :
         """
         initiates the operator
-        
+
         @param      name        name of the column
         """
         pass
@@ -373,7 +373,7 @@ class OperatorFunc(ColumnOperator):
         constructor
         """
         self._func = func
-    
+
     def __str__(self):
         """
         usual
@@ -387,4 +387,3 @@ class OperatorFunc(ColumnOperator):
         if not isinstance(columns,tuple): raise TypeError("we expect a tuple here")
         for c in columns: c.IsColumnType()
         return self._func(* [ c() for c in columns ] )
-

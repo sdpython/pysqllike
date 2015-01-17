@@ -13,11 +13,11 @@ class ColumnGroupOperator (ColumnOperator):
     """
     defines an operation between two columns
     """
-    
+
     def __init__ (self) :
         """
         initiates the operator
-        
+
         @param      name        name of the column
         """
         pass
@@ -51,7 +51,7 @@ class OperatorGroupLen(ColumnGroupOperator):
         if not isinstance(columns, collections.Iterable):
             raise TypeError("we expect an iterator here not " + str(type(columns)))
         return len(columns)
-        
+
 class OperatorGroupAvg(ColumnGroupOperator):
     """
     defines the group function ``avg``, the default value when the set is empty is None
@@ -76,7 +76,6 @@ class OperatorGroupAvg(ColumnGroupOperator):
             if nb == 0 : s = val
             else : s += val
             nb += 1
-            
+
         if nb == 0 : return NA
         else : return s / nb
-        

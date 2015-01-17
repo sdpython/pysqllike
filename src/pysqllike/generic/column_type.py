@@ -22,10 +22,10 @@ class ColumnType :
     """
     defines a column of a table
     """
-    
+
     _default_name = "__unk__"
-    _str_type = {   int:'int', long:'long', NA:'NA', 
-                    float:'float', str:'str', 
+    _str_type = {   int:'int', long:'long', NA:'NA',
+                    float:'float', str:'str',
                     type(private_function_type):'func',
                     }
 
@@ -48,7 +48,7 @@ class ColumnType :
         property
         """
         return self._name
-    
+
     @property
     def Type(self):
         """
@@ -73,7 +73,7 @@ class ColumnType :
     def __init__ (self, name, typ, func = None, parent = tuple(), op = None, owner = None) :
         """
         initiates the column
-        
+
         @param      name        name of the column
         @param      typ         type of the data it will contain (can be None)
         @param      func        a function, if None, if will be the identity
@@ -100,7 +100,7 @@ class ColumnType :
 
         if typ not in [int,float,long,str,None,NA,type(private_function_type)] :
             raise IterException("type should in [int,float,str,long,function]: " + str(typ))
-        
+
         if isfunction(func):
             self._func = func
         elif func is None :
@@ -110,7 +110,7 @@ class ColumnType :
 
         if "_func" not in self.__dict__ :
             raise IterException("this column is missing a function")
-            
+
     def __str__(self):
         """
         usual
@@ -140,7 +140,7 @@ class ColumnType :
                     raise IterException("unable(1) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3} TYPE_PARENT={4}".format(str(self._op), str(self), type(self), type(self._op), type(self._parent))) from e
                 except AttributeError as ee :
                     raise IterException("unable(2) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3} TYPE_PARENT={4}".format(str(self._op), str(self), type(self), type(self._op), type(self._parent))) from ee
-                    
+
                 if isinstance(res, ColumnType):
                     raise IterException("this evaluation(*) cannot return a ColumnType for this column: {0}".format(str(self)))
         else :
@@ -155,11 +155,11 @@ class ColumnType :
 
         self.set(res)
         return res
-        
+
     def set(self, value):
         """
         sets a value for this column
-        
+
         @param      value       anything in [int,float,long,str, function ]
         """
         if isinstance(value,int) or isinstance(value,str) or \
@@ -182,11 +182,11 @@ class ColumnType :
         for p in self._parent:
             p.set_none()
             self._value = None
-        
+
     def set_name(self, new_name):
         """
         changes the name of the column
-        
+
         @param      newname     new name
         """
         self._name = new_name
@@ -240,9 +240,9 @@ class ColumnType :
 
     def __mul__(self, column):
         """
-        these operators should be able to translate an expression 
+        these operators should be able to translate an expression
         into function operating on the values
-        
+
         @param      column      a function or an int or a float or a long or a str or a ColumnType
         @return                 a ColumnType
         """
@@ -345,7 +345,7 @@ class ColumnType :
             return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorEq())
         else:
             return self.__eq__( ColumnConstantType(column) )
-            
+
     def __lt__(self, column):
         """
         these operators should be able to translate an expression
@@ -358,7 +358,7 @@ class ColumnType :
             return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorLt())
         else:
             return self.__lt__( ColumnConstantType(column) )
-            
+
     def __le__(self, column):
         """
         these operators should be able to translate an expression
@@ -371,7 +371,7 @@ class ColumnType :
             return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorLe())
         else:
             return self.__le__( ColumnConstantType(column) )
-            
+
     def __gt__(self, column):
         """
         these operators should be able to translate an expression
@@ -384,7 +384,7 @@ class ColumnType :
             return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorGt())
         else:
             return self.__gt__( ColumnConstantType(column) )
-            
+
     def __ge__(self, column):
         """
         these operators should be able to translate an expression
@@ -397,7 +397,7 @@ class ColumnType :
             return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorGe())
         else:
             return self.__ge__( ColumnConstantType(column) )
-            
+
     def __ne__(self, column):
         """
         these operators should be able to translate an expression
@@ -410,7 +410,7 @@ class ColumnType :
             return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorNe())
         else:
             return self.__ne__( ColumnConstantType(column) )
-            
+
     #######################################
     # logical
     #######################################
@@ -420,7 +420,7 @@ class ColumnType :
         ``not`` cannot be overriden
         """
         return self.__not__()
-            
+
     def __not__(self):
         """
         these operators should be able to translate an expression
@@ -429,13 +429,13 @@ class ColumnType :
         @return                 a ColumnType
         """
         return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,), op=OperatorNot())
-            
+
     def Or (self, column):
         """
         ``or`` cannot be overriden
         """
         return self.__or__(column)
-            
+
     def __or__(self, column):
         """
         these operators should be able to translate an expression
@@ -448,13 +448,13 @@ class ColumnType :
             return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorOr())
         else:
             return self.__or__( ColumnConstantType(column) )
-            
+
     def And (self, column):
         """
         ``and`` cannot be overriden
         """
         return self.__and__(column)
-            
+
     def __and__(self, column):
         """
         these operators should be able to translate an expression
@@ -589,7 +589,7 @@ class ColumnTableType(ColumnType):
         usual
         """
         return "col({0},{1})".format(self._name, ColumnType._str_type[self._type])
-        
+
 class ColumnGroupType(ColumnType):
     """
     defines a column which processes a group of rows (after a groupby)
@@ -648,7 +648,7 @@ class ColumnGroupType(ColumnType):
     def set(self, value):
         """
         sets a value for this column
-        
+
         @param      value       anything in [int,float,long,str, function ]
         """
         self._value = value
@@ -656,7 +656,7 @@ class ColumnGroupType(ColumnType):
             not isinstance(value, str) and \
             not isinstance(value, GroupByContainer):
             raise IterException("type of value should be GroupByContainer not {0} for the column {1}".format(type(value), str(self)))
-        
+
     def __mul__(self, column):
         """
         forbidden
@@ -699,8 +699,8 @@ class ColumnGroupType(ColumnType):
         """
         raise NotAllowedOperation()
 
-        
-        
+
+
 class CFT(ColumnType):
     """
     defines a function
@@ -720,9 +720,9 @@ class CFT(ColumnType):
         self._owner = None
         self._thisfunc = func
         self._parent = tuple(l)
-        
+
         for _ in l:
-            if not isinstance(_,ColumnType): 
+            if not isinstance(_,ColumnType):
                 raise TypeError("expecting a column type, not " + str(type(_)))
 
     @property
@@ -743,4 +743,3 @@ class CFT(ColumnType):
         usual
         """
         return "func({0},{1})".format(self._name, ColumnType._str_type[self._type])
-

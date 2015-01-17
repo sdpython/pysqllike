@@ -41,22 +41,21 @@ class NoSortClass:
         any value
         """
         self.value = value
-        
+
     def __lt__(self, o):
         """
         operator __lt__
         """
         return -1
-        
+
     def __str__(self):
         """
         usual
         """
         return "NSC:{0}".format(str(self.value))
-        
+
 class GroupByContainer (list):
     """
     to differiate between a list and a list introduced by a groupby
     """
     pass
-    
