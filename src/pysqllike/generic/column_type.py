@@ -4,7 +4,8 @@
 @brief Classes which defines column for class @see cl IterRow
 """
 from inspect import isfunction
-import operator, collections
+import operator
+import collections
 from .iter_exceptions import IterException, NotAllowedOperation
 from .others_types import long, NA, EmptyGroup, GroupByContainer
 
@@ -15,19 +16,22 @@ from .column_operator import OperatorFunc
 
 from .column_group_operator import OperatorGroupLen, OperatorGroupAvg
 
+
 def private_function_type():
     pass
 
-class ColumnType :
+
+class ColumnType:
+
     """
     defines a column of a table
     """
 
     _default_name = "__unk__"
-    _str_type = {   int:'int', long:'long', NA:'NA',
-                    float:'float', str:'str',
-                    type(private_function_type):'func',
-                    }
+    _str_type = {int: 'int', long: 'long', NA: 'NA',
+                 float: 'float', str: 'str',
+                 type(private_function_type): 'func',
+                 }
 
     def IsColumnType(self):
         """
@@ -70,7 +74,8 @@ class ColumnType :
         """
         return self._func
 
-    def __init__ (self, name, typ, func = None, parent = tuple(), op = None, owner = None) :
+    def __init__(
+            self, name, typ, func=None, parent=tuple(), op=None, owner=None):
         """
         initiates the column
 
@@ -91,24 +96,31 @@ class ColumnType :
         self._owner = owner
 
         if not isinstance(op, ColumnOperator):
-            raise IterException("op should be a ColumnOperator not: {0}".format(type(op)))
+            raise IterException(
+                "op should be a ColumnOperator not: {0}".format(
+                    type(op)))
 
         if not isinstance(parent, tuple):
             raise TypeError("we expect a tuple for parameter parent")
-        for p in parent :
+        for p in parent:
             p.IsColumnType()
 
-        if typ not in [int,float,long,str,None,NA,type(private_function_type)] :
-            raise IterException("type should in [int,float,str,long,function]: " + str(typ))
+        if typ not in [int, float, long, str, None, NA,
+                       type(private_function_type)]:
+            raise IterException(
+                "type should in [int,float,str,long,function]: " +
+                str(typ))
 
         if isfunction(func):
             self._func = func
-        elif func is None :
+        elif func is None:
             self._func = None
-        else :
-            raise IterException("type of func should in [int,float,str,long,function]: {0}".format(str(func)))
+        else:
+            raise IterException(
+                "type of func should in [int,float,str,long,function]: {0}".format(
+                    str(func)))
 
-        if "_func" not in self.__dict__ :
+        if "_func" not in self.__dict__:
             raise IterException("this column is missing a function")
 
     def __str__(self):
@@ -116,42 +128,65 @@ class ColumnType :
         usual
         """
         ps = "|".join([_.ShortName for _ in self._parent])
-        if self._value != None :
-            return "CT({0},<{1}>,op:{2},#P={3})={4}".format(self._name, ColumnType._str_type[self._type], str(self._op), ps, self())
+        if self._value is not None:
+            return "CT({0},<{1}>,op:{2},#P={3})={4}".format(
+                self._name, ColumnType._str_type[self._type], str(self._op), ps, self())
         else:
-            return "CT({0},<{1}>,op:{2},#P={3}) [no loop started]".format(self._name, ColumnType._str_type[self._type], str(self._op), ps)
+            return "CT({0},<{1}>,op:{2},#P={3}) [no loop started]".format(
+                self._name, ColumnType._str_type[self._type], str(self._op), ps)
 
     def __call__(self):
         """
         returns func(value)
         """
-        if self._func is None :
-            if len(self._parent) == 0 :
-                if self._value is None :
-                    raise ValueError("method set must be called before for column {0}".format(str(self)))
-                else :
+        if self._func is None:
+            if len(self._parent) == 0:
+                if self._value is None:
+                    raise ValueError(
+                        "method set must be called before for column {0}".format(
+                            str(self)))
+                else:
                     res = self._value
-            elif self._op is None :
-                raise ValueError("there are parents but no operator for column {0}\nParents:\n{1}".format(str(self), self.print_parent()))
-            else :
-                try :
-                    res = self._op( self._parent )
-                except TypeError as e :
-                    raise IterException("unable(1) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3} TYPE_PARENT={4}".format(str(self._op), str(self), type(self), type(self._op), type(self._parent))) from e
-                except AttributeError as ee :
-                    raise IterException("unable(2) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3} TYPE_PARENT={4}".format(str(self._op), str(self), type(self), type(self._op), type(self._parent))) from ee
+            elif self._op is None:
+                raise ValueError(
+                    "there are parents but no operator for column {0}\nParents:\n{1}".format(
+                        str(self),
+                        self.print_parent()))
+            else:
+                try:
+                    res = self._op(self._parent)
+                except TypeError as e:
+                    raise IterException(
+                        "unable(1) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3} TYPE_PARENT={4}".format(
+                            str(
+                                self._op), str(self), type(self), type(
+                                self._op), type(
+                                self._parent))) from e
+                except AttributeError as ee:
+                    raise IterException(
+                        "unable(2) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3} TYPE_PARENT={4}".format(
+                            str(
+                                self._op), str(self), type(self), type(
+                                self._op), type(
+                                self._parent))) from ee
 
                 if isinstance(res, ColumnType):
-                    raise IterException("this evaluation(*) cannot return a ColumnType for this column: {0}".format(str(self)))
-        else :
+                    raise IterException(
+                        "this evaluation(*) cannot return a ColumnType for this column: {0}".format(str(self)))
+        else:
             # we use a shortcut
-            try :
+            try:
                 res = self._func(self._value)
-            except TypeError as e :
-                raise IterException("unable to compute the value of {0}\n{1}".format(str(self), self.print_parent())) from e
+            except TypeError as e:
+                raise IterException(
+                    "unable to compute the value of {0}\n{1}".format(
+                        str(self),
+                        self.print_parent())) from e
 
         if isinstance(res, ColumnType):
-            raise IterException("this evaluation cannot return a ColumnType for this column: {0}".format(str(self)))
+            raise IterException(
+                "this evaluation cannot return a ColumnType for this column: {0}".format(
+                    str(self)))
 
         self.set(res)
         return res
@@ -162,18 +197,21 @@ class ColumnType :
 
         @param      value       anything in [int,float,long,str, function ]
         """
-        if isinstance(value,int) or isinstance(value,str) or \
-             isinstance(value,float) or isinstance(value,long) or \
-             isinstance(value,NA) :
+        if isinstance(value, int) or isinstance(value, str) or \
+                isinstance(value, float) or isinstance(value, long) or \
+                isinstance(value, NA):
             self._value = value
-        elif isinstance(value,EmptyGroup) :
+        elif isinstance(value, EmptyGroup):
             # for an empty group
             self._value = value
-        elif isinstance(value,list) :
+        elif isinstance(value, list):
             # for a group
             self._value = value
-        else :
-            raise IterException("type of value should be in [int,float,str,long] not {0} for the column {1}".format(type(value), str(self)))
+        else:
+            raise IterException(
+                "type of value should be in [int,float,str,long] not {0} for the column {1}".format(
+                    type(value),
+                    str(self)))
 
     def set_none(self):
         """
@@ -214,10 +252,10 @@ class ColumnType :
         """
         if self._parent is None:
             return self.__str__()
-        else :
-            rows = [ self.__str__() ]
-            for p in self._parent :
-                rs = [ "    " + _ for _ in p.print_parent().split("\n") ]
+        else:
+            rows = [self.__str__()]
+            for p in self._parent:
+                rs = ["    " + _ for _ in p.print_parent().split("\n")]
                 rows.extend(rs)
             return "\n".join(rows)
 
@@ -232,7 +270,8 @@ class ColumnType :
         @param      new_owner       new owner
         @return                     ColumnType
         """
-        return ColumnType(self._name, self._type, func = None, parent = (self,), op=OperatorId(), owner = new_owner)
+        return ColumnType(self._name, self._type, func=None, parent=(
+            self,), op=OperatorId(), owner=new_owner)
 
     #######################################
     # operations
@@ -247,9 +286,10 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorMul())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorMul())
         else:
-            return self.__mul__( ColumnConstantType(column) )
+            return self.__mul__(ColumnConstantType(column))
 
     def __add__(self, column):
         """
@@ -260,9 +300,10 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorAdd())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorAdd())
         else:
-            return self.__add__( ColumnConstantType(column) )
+            return self.__add__(ColumnConstantType(column))
 
     def __sub__(self, column):
         """
@@ -273,9 +314,10 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorSub())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorSub())
         else:
-            return self.__sub__( ColumnConstantType(column) )
+            return self.__sub__(ColumnConstantType(column))
 
     def __truediv__(self, column):
         """
@@ -286,9 +328,10 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorDiv())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorDiv())
         else:
-            return self.__truediv__( ColumnConstantType(column) )
+            return self.__truediv__(ColumnConstantType(column))
 
     def __floordiv__(self, column):
         """
@@ -299,9 +342,10 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorDivN())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorDivN())
         else:
-            return self.__floordiv__( ColumnConstantType(column) )
+            return self.__floordiv__(ColumnConstantType(column))
 
     def __mod__(self, column):
         """
@@ -312,9 +356,10 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorMod())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorMod())
         else:
-            return self.__mod__( ColumnConstantType(column) )
+            return self.__mod__(ColumnConstantType(column))
 
     def __pow__(self, column):
         """
@@ -325,9 +370,10 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorPow())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorPow())
         else:
-            return self.__pow__( ColumnConstantType(column) )
+            return self.__pow__(ColumnConstantType(column))
 
     #######################################
     # test
@@ -342,9 +388,10 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorEq())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorEq())
         else:
-            return self.__eq__( ColumnConstantType(column) )
+            return self.__eq__(ColumnConstantType(column))
 
     def __lt__(self, column):
         """
@@ -355,9 +402,10 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorLt())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorLt())
         else:
-            return self.__lt__( ColumnConstantType(column) )
+            return self.__lt__(ColumnConstantType(column))
 
     def __le__(self, column):
         """
@@ -368,9 +416,10 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorLe())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorLe())
         else:
-            return self.__le__( ColumnConstantType(column) )
+            return self.__le__(ColumnConstantType(column))
 
     def __gt__(self, column):
         """
@@ -381,9 +430,10 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorGt())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorGt())
         else:
-            return self.__gt__( ColumnConstantType(column) )
+            return self.__gt__(ColumnConstantType(column))
 
     def __ge__(self, column):
         """
@@ -394,9 +444,10 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorGe())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorGe())
         else:
-            return self.__ge__( ColumnConstantType(column) )
+            return self.__ge__(ColumnConstantType(column))
 
     def __ne__(self, column):
         """
@@ -407,15 +458,16 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorNe())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorNe())
         else:
-            return self.__ne__( ColumnConstantType(column) )
+            return self.__ne__(ColumnConstantType(column))
 
     #######################################
     # logical
     #######################################
 
-    def Not (self):
+    def Not(self):
         """
         ``not`` cannot be overriden
         """
@@ -428,9 +480,10 @@ class ColumnType :
 
         @return                 a ColumnType
         """
-        return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,), op=OperatorNot())
+        return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+            self,), op=OperatorNot())
 
-    def Or (self, column):
+    def Or(self, column):
         """
         ``or`` cannot be overriden
         """
@@ -445,11 +498,12 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorOr())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorOr())
         else:
-            return self.__or__( ColumnConstantType(column) )
+            return self.__or__(ColumnConstantType(column))
 
-    def And (self, column):
+    def And(self, column):
         """
         ``and`` cannot be overriden
         """
@@ -464,9 +518,10 @@ class ColumnType :
         @return                 a ColumnType
         """
         if isinstance(column, ColumnType):
-            return ColumnType( ColumnType._default_name, self._type, func = None, parent=(self,column), op=OperatorAnd())
+            return ColumnType(ColumnType._default_name, self._type, func=None, parent=(
+                self, column), op=OperatorAnd())
         else:
-            return self.__and__( ColumnConstantType(column) )
+            return self.__and__(ColumnConstantType(column))
 
     #######################################
     # group function
@@ -476,7 +531,8 @@ class ColumnType :
         """
         returns a group columns to count the number of observations
         """
-        return ColumnGroupType( ColumnType._default_name, int, parent=(self,), op=OperatorGroupLen())
+        return ColumnGroupType(
+            ColumnType._default_name, int, parent=(self,), op=OperatorGroupLen())
 
     def count(self):
         """
@@ -488,28 +544,33 @@ class ColumnType :
         """
         returns a group columns to return an average
         """
-        return ColumnGroupType( ColumnType._default_name, float, parent=(self,), op=OperatorGroupAvg())
+        return ColumnGroupType(
+            ColumnType._default_name, float, parent=(self,), op=OperatorGroupAvg())
 
 
 class ColumnConstantType(ColumnType):
+
     """
     defines a constant as a column
     """
+
     def __init__(self, const):
         self._value = const
-        self._func = lambda x,c=self._value : c
+        self._func = lambda x, c=self._value: c
         self._parent = None
         self._op = None
         self._type = type(const)
         self._const = const
         self._owner = None
 
-        if isinstance(const, int) or isinstance(const,float) or \
-           isinstance(const,long) or isinstance(const,str) or \
-           isinstance(const,NA) :
+        if isinstance(const, int) or isinstance(const, float) or \
+           isinstance(const, long) or isinstance(const, str) or \
+           isinstance(const, NA):
             pass
-        else :
-            raise ValueError("this value is not a constant: {0}".format(str(const)))
+        else:
+            raise ValueError(
+                "this value is not a constant: {0}".format(
+                    str(const)))
 
     @property
     def ShortName(self):
@@ -524,7 +585,7 @@ class ColumnConstantType(ColumnType):
         """
         pass
 
-    def set(self,value):
+    def set(self, value):
         """
         do nothing (it is a constant)
 
@@ -544,10 +605,13 @@ class ColumnConstantType(ColumnType):
         """
         return "cst({0})".format(self())
 
+
 class ColumnTableType(ColumnType):
+
     """
     defines a table column (not coming from an expression)
     """
+
     def __init__(self, name, typ, owner):
         """
         constructor
@@ -581,19 +645,25 @@ class ColumnTableType(ColumnType):
         returns the content
         """
         if self._value is None:
-            raise IterException("this column should contain a value: {0}".format(str(self)))
+            raise IterException(
+                "this column should contain a value: {0}".format(
+                    str(self)))
         return self._value
 
     def __str__(self):
         """
         usual
         """
-        return "col({0},{1})".format(self._name, ColumnType._str_type[self._type])
+        return "col({0},{1})".format(
+            self._name, ColumnType._str_type[self._type])
+
 
 class ColumnGroupType(ColumnType):
+
     """
     defines a column which processes a group of rows (after a groupby)
     """
+
     def __init__(self, name, typ, parent, op):
         """
         constructor
@@ -630,12 +700,20 @@ class ColumnGroupType(ColumnType):
         returns the content
         """
         if isinstance(self._value, GroupByContainer):
-            try :
-                return self._opgr( self._value )
-            except TypeError as e :
-                raise IterException("unable(1) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3}".format(str(self._op), str(self), type(self), type(self._op))) from e
-            except AttributeError as ee :
-                raise IterException("unable(2) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3}".format(str(self._op), str(self), type(self), type(self._op))) from ee
+            try:
+                return self._opgr(self._value)
+            except TypeError as e:
+                raise IterException(
+                    "unable(1) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3}".format(
+                        str(
+                            self._op), str(self), type(self), type(
+                            self._op))) from e
+            except AttributeError as ee:
+                raise IterException(
+                    "unable(2) to apply an operator for column op=<{0}>, col={1}, TYPE={2} TYPE_OP={3}".format(
+                        str(
+                            self._op), str(self), type(self), type(
+                            self._op))) from ee
         else:
             return super().__call__()
 
@@ -652,10 +730,13 @@ class ColumnGroupType(ColumnType):
         @param      value       anything in [int,float,long,str, function ]
         """
         self._value = value
-        if isinstance(value,collections.Iterable) and \
-            not isinstance(value, str) and \
-            not isinstance(value, GroupByContainer):
-            raise IterException("type of value should be GroupByContainer not {0} for the column {1}".format(type(value), str(self)))
+        if isinstance(value, collections.Iterable) and \
+                not isinstance(value, str) and \
+                not isinstance(value, GroupByContainer):
+            raise IterException(
+                "type of value should be GroupByContainer not {0} for the column {1}".format(
+                    type(value),
+                    str(self)))
 
     def __mul__(self, column):
         """
@@ -700,11 +781,12 @@ class ColumnGroupType(ColumnType):
         raise NotAllowedOperation()
 
 
-
 class CFT(ColumnType):
+
     """
     defines a function
     """
+
     def __init__(self, func, *l):
         """
         constructor (a function cannot accept keywords)
@@ -722,7 +804,7 @@ class CFT(ColumnType):
         self._parent = tuple(l)
 
         for _ in l:
-            if not isinstance(_,ColumnType):
+            if not isinstance(_, ColumnType):
                 raise TypeError("expecting a column type, not " + str(type(_)))
 
     @property
@@ -742,4 +824,5 @@ class CFT(ColumnType):
         """
         usual
         """
-        return "func({0},{1})".format(self._name, ColumnType._str_type[self._type])
+        return "func({0},{1})".format(
+            self._name, ColumnType._str_type[self._type])

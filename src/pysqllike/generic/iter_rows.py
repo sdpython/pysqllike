@@ -8,12 +8,14 @@ from .iter_exceptions import IterException, NotAllowedOperation, SchemaException
 from .column_type import ColumnType, ColumnTableType, ColumnGroupType
 from .others_types import NoSortClass, GroupByContainer, NA
 
+
 class IterRow(object):
+
     """
     defines an iterator which mimic SQL behavior
     """
 
-    def __init__ (self, schema = None, anyset = None, as_dict = True):
+    def __init__(self, schema=None, anyset=None, as_dict=True):
         """
         initiates the iterator
 
@@ -39,45 +41,53 @@ class IterRow(object):
         @endcode
         @endexample
         """
-        if schema is None :
+        if schema is None:
             if len(anyset) == 0:
                 raise ValueError("unable to guess a schema from an empty list")
             firstrow = anyset[0]
-            if not isinstance(firstrow,dict):
-                raise ValueError("the first row must be a dictionary, otherwise, the schema cannot be guessed")
-            schema = [ (k,type(v)) for k,v in firstrow.items() ]
+            if not isinstance(firstrow, dict):
+                raise ValueError(
+                    "the first row must be a dictionary, otherwise, the schema cannot be guessed")
+            schema = [(k, type(v)) for k, v in firstrow.items()]
 
-        if len(schema) == 0 :
+        if len(schema) == 0:
             raise IterException("schema is empty")
 
-        truesch = [ ]
+        truesch = []
         for _ in schema:
-            if isinstance(_,ColumnType):
-                c = _.copy(new_owner = self)
-            elif isinstance(_,str):
-                c = ColumnTableType( _, None, owner = self)
-            elif isinstance(_,tuple) :
+            if isinstance(_, ColumnType):
+                c = _.copy(new_owner=self)
+            elif isinstance(_, str):
+                c = ColumnTableType(_, None, owner=self)
+            elif isinstance(_, tuple):
                 if len(_) == 1:
-                    c = ColumnTableType( _[0], None, owner = self)
+                    c = ColumnTableType(_[0], None, owner=self)
                 elif len(_) == 2:
-                    c = ColumnTableType( _[0], _[1], owner = self)
+                    c = ColumnTableType(_[0], _[1], owner=self)
                 else:
-                    raise IterException("schema is not properly defined {0}".format(str(_)))
-            else :
-                raise IterException("schema is not properly defined {0}".format(str(_)))
+                    raise IterException(
+                        "schema is not properly defined {0}".format(
+                            str(_)))
+            else:
+                raise IterException(
+                    "schema is not properly defined {0}".format(
+                        str(_)))
             truesch.append(c)
 
-        names = set([ _.Name for _ in truesch] )
-        if len(names) < len(truesch) :
-            raise IterException("some columns share the same name: " + str(truesch))
+        names = set([_.Name for _ in truesch])
+        if len(names) < len(truesch):
+            raise IterException(
+                "some columns share the same name: " +
+                str(truesch))
 
-        self._schema  = truesch
+        self._schema = truesch
         self._thisset = anyset
         self._as_dict = as_dict
 
         for sch in self._schema:
-            if sch.Name in self.__dict__ :
-                raise IterException("a column has a wrong name: {0}".format(sch))
+            if sch.Name in self.__dict__:
+                raise IterException(
+                    "a column has a wrong name: {0}".format(sch))
             self.__dict__[sch.Name] = sch
 
     @property
@@ -91,48 +101,48 @@ class IterRow(object):
         """
         usual
         """
-        return ";".join( [ str(_) for _ in self._schema ] )
+        return ";".join([str(_) for _ in self._schema])
 
     def __call__(self):
         """
         evaluate
         """
-        return [ _() for _ in self._schema ]
+        return [_() for _ in self._schema]
 
     def __iter__(self):
         """
         iterator, returns this row,
         it always outputs a list of list
         """
-        if self._thisset is None :
+        if self._thisset is None:
             raise IterException("this class contains no iterator")
 
         if self._as_dict:
-            for _ in self._thisset :
-                if isinstance(_,dict):
-                    yield { k.Name:_[k.Name]  for k in self._schema }
-                else :
-                    yield { k.Name:v for k,v in zip(self._schema,_) }
-        else :
-            for _ in self._thisset :
-                if isinstance(_,dict):
-                    yield tuple([ _[k.Name] for k in self._schema ])
-                else :
+            for _ in self._thisset:
+                if isinstance(_, dict):
+                    yield {k.Name: _[k.Name] for k in self._schema}
+                else:
+                    yield {k.Name: v for k, v in zip(self._schema, _)}
+        else:
+            for _ in self._thisset:
+                if isinstance(_, dict):
+                    yield tuple([_[k.Name] for k in self._schema])
+                else:
                     yield _
 
-        for _ in self._schema :
+        for _ in self._schema:
             _.set_none()
 
     def print_schema(self):
         """
         calls @see me print_parent on each column
         """
-        rows = [ "number of columns={0}".format(len(self._schema))]
-        for i,sch in enumerate(self._schema):
+        rows = ["number of columns={0}".format(len(self._schema))]
+        for i, sch in enumerate(self._schema):
             rows.append(sch.print_parent())
         return "\n".join(rows)
 
-    def select(self, *nochange, as_dict = True, **changed) :
+    def select(self, *nochange, as_dict=True, **changed):
         """
         This function takes an undefined number of arguments.
         It can be used the following way:
@@ -170,18 +180,22 @@ class IterRow(object):
         @endcode
         @endexample
         """
-        newschema = list(nochange) + [ (k,None) for k in changed.keys() ]
+        newschema = list(nochange) + [(k, None) for k in changed.keys()]
 
-        for el in nochange :
+        for el in nochange:
             if not isinstance(el, ColumnType):
-                raise IterException("expecting a ColumnType here not: {0}".format(str(el)))
+                raise IterException(
+                    "expecting a ColumnType here not: {0}".format(
+                        str(el)))
             if el._owner != self:
-                raise IterException("mismatch: all columns should belong to this view, check all columns come from this instance")
+                raise IterException(
+                    "mismatch: all columns should belong to this view, check all columns come from this instance")
 
-        arow = [ v.copy(None) for v in nochange ]  # we do not know the owner yet
-        for k,v in changed.items():
+        arow = [v.copy(None) for v in nochange]  # we do not know the owner yet
+        for k, v in changed.items():
             if not isinstance(v, ColumnType):
-                raise IterException("expecting a ColumnType here not: {0}-{1}".format(type(v),str(v)))
+                raise IterException(
+                    "expecting a ColumnType here not: {0}-{1}".format(type(v), str(v)))
             v = v.copy(None)  # we do not know the owner yet
             v.set_name(k)
             arow.append(v)
@@ -193,25 +207,25 @@ class IterRow(object):
                 raise TypeError("we expect a ColumnType for column")
 
         def itervalues():
-            for row in self._thisset :
-                if isinstance(row,dict):
-                    for col in self._schema :
+            for row in self._thisset:
+                if isinstance(row, dict):
+                    for col in self._schema:
                         col.set(row[col.Name])
-                else :
-                    for col,r in zip(self._schema, row) :
+                else:
+                    for col, r in zip(self._schema, row):
                         col.set(r)
 
-                if as_dict :
-                    yield {_.Name:  _() for _ in schema }
-                else :
-                    yield tuple([ _() for _ in schema ])
+                if as_dict:
+                    yield {_.Name: _() for _ in schema}
+                else:
+                    yield tuple([_() for _ in schema])
 
-        tbl = IterRow(schema, anyset = itervalues(), as_dict = as_dict )
-        for c in schema :
-            c.set_owner (tbl)
+        tbl = IterRow(schema, anyset=itervalues(), as_dict=as_dict)
+        for c in schema:
+            c.set_owner(tbl)
         return tbl
 
-    def where(self, condition, as_dict = True, append_condition = False) :
+    def where(self, condition, as_dict=True, append_condition=False):
         """
         This function filters elements from an IterRow instance.
 
@@ -238,34 +252,37 @@ class IterRow(object):
         @endcode
         @endexample
         """
-        if not isinstance(condition,ColumnType):
-            raise TypeError("condition should a ColumnType: {0}".format(str(condition)))
+        if not isinstance(condition, ColumnType):
+            raise TypeError(
+                "condition should a ColumnType: {0}".format(
+                    str(condition)))
 
-        schema = [ v.copy(None) for v in self._schema ]  # we do not know the owner yet
-        if append_condition :
-            schema.append ( condition )
+        schema = [v.copy(None)
+                  for v in self._schema]  # we do not know the owner yet
+        if append_condition:
+            schema.append(condition)
 
         def itervalues():
-            for row in self._thisset :
-                if isinstance(row,dict):
-                    for col in self._schema :
+            for row in self._thisset:
+                if isinstance(row, dict):
+                    for col in self._schema:
                         col.set(row[col.Name])
-                else :
-                    for col,r in zip(self._schema, row) :
+                else:
+                    for col, r in zip(self._schema, row):
                         col.set(r)
 
-                if condition() :
-                    if as_dict :
-                        yield  {_.Name:  _() for _ in schema  }
-                    else :
-                        yield tuple([ _() for _ in schema ])
+                if condition():
+                    if as_dict:
+                        yield {_.Name: _() for _ in schema}
+                    else:
+                        yield tuple([_() for _ in schema])
 
-        tbl = IterRow(schema, anyset = itervalues(), as_dict = as_dict )
-        for c in schema :
-            c.set_owner (tbl)
+        tbl = IterRow(schema, anyset=itervalues(), as_dict=as_dict)
+        for c in schema:
+            c.set_owner(tbl)
         return tbl
 
-    def orderby(self, *nochange, as_dict = True, ascending = True) :
+    def orderby(self, *nochange, as_dict=True, ascending=True):
         """
         This function sorts elements from an IterRow instance.
 
@@ -286,34 +303,38 @@ class IterRow(object):
         @endexample
 
         """
-        schema = [ v.copy(None) for v in self._schema ]  # we do not know the owner yet
+        schema = [v.copy(None)
+                  for v in self._schema]  # we do not know the owner yet
 
         def itervalues():
             colsi = None
-            for row in self._thisset :
-                if isinstance(row,dict):
-                    for col in self._schema :
+            for row in self._thisset:
+                if isinstance(row, dict):
+                    for col in self._schema:
                         col.set(row[col.Name])
-                    key = tuple ( row [k.Name] for k in nochange )
-                else :
-                    for col,r in zip(self._schema, row) :
+                    key = tuple(row[k.Name] for k in nochange)
+                else:
+                    for col, r in zip(self._schema, row):
                         col.set(r)
                     if colsi is None:
-                        colsi = [ self._findschema(self._schema, k.Name) for k in nochange ]
-                    key = tuple ( row [k] for k in colsi)
+                        colsi = [
+                            self._findschema(
+                                self._schema,
+                                k.Name) for k in nochange]
+                    key = tuple(row[k] for k in colsi)
 
-                if as_dict :
-                    yield key, { _.Name: _() for _ in schema  }
-                else :
-                    yield key, tuple([ _() for _ in schema ])
+                if as_dict:
+                    yield key, {_.Name: _() for _ in schema}
+                else:
+                    yield key, tuple([_() for _ in schema])
 
         def itervalues_sort():
-            for key,row in sorted(itervalues(), reverse = not ascending):
+            for key, row in sorted(itervalues(), reverse=not ascending):
                 yield row
 
-        tbl = IterRow(schema, anyset = itervalues_sort(), as_dict = as_dict )
-        for c in schema :
-            c.set_owner (tbl)
+        tbl = IterRow(schema, anyset=itervalues_sort(), as_dict=as_dict)
+        for c in schema:
+            c.set_owner(tbl)
         return tbl
 
     def _findschema(self, schema, name):
@@ -324,11 +345,12 @@ class IterRow(object):
         @param      schema  schama
         @return             position
         """
-        for i,col in enumerate(schema):
-            if col.Name == name : return i
+        for i, col in enumerate(schema):
+            if col.Name == name:
+                return i
         raise IndexError()
 
-    def groupby(self, *nochange, as_dict = True, **changed) :
+    def groupby(self, *nochange, as_dict=True, **changed):
         """
         This function applies a groupby (same behavior as SQL's version)
 
@@ -351,20 +373,24 @@ class IterRow(object):
         @endcode
         @endexample
         """
-        selftbl = self.orderby(nochange, as_dict = as_dict)
+        selftbl = self.orderby(nochange, as_dict=as_dict)
 
-        newschema = list(nochange) + [ (k,None) for k in changed.keys() ]
+        newschema = list(nochange) + [(k, None) for k in changed.keys()]
 
-        for el in nochange :
+        for el in nochange:
             if not isinstance(el, ColumnType):
-                raise IterException("expecting a ColumnType here not: {0}".format(str(el)))
+                raise IterException(
+                    "expecting a ColumnType here not: {0}".format(
+                        str(el)))
             if el._owner != self:
-                raise IterException("mismatch: all columns should belong to this view, check all columns come from this instance")
+                raise IterException(
+                    "mismatch: all columns should belong to this view, check all columns come from this instance")
 
-        arow = [ v.copy(None) for v in nochange ]  # we do not know the owner yet
-        for k,v in changed.items():
+        arow = [v.copy(None) for v in nochange]  # we do not know the owner yet
+        for k, v in changed.items():
             if not isinstance(v, ColumnType):
-                raise IterException("expecting a ColumnType here not: {0}-{1}".format(type(v),str(v)))
+                raise IterException(
+                    "expecting a ColumnType here not: {0}-{1}".format(type(v), str(v)))
             v.set_name(k)
             arow.append(v)
 
@@ -376,16 +402,16 @@ class IterRow(object):
 
         def to_matrix(iter):
             mat = list(iter)
-            if isinstance(mat[0],dict):
+            if isinstance(mat[0], dict):
                 res = {}
                 for k in mat[0]:
                     i = self._findschema(schema, k)
                     col = schema[i]
                     if isinstance(col, ColumnGroupType):
-                        temp = GroupByContainer( m[k] for m in mat )
+                        temp = GroupByContainer(m[k] for m in mat)
                         col.set(temp)
                         res[k] = col()
-                    else :
+                    else:
                         temp = mat[0][k]
                         col.set(temp)
                         res[k] = temp
@@ -393,52 +419,55 @@ class IterRow(object):
             else:
                 raise NotImplementedError()
                 res = []
-                for i in range(0,len(mat[0])) :
-                    res.append ( GroupByContainer( m[i] for m in mat ) )
+                for i in range(0, len(mat[0])):
+                    res.append(GroupByContainer(m[i] for m in mat))
                     self._schema[i].set(res[-1])
                 return res
 
         def itervalues():
             colsi = None
-            for row in self._thisset :
-                if isinstance(row,dict):
-                    for col in self._schema :
+            for row in self._thisset:
+                if isinstance(row, dict):
+                    for col in self._schema:
                         col.set(row[col.Name])
-                    key = tuple ( row [k.Name] for k in nochange )
-                else :
-                    for col,r in zip(self._schema, row) :
+                    key = tuple(row[k.Name] for k in nochange)
+                else:
+                    for col, r in zip(self._schema, row):
                         col.set(r)
                     if colsi is None:
-                        colsi = [ self._findschema(self._schema, k.Name) for k in nochange ]
-                    key = tuple ( row [k] for k in colsi)
+                        colsi = [
+                            self._findschema(
+                                self._schema,
+                                k.Name) for k in nochange]
+                    key = tuple(row[k] for k in colsi)
 
-                if as_dict :
-                    yield key, NoSortClass({ _.Name: _() for _ in schema  })
-                else :
-                    yield key, NoSortClass(tuple([ _() for _ in schema ]))
+                if as_dict:
+                    yield key, NoSortClass({_.Name: _() for _ in schema})
+                else:
+                    yield key, NoSortClass(tuple([_() for _ in schema]))
 
         def itervalues_group():
-            current = [ ]
+            current = []
             keycur = None
-            for key,row in sorted(itervalues()):
-                if key != keycur :
-                    if len(current) > 0 :
+            for key, row in sorted(itervalues()):
+                if key != keycur:
+                    if len(current) > 0:
                         tom = to_matrix(current)
                         yield tom
-                    current = [ row.value ]
+                    current = [row.value]
                     keycur = key
-                else :
+                else:
                     current.append(row.value)
-            if len(current) > 0 :
+            if len(current) > 0:
                 tom = to_matrix(current)
                 yield tom
 
-        tbl = IterRow(schema, anyset = itervalues_group(), as_dict = as_dict )
-        for c in schema :
-            c.set_owner (tbl)
+        tbl = IterRow(schema, anyset=itervalues_group(), as_dict=as_dict)
+        for c in schema:
+            c.set_owner(tbl)
         return tbl
 
-    def unionall(self, iter, merge_schema = False, as_dict = True):
+    def unionall(self, iter, merge_schema=False, as_dict=True):
         """
         Concatenates this table with another one
 
@@ -476,76 +505,83 @@ class IterRow(object):
         @endexample
         """
 
-        if merge_schema :
-            names = set( a.Name for a in self._schema )
-            name2 = set( a.Name for a in iter._schema )
+        if merge_schema:
+            names = set(a.Name for a in self._schema)
+            name2 = set(a.Name for a in iter._schema)
             common = names & name2
 
             schema = []
-            for c in common :
+            for c in common:
                 i = self._findschema(self._schema, c)
                 col = self._schema[i]
-                schema.append ( col.copy(None) )
+                schema.append(col.copy(None))
 
-            for col in self._schema :
-                if col.Name not in common :
-                    schema.append ( col.copy(None) )
-            for col in iter._schema :
-                if col.Name not in common :
-                    schema.append ( col.copy(None) )
+            for col in self._schema:
+                if col.Name not in common:
+                    schema.append(col.copy(None))
+            for col in iter._schema:
+                if col.Name not in common:
+                    schema.append(col.copy(None))
 
-            not_in_self = set ( c.Name for c in iter._schema if c.Name not in common )
-            not_in_iter = set ( c.Name for c in self._schema if c.Name not in common )
+            not_in_self = set(
+                c.Name for c in iter._schema if c.Name not in common)
+            not_in_iter = set(
+                c.Name for c in self._schema if c.Name not in common)
 
-        else :
+        else:
             if len(self._schema) != len(self._schema):
-                raise SchemaException("cannot concatenate, different schema length")
-            names = sorted( a.Name for a in self._schema )
-            name2 = sorted( a.Name for a in iter._schema )
-            for a,b in zip(names, name2):
-                if a != b :
-                    raise SchemaException("cannot concatenate, different schema column: {0} != {1}".format(a,b))
+                raise SchemaException(
+                    "cannot concatenate, different schema length")
+            names = sorted(a.Name for a in self._schema)
+            name2 = sorted(a.Name for a in iter._schema)
+            for a, b in zip(names, name2):
+                if a != b:
+                    raise SchemaException(
+                        "cannot concatenate, different schema column: {0} != {1}".format(
+                            a,
+                            b))
 
-            schema = [ v.copy(None) for v in self._schema ]  # we do not know the owner yet
+            # we do not know the owner yet
+            schema = [v.copy(None) for v in self._schema]
 
             not_in_self = set()
             not_in_iter = set()
 
-        not_in_self = [ iter._findschema(iter._schema, c) for c in not_in_self ]
-        not_in_iter = [ self._findschema(self._schema, c) for c in not_in_iter ]
+        not_in_self = [iter._findschema(iter._schema, c) for c in not_in_self]
+        not_in_iter = [self._findschema(self._schema, c) for c in not_in_iter]
 
         def iter_union():
-            for i in not_in_self :
+            for i in not_in_self:
                 iter._schema[i].set(NA())
-            for row in self._thisset :
-                if isinstance(row,dict):
-                    for col in self._schema :
+            for row in self._thisset:
+                if isinstance(row, dict):
+                    for col in self._schema:
                         col.set(row[col.Name])
-                else :
-                    for col,r in zip(self._schema, row) :
+                else:
+                    for col, r in zip(self._schema, row):
                         col.set(r)
 
-                if as_dict :
-                    yield  {_.Name:  _() for _ in schema  }
-                else :
-                    yield tuple([ _() for _ in schema ])
+                if as_dict:
+                    yield {_.Name: _() for _ in schema}
+                else:
+                    yield tuple([_() for _ in schema])
 
-            for i in not_in_iter :
+            for i in not_in_iter:
                 self._schema[i].set(NA())
-            for row in iter._thisset :
-                if isinstance(row,dict):
-                    for col in iter._schema :
+            for row in iter._thisset:
+                if isinstance(row, dict):
+                    for col in iter._schema:
                         col.set(row[col.Name])
-                else :
-                    for col,r in zip(iter._schema, row) :
+                else:
+                    for col, r in zip(iter._schema, row):
                         col.set(r)
 
-                if as_dict :
-                    yield  {_.Name:  _() for _ in schema  }
-                else :
-                    yield tuple([ _() for _ in schema ])
+                if as_dict:
+                    yield {_.Name: _() for _ in schema}
+                else:
+                    yield tuple([_() for _ in schema])
 
-        tbl = IterRow(schema, anyset = iter_union(), as_dict = as_dict )
-        for c in schema :
-            c.set_owner (tbl)
+        tbl = IterRow(schema, anyset=iter_union(), as_dict=as_dict)
+        for c in schema:
+            c.set_owner(tbl)
         return tbl
