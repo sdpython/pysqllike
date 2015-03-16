@@ -4,7 +4,8 @@
 README / Changes
 ================
 
-   
+.. image:: https://badge.fury.io/py/pysqllike.svg
+    :target: http://badge.fury.io/py/pysqllike   
    
 **Links:**
     * `pypi/pysqllike <https://pypi.python.org/pypi/pysqllike/>`_
