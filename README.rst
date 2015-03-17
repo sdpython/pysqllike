@@ -7,6 +7,11 @@ README / Changes
 .. image:: https://badge.fury.io/py/pysqllike.svg
     :target: http://badge.fury.io/py/pysqllike   
    
+.. image:: http://img.shields.io/pypi/dm/pysqllike.png
+    :alt: PYPI Package
+    :target: https://pypi.python.org/pypi/pysqllike
+
+              
 **Links:**
     * `pypi/pysqllike <https://pypi.python.org/pypi/pysqllike/>`_
     * `GitHub/pysqllike <https://github.com/sdpython/pysqllike>`_
