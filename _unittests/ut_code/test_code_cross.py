@@ -53,7 +53,8 @@ def myjob1(input):
     return wher
 
 
-def cube(x): return x * x * x
+def cube(x):
+    return x * x * x
 
 
 def myjob2(input):

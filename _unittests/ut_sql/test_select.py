@@ -210,7 +210,7 @@ class TestSelect (unittest.TestCase):
                           agem=tbl.age * 0.5,
                           agea=tbl.age + 0.5,
                           ages=tbl.age - 0.5,
-                          agep=tbl.age**0.5, agedd=tbl.age // 3, agemod=tbl.age % 3
+                          agep=tbl.age ** 0.5, agedd=tbl.age // 3, agemod=tbl.age % 3
                           )
 
         res = list(iter)

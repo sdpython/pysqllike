@@ -153,7 +153,7 @@ class TranslateClass:
 
         # the rest
         self._status = code_rows  # for debugging purpose
-        assi = [_ for _ in chil if _["type"] == "Assign"]
+        # assi = [_ for _ in chil if _["type"] == "Assign"]
         for an in chil:
             if an["type"] == "Assign":
                 one = self.Intruction(an)
@@ -192,7 +192,7 @@ class TranslateClass:
         if len(name) != 1:
             self.RaiseCodeException(
                 "expecting only one row not %d" %
-                len(call))
+                len(chil))
         call = [_ for _ in chil if _["type"] == "Call"]
         if len(call) != 1:
             self.RaiseCodeException(
@@ -334,7 +334,6 @@ class TranslateClass:
                 # we need to look further as CFT is a way to call a function
                 funcName = None
                 subexp = []
-                atts = []
                 for chil in node["children"]:
                     if chil["type"] == "Attribute":
                         chil["processed"] = True
@@ -359,7 +358,6 @@ class TranslateClass:
                 # aggregated function
                 funcName = None
                 subexp = []
-                atts = []
                 for chil in node["children"]:
                     if chil["type"] == "Attribute":
                         chil["processed"] = True

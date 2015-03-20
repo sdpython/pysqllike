@@ -36,8 +36,9 @@ except ImportError:
 
 
 from pyquickhelper import fLOG
-from src.pysqllike.generic.iter_rows import IterRow, IterException, NotAllowedOperation
+from src.pysqllike.generic.iter_rows import IterRow, IterException
 from src.pysqllike.generic.column_type import CFT
+from src.pysqllike.generic.iter_exceptions import NotAllowedOperation
 
 
 class TestSelectGroupBy (unittest.TestCase):

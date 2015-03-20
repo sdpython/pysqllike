@@ -4,6 +4,10 @@
 README / Changes
 ================
 
+.. image:: https://travis-ci.org/sdpython/pysqllike.svg?branch=master
+    :target: https://travis-ci.org/sdpython/pysqllike
+    :alt: Build status
+
 .. image:: https://badge.fury.io/py/pysqllike.svg
     :target: http://badge.fury.io/py/pysqllike   
    

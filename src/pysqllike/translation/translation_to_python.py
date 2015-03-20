@@ -114,7 +114,7 @@ class Translate2Python(TranslateClass):
             if not first:
                 self.RaiseCodeException(
                     "SyntaxError, only one clause where is allowed")
-            att0 = r["str"]
+            # att0 = r["str"]
             exp, fields, functions = self.ResolveExpression(r, "_")
             for att_ in fields:
                 spl = att_.split(".")

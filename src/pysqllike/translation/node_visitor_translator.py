@@ -219,7 +219,7 @@ class CodeNodeVisitor(ast.NodeVisitor):
         cont = {"indent": self._indent, "type": "Attribute", "str": node.attr,
                 "node": node, "value": node.value, "ctx": node.ctx, "attr": node.attr}
         self.push(cont)
-        last = len(self._rows)
+        # last = len(self._rows)
         res = self.generic_visit(node, cont)
 
         if len(cont["children"]) > 0:

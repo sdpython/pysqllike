@@ -4,7 +4,6 @@
 @brief Classes which defines column for class @see cl IterRow
 """
 from inspect import isfunction
-import operator
 import collections
 from .iter_exceptions import IterException, NotAllowedOperation
 from .others_types import long, NA, EmptyGroup, GroupByContainer

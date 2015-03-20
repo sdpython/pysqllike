@@ -4,7 +4,7 @@
 @brief An class which iterates on any set.
 """
 
-from .iter_exceptions import IterException, NotAllowedOperation, SchemaException
+from .iter_exceptions import IterException, SchemaException
 from .column_type import ColumnType, ColumnTableType, ColumnGroupType
 from .others_types import NoSortClass, GroupByContainer, NA
 
@@ -180,7 +180,7 @@ class IterRow(object):
         @endcode
         @endexample
         """
-        newschema = list(nochange) + [(k, None) for k in changed.keys()]
+        # newschema = list(nochange) + [(k, None) for k in changed.keys()]
 
         for el in nochange:
             if not isinstance(el, ColumnType):
@@ -373,9 +373,8 @@ class IterRow(object):
         @endcode
         @endexample
         """
-        selftbl = self.orderby(nochange, as_dict=as_dict)
-
-        newschema = list(nochange) + [(k, None) for k in changed.keys()]
+        # selftbl = self.orderby(nochange, as_dict=as_dict)
+        # newschema = list(nochange) + [(k, None) for k in changed.keys()]
 
         for el in nochange:
             if not isinstance(el, ColumnType):

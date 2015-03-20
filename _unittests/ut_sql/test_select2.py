@@ -53,7 +53,8 @@ class TestSelect2 (unittest.TestCase):
         schema = [("nom", str), ("age", int)]
         tbl = IterRow(schema, l)
 
-        def myf(x, y): return x * 2.5 + y
+        def myf(x, y):
+            return x * 2.5 + y
         iter = tbl.select(tbl.nom, age0=CFT(myf, tbl.age, tbl.age))
         res = list(iter)
 
@@ -75,7 +76,8 @@ class TestSelect2 (unittest.TestCase):
              {"nom": "jeanne", "age": 2}]
         tbl = IterRow(None, l)
 
-        def myf(x, y): return x * 2.5 + y
+        def myf(x, y):
+            return x * 2.5 + y
         iter = tbl.select(tbl.nom, age0=CFT(myf, tbl.age, tbl.age))
         res = list(iter)
 
