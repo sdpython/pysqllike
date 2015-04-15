@@ -23,7 +23,8 @@ pysqllike documentation
 **Links:** `pypi <https://pypi.python.org/pypi/pysqllike/>`_,
 `github <https://github.com/sdpython/pysqllike/>`_,
 `documentation <http://www.xavierdupre.fr/app/pysqllike/helpsphinx/index.html>`_,
-`wheel <http://www.xavierdupre.fr/site2013/index_code.html#pysqllike>`_
+`wheel <http://www.xavierdupre.fr/site2013/index_code.html#pysqllike>`_,
+:ref:`l-README`
 
 
 Description
@@ -61,6 +62,11 @@ job::
 
 It should also be translated into 
 `SQL <http://fr.wikipedia.org/wiki/Structured_Query_Language>`_.
+
+Installation
+------------
+
+``pip install pysqllike``
 
 Functionalities
 ---------------
