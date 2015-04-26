@@ -26,3 +26,5 @@ set_sphinx_variables(__file__,
                      csp.get_theme_dir(),
                      locals(),
                      add_extensions=['cloud_sptheme'])
+
+blog_root = "http://www.xavierdupre.fr/app/sqllike/helpsphinx/"
