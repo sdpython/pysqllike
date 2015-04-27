@@ -21,6 +21,8 @@ README / Changes
     * `GitHub/pysqllike <https://github.com/sdpython/pysqllike>`_
     * `documentation <http://www.xavierdupre.fr/app/pysqllike/helpsphinx/index.html>`_
     * `Windows Setup <http://www.xavierdupre.fr/site2013/index_code.html#pysqllike>`_
+    * `Travis <https://travis-ci.org/sdpython/pysqllike>`_
+    * `Blog <http://www.xavierdupre.fr/app/pysqllike/helpsphinx/blog/main_0000.html#ap-main-0>`_
 
 
 Description
