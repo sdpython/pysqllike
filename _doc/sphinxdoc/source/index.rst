@@ -18,7 +18,13 @@ pysqllike documentation
     :alt: PYPI Package
     :target: https://pypi.python.org/pypi/pysqllike
 
-                 
+ .. image:: http://img.shields.io/github/issues/sdpython/pysqllike.png
+    :alt: GitHub Issues
+    :target: https://github.com/sdpython/pysqllike/issues
+    
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
+    :alt: MIT License
+    :target: http://opensource.org/licenses/MIT
    
 **Links:** `pypi <https://pypi.python.org/pypi/pysqllike/>`_,
 `github <https://github.com/sdpython/pysqllike/>`_,
