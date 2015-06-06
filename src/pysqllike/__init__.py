@@ -9,7 +9,7 @@ __author__ = "Xavier Dupré"
 __github__ = "https://github.com/sdpython/pysqllike"
 __url__ = "http://www.xavierdupre.fr/app/pysqllike/helpsphinx/index.html"
 __downloadUrl__ = "http://www.xavierdupre.fr/site2013/index_code.html#pysqllike"
-__license__ = "BSD License"
+__license__ = "MIT License"
 
 
 def _setup_hook():
