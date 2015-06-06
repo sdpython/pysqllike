@@ -1,0 +1,14 @@
+
+
+.. blogpost::
+    :title: About this module
+    :keywords: about
+    :date: 2015-06-06
+    :categories: teachings
+    
+    I first intented to use this module to speed up writing
+    map reduce jobs by using a kind of functional syntax to define the job.
+    I allow easy testing on local data and some functions to translate
+    this job into various map reduce languages SQL, PIG, Python.
+    But I do not have time to really work on it and complete it.
+    

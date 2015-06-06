@@ -18,7 +18,7 @@ pysqllike documentation
     :alt: PYPI Package
     :target: https://pypi.python.org/pypi/pysqllike
 
- .. image:: http://img.shields.io/github/issues/sdpython/pysqllike.png
+.. image:: http://img.shields.io/github/issues/sdpython/pysqllike.png
     :alt: GitHub Issues
     :target: https://github.com/sdpython/pysqllike/issues
     
@@ -30,7 +30,8 @@ pysqllike documentation
 `github <https://github.com/sdpython/pysqllike/>`_,
 `documentation <http://www.xavierdupre.fr/app/pysqllike/helpsphinx/index.html>`_,
 `wheel <http://www.xavierdupre.fr/site2013/index_code.html#pysqllike>`_,
-:ref:`l-README`
+:ref:`l-README`,
+:ref:`blog <ap-main-0>`
 
 
 Description

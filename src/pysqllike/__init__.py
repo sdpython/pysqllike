@@ -12,6 +12,13 @@ __downloadUrl__ = "http://www.xavierdupre.fr/site2013/index_code.html#pysqllike"
 __license__ = "BSD License"
 
 
+def _setup_hook():
+    """
+    does nothing
+    """
+    pass
+
+
 def check(log=False):
     """
     Checks the library is working.
