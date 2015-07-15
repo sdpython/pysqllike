@@ -81,6 +81,16 @@ Functionalities
 * not yet ready
     
 
+Tutorial
+--------
+
+.. toctree::
+    :max_depth: 1
+    
+    all_example
+    all_notebooks
+            
+        
 Indices and tables
 ------------------
 
