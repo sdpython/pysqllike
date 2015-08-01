@@ -34,7 +34,7 @@ pysqllike documentation
 :ref:`blog <ap-main-0>`
 
 
-Description
+What is it?
 -----------
 
 Writing a map/reduce job
@@ -81,8 +81,8 @@ Functionalities
 * not yet ready
     
 
-Tutorial
---------
+Quick start
+-----------
 
 .. toctree::
     :maxdepth: 1
