@@ -21,7 +21,7 @@ from pyquickhelper.helpgen.default_conf import set_sphinx_variables
 set_sphinx_variables(__file__,
                      "pysqllike",
                      "Xavier Dupré",
-                     2014,
+                     2015,
                      "cloud",
                      csp.get_theme_dir(),
                      locals(),
