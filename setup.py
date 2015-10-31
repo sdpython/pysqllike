@@ -152,6 +152,9 @@ if is_local():
         sys.argv, __file__, project_var_name,
         additional_notebook_path=["pyquickhelper"],
         unittest_modules=["pyquickhelper"])
+
+    if not r:
+        raise Exception("unable to interpret command line: " + str(sys.argv))
 else:
     r = False
 
