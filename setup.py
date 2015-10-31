@@ -118,6 +118,7 @@ def verbose():
 if is_local():
     def write_version():
         pyquickhelper = import_pyquickhelper()
+        print("**** PYQUICKHELPER: " + pyquickhelper.__file__)
         from pyquickhelper import write_version_for_setup
         return write_version_for_setup(__file__)
 
@@ -150,10 +151,12 @@ if is_local():
     pyquickhelper = import_pyquickhelper()
     r = pyquickhelper.process_standard_options_for_setup(
         sys.argv, __file__, project_var_name,
+        requirements=["pyquickhelper"],
         additional_notebook_path=["pyquickhelper"],
         unittest_modules=["pyquickhelper"])
-
-    if not r:
+    if not r and not ({"bdist_msi", "sdist",
+                       "bdist_wheel", "publish", "publish_doc", "register",
+                       "upload_docs", "bdist_wininst"} & set(sys.argv)):
         raise Exception("unable to interpret command line: " + str(sys.argv))
 else:
     r = False
