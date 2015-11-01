@@ -9,6 +9,10 @@ README / Changes
     :target: https://travis-ci.org/sdpython/pysqllike
     :alt: Build status
 
+.. image:: https://ci.appveyor.com/api/projects/status/67ljkgh36klak07a?svg=true
+    :target: https://ci.appveyor.com/project/sdpython/pysqllike
+    :alt: Build Status Windows
+    
 .. image:: https://badge.fury.io/py/pysqllike.svg
     :target: http://badge.fury.io/py/pysqllike   
    
