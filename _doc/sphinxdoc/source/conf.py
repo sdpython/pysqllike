@@ -3,7 +3,7 @@ import sys
 import os
 import datetime
 import re
-import cloud_sptheme as csp
+import alabaster
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.split(__file__)[0])))
 sys.path.insert(
@@ -23,9 +23,9 @@ set_sphinx_variables(__file__,
                      "pysqllike",
                      "Xavier Dupré",
                      2015,
-                     "cloud",
-                     csp.get_theme_dir(),
+                     "alabaster",
+                     alabaster.get_path(),
                      locals(),
-                     add_extensions=['cloud_sptheme'])
+                     add_extensions=['alabaster'])
 
 blog_root = "http://www.xavierdupre.fr/app/sqllike/helpsphinx/"
