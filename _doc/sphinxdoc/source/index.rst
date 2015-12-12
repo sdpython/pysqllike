@@ -29,6 +29,11 @@ pysqllike documentation
 .. image:: https://img.shields.io/badge/license-MIT-blue.svg
     :alt: MIT License
     :target: http://opensource.org/licenses/MIT
+    
+.. image:: https://landscape.io/github/sdpython/pysqllike/master/landscape.svg?style=flat
+   :target: https://landscape.io/github/sdpython/pysqllike/master
+   :alt: Code Health
+    
    
 **Links:** `pypi <https://pypi.python.org/pypi/pysqllike/>`_,
 `github <https://github.com/sdpython/pysqllike/>`_,
