@@ -32,7 +32,10 @@ README / Changes
    :target: https://landscape.io/github/sdpython/pysqllike/master
    :alt: Code Health
     
-
+.. image:: https://requires.io/github/sdpython/pysqllike/requirements.svg?branch=master
+     :target: https://requires.io/github/sdpython/pysqllike/requirements/?branch=master
+     :alt: Requirements Status   
+    
 **Links:**
     * `pypi/pysqllike <https://pypi.python.org/pypi/pysqllike/>`_
     * `GitHub/pysqllike <https://github.com/sdpython/pysqllike>`_
