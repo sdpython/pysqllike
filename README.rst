@@ -34,7 +34,11 @@ README / Changes
     
 .. image:: https://requires.io/github/sdpython/pysqllike/requirements.svg?branch=master
      :target: https://requires.io/github/sdpython/pysqllike/requirements/?branch=master
-     :alt: Requirements Status   
+     :alt: Requirements Status  
+
+.. image:: https://codecov.io/github/codecov/pysqllike/coverage.svg?branch=master
+    :target: https://codecov.io/github/codecov/pysqllike?branch=master
+    
     
 **Links:**
     * `pypi/pysqllike <https://pypi.python.org/pypi/pysqllike/>`_
@@ -100,7 +104,7 @@ This project contains various helper about logging functions, unit tests and hel
 Versions
 --------
 
-* **v0.1 - 2014/??/??**
+* **0.1 - 2016/??/??**
     * **new:** first version
     * **fix:** the setup does not need the file ``README.rst`` anymore
     

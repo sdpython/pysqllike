@@ -37,6 +37,11 @@ pysqllike documentation
 .. image:: https://requires.io/github/sdpython/pysqllike/requirements.svg?branch=master
      :target: https://requires.io/github/sdpython/pysqllike/requirements/?branch=master
      :alt: Requirements Status      
+
+.. image:: https://codecov.io/github/codecov/pysqllike/coverage.svg?branch=master
+    :target: https://codecov.io/github/codecov/pysqllike?branch=master
+    
+
    
 **Links:** `pypi <https://pypi.python.org/pypi/pysqllike/>`_,
 `github <https://github.com/sdpython/pysqllike/>`_,
