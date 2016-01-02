@@ -38,8 +38,8 @@ pysqllike documentation
      :target: https://requires.io/github/sdpython/pysqllike/requirements/?branch=master
      :alt: Requirements Status      
 
-.. image:: https://codecov.io/github/codecov/pysqllike/coverage.svg?branch=master
-    :target: https://codecov.io/github/codecov/pysqllike?branch=master
+.. image:: https://codecov.io/github/sdpython/pysqllike/coverage.svg?branch=master
+    :target: https://codecov.io/github/sdpython/pysqllike?branch=master
     
 
    
