@@ -7,8 +7,6 @@ import os
 import unittest
 import inspect
 import ast
-import inspect
-import _ast
 
 try:
     import src
@@ -24,7 +22,7 @@ except ImportError:
     import src
 
 try:
-    import pyquickhelper
+    import pyquickhelper as skip_
 except ImportError:
     path = os.path.abspath(
         os.path.join(
@@ -35,11 +33,10 @@ except ImportError:
             "pyquickhelper",
             "src"))
     sys.path.append(path)
-    import pyquickhelper
+    import pyquickhelper as skip_
 
 
-from pyquickhelper import fLOG
-from src.pysqllike.generic.iter_rows import IterRow, IterException
+from pyquickhelper.loghelper import fLOG
 from src.pysqllike.translation.node_visitor_translator import CodeNodeVisitor
 from src.pysqllike.translation.translation_class import TranslateClass
 from src.pysqllike.translation.translation_to_python import Translate2Python
@@ -61,7 +58,6 @@ class TestCode (unittest.TestCase):
             OutputPrint=__name__ == "__main__")
         code = inspect.getsource(myjob)
         node = ast.parse(code)
-        inode = 0
         stack = [(0, node)]
 
         while len(stack) > 0:
@@ -105,7 +101,7 @@ class TestCode (unittest.TestCase):
             OutputPrint=__name__ == "__main__")
         trans = TranslateClass(myjob)
         try:
-            code = trans.Code()
+            trans.Code()
             assert False
         except CodeException as e:
             assert "not implemented" in str(e)

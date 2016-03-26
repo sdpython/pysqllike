@@ -5,10 +5,7 @@
 import sys
 import os
 import unittest
-import inspect
-import ast
-import inspect
-import _ast
+
 
 try:
     import src
@@ -24,7 +21,7 @@ except ImportError:
     import src
 
 try:
-    import pyquickhelper
+    import pyquickhelper as skip_
 except ImportError:
     path = os.path.abspath(
         os.path.join(
@@ -35,15 +32,12 @@ except ImportError:
             "pyquickhelper",
             "src"))
     sys.path.append(path)
-    import pyquickhelper
+    import pyquickhelper as skip_
 
 
-from pyquickhelper import fLOG
-from src.pysqllike.generic.iter_rows import IterRow, IterException
-from src.pysqllike.translation.node_visitor_translator import CodeNodeVisitor
-from src.pysqllike.translation.translation_class import TranslateClass
+from pyquickhelper.loghelper import fLOG
+from src.pysqllike.generic.iter_rows import IterRow
 from src.pysqllike.translation.translation_to_python import Translate2Python
-from src.pysqllike.translation.code_exception import CodeException
 from src.pysqllike.generic.column_type import CFT
 
 
@@ -81,7 +75,6 @@ class TestCodeCross (unittest.TestCase):
             __file__,
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
-        data = [data1]
         functions = [myjob1, myjob2, myjob3]
         translate = [Translate2Python]
 
@@ -104,6 +97,8 @@ class TestCodeCross (unittest.TestCase):
                     co = exec(code)
                 except Exception as e:
                     raise Exception("unable to compile code\n" + code) from e
+
+                assert co is None
 
                 try:
                     exe = eval("%s(it)" % fname)

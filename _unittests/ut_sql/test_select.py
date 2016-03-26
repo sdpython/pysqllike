@@ -6,7 +6,7 @@
 import sys
 import os
 import unittest
-import operator
+
 
 try:
     import src
@@ -22,7 +22,7 @@ except ImportError:
     import src
 
 try:
-    import pyquickhelper
+    import pyquickhelper as skip_
 except ImportError:
     path = os.path.abspath(
         os.path.join(
@@ -33,10 +33,10 @@ except ImportError:
             "pyquickhelper",
             "src"))
     sys.path.append(path)
-    import pyquickhelper
+    import pyquickhelper as skip_
 
 
-from pyquickhelper import fLOG
+from pyquickhelper.loghelper import fLOG
 from src.pysqllike.generic.iter_rows import IterRow, IterException
 
 
@@ -187,13 +187,12 @@ class TestSelect (unittest.TestCase):
 
         iter = tbl.select(tbl.nom, age2=tbl.age, age3=tbl.age * 0.5)
         try:
-            iter2 = iter.select(iter.nom, tbl.age)
+            iter.select(iter.nom, tbl.age)
             raise TypeError(
                 "we should not be able to reach this code due to confusion between iter and tbl")
         except IterException as e:
             fLOG(e)
             assert "mismatch" in str(e)
-
         # however we do not check formulas...
 
     def test_select_operators(self):

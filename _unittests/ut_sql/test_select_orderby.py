@@ -5,7 +5,7 @@
 import sys
 import os
 import unittest
-import operator
+
 
 try:
     import src
@@ -21,7 +21,7 @@ except ImportError:
     import src
 
 try:
-    import pyquickhelper
+    import pyquickhelper as skip_
 except ImportError:
     path = os.path.abspath(
         os.path.join(
@@ -32,11 +32,11 @@ except ImportError:
             "pyquickhelper",
             "src"))
     sys.path.append(path)
-    import pyquickhelper
+    import pyquickhelper as skip_
 
 
-from pyquickhelper import fLOG
-from src.pysqllike.generic.iter_rows import IterRow, IterException
+from pyquickhelper.loghelper import fLOG
+from src.pysqllike.generic.iter_rows import IterRow
 
 
 class TestSelectOrderBy (unittest.TestCase):
