@@ -58,7 +58,7 @@ class TestFlake8(unittest.TestCase):
 
         thi = os.path.abspath(os.path.dirname(__file__))
         src_ = os.path.normpath(os.path.join(thi, "..", "..", "src"))
-        check_pep8(src_, fLOG=fLOG, extended=[("fLOG", _extended_refectoring)])
+        check_pep8(src_, fLOG=fLOG, extended=[("fLOG", _extended_refactoring)])
 
     def test_flake8_test(self):
         fLOG(
@@ -80,7 +80,7 @@ class TestFlake8(unittest.TestCase):
                          "'skip__' imported but unused",
                          "'skip___' imported but unused",
                          ],
-                   extended=[("fLOG", _extended_refectoring)])
+                   extended=[("fLOG", _extended_refactoring)])
 
 
 if __name__ == "__main__":
