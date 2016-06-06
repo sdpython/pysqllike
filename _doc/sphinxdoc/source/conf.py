@@ -19,13 +19,8 @@ sys.path.insert(
             "src")))
 
 from pyquickhelper.helpgen.default_conf import set_sphinx_variables
-set_sphinx_variables(__file__,
-                     "pysqllike",
-                     "Xavier Dupré",
-                     2015,
-                     "alabaster",
-                     alabaster.get_path(),
-                     locals(),
-                     add_extensions=['alabaster'])
+set_sphinx_variables(__file__, "pysqllike", "Xavier Dupré", 2016,
+                     "alabaster", alabaster.get_path(), locals(), add_extensions=['alabaster'],
+                     extlinks=dict(issue=('https://github.com/sdpython/pysqllike/issues/%d', 'issue')))
 
 blog_root = "http://www.xavierdupre.fr/app/sqllike/helpsphinx/"
