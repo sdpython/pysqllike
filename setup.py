@@ -152,8 +152,8 @@ if "--verbose" in sys.argv:
 if is_local():
     pyquickhelper = import_pyquickhelper()
     logging_function = pyquickhelper.get_fLOG()
-    logging_function(OutputPrint=True)
     from pyquickhelper.pycode import process_standard_options_for_setup
+    logging_function(OutputPrint=True)
     r = process_standard_options_for_setup(
         sys.argv, __file__, project_var_name,
         requirements=["pyquickhelper"],
