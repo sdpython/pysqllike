@@ -19,7 +19,7 @@ KEYWORDS = project_var_name + ', SQL, Map Reduce, Xavier, Dupré'
 DESCRIPTION = """An intent to write SQL like programs and to translate them in Python, SQL, Hive, PIG."""
 
 CLASSIFIERS = [
-    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: %d' % sys.version_info[0],
     'Intended Audience :: Developers',
     'Topic :: Scientific/Engineering',
     'Topic :: Education',
@@ -90,7 +90,8 @@ def import_pyquickhelper():
                     os.path.join(
                         os.path.dirname(__file__),
                         "..",
-                        "pyquickhelper",
+                        "pyquickhelper" if sys.version_info[
+                            0] >= 3 else "py27_pyquickhelper_27",
                         "src"))))
         try:
             import pyquickhelper
@@ -138,6 +139,8 @@ else:
 ##############
 
 if os.path.exists(readme):
+    if sys.version_info[0] == 2:
+        from codecs import open
     with open(readme, "r", encoding='utf-8-sig') as f:
         long_description = f.read()
 else:
@@ -148,7 +151,7 @@ if "--verbose" in sys.argv:
 
 if is_local():
     pyquickhelper = import_pyquickhelper()
-    from pyquickhelper.loghelper import fLOG as logging_function
+    logging_function = pyquickhelper.get_fLOG()
     logging_function(OutputPrint=True)
     from pyquickhelper.pycode import process_standard_options_for_setup
     r = process_standard_options_for_setup(
@@ -170,6 +173,11 @@ if len(sys.argv) == 1 and "--help" in sys.argv:
     process_standard_options_for_setup_help()
 
 if not r:
+    if len(sys.argv) in (1, 2) and sys.argv[-1] in ("--help-commands",):
+        pyquickhelper = import_pyquickhelper()
+        from pyquickhelper.pycode import process_standard_options_for_setup_help
+        process_standard_options_for_setup_help(sys.argv)
+
     setup(
         name=project_var_name,
         version='%s%s' % (sversion, subversion),
