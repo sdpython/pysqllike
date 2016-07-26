@@ -13,7 +13,7 @@ sversion = "0.1"
 versionPython = "%s.%s" % (sys.version_info.major, sys.version_info.minor)
 path = "Lib/site-packages/" + project_var_name
 readme = 'README.rst'
-
+requirements = None
 
 KEYWORDS = project_var_name + ', SQL, Map Reduce, Xavier, Dupré'
 DESCRIPTION = """An intent to write SQL like programs and to translate them in Python, SQL, Hive, PIG."""
@@ -27,9 +27,11 @@ CLASSIFIERS = [
     'Development Status :: 5 - Production/Stable'
 ]
 
+
 #######
 # data
 #######
+
 
 packages = find_packages('src', exclude='src')
 package_dir = {k: "src/" + k.replace(".", "/") for k in packages}
@@ -63,6 +65,7 @@ def is_local():
        "unittests" in sys.argv or \
        "unittests_LONG" in sys.argv or \
        "unittests_SKIP" in sys.argv or \
+       "unittests_GUI" in sys.argv or \
        "run27" in sys.argv or \
        "sdist" in sys.argv or \
        "setupdep" in sys.argv or \
@@ -116,18 +119,21 @@ def verbose():
 # version
 ##########
 
-if is_local():
+if is_local() and "--help" not in sys.argv and "--help-commands" not in sys.argv:
     def write_version():
         pyquickhelper = import_pyquickhelper()
         from pyquickhelper.pycode import write_version_for_setup
         return write_version_for_setup(__file__)
 
-    write_version()
+    if sys.version_info[0] != 2:
+        write_version()
 
     if os.path.exists("version.txt"):
         with open("version.txt", "r") as f:
             lines = f.readlines()
         subversion = "." + lines[0].strip("\r\n ")
+        if subversion == ".0":
+            raise Exception("subversion is wrong: " + subversion)
     else:
         raise FileNotFoundError("version.txt")
 else:
@@ -166,11 +172,6 @@ if is_local():
         raise Exception("unable to interpret command line: " + str(sys.argv))
 else:
     r = False
-
-if len(sys.argv) == 1 and "--help" in sys.argv:
-    pyquickhelper = import_pyquickhelper()
-    from pyquickhelper.pycode import process_standard_options_for_setup_help
-    process_standard_options_for_setup_help()
 
 if not r:
     if len(sys.argv) in (1, 2) and sys.argv[-1] in ("--help-commands",):
