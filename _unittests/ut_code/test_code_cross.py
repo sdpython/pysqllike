@@ -61,6 +61,7 @@ def myjob3(input):
     iter = input.groupby(input.year, size=input.ext.len())
     return iter
 
+
 data1 = [{"ext": "pysqllike", "num": 3, "year": 2014},
          {"ext": "pyquickhelper", "num": 1, "year": 2013},
          {"ext": "pyensae", "num": 2, "year": 2013},

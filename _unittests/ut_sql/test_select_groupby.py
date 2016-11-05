@@ -48,10 +48,10 @@ class TestSelectGroupBy (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [{"nom": "j", "age": 10, "gender": "M"},
-             {"nom": "jean", "age": 40, "gender": "M"},
-             {"nom": "jeanne", "age": 2, "gender": "F"}]
-        tbl = IterRow(None, l)
+        lr = [{"nom": "j", "age": 10, "gender": "M"},
+              {"nom": "jean", "age": 40, "gender": "M"},
+              {"nom": "jeanne", "age": 2, "gender": "F"}]
+        tbl = IterRow(None, lr)
 
         iter = tbl.groupby(
             tbl.gender,
@@ -81,10 +81,10 @@ class TestSelectGroupBy (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [{"nom": "j", "age": 10, "gender": "M"},
-             {"nom": "jean", "age": 40, "gender": "M"},
-             {"nom": "jeanne", "age": 2, "gender": "F"}]
-        tbl = IterRow(None, l)
+        le = [{"nom": "j", "age": 10, "gender": "M"},
+              {"nom": "jean", "age": 40, "gender": "M"},
+              {"nom": "jeanne", "age": 2, "gender": "F"}]
+        tbl = IterRow(None, le)
 
         iter = tbl.groupby(tbl.gender, tbl.nom, nbs=tbl.age.len())
         res = list(iter)

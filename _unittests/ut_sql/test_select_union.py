@@ -48,10 +48,10 @@ class TestSelectUnion (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [{"nom": "j", "age": 10, "gender": "M"},
-             {"nom": "jean", "age": 40, "gender": "M"},
-             {"nom": "jeanne", "age": 2, "gender": "F"}]
-        tbl = IterRow(None, l)
+        lr = [{"nom": "j", "age": 10, "gender": "M"},
+              {"nom": "jean", "age": 40, "gender": "M"},
+              {"nom": "jeanne", "age": 2, "gender": "F"}]
+        tbl = IterRow(None, lr)
 
         iter = tbl.unionall(tbl)
         res = list(iter)
@@ -73,15 +73,15 @@ class TestSelectUnion (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [{"nom": "j", "age": 10, "gender": "M"},
-             {"nom": "jean", "age": 40, "gender": "M"},
-             {"nom": "jeanne", "age": 2, "gender": "F"}]
-        tbl = IterRow(None, l)
+        le = [{"nom": "j", "age": 10, "gender": "M"},
+              {"nom": "jean", "age": 40, "gender": "M"},
+              {"nom": "jeanne", "age": 2, "gender": "F"}]
+        tbl = IterRow(None, le)
 
-        l = [{"nom": "j", "newage": 10, "gender": "M"},
-             {"nom": "jean", "newage": 40, "gender": "M"},
-             {"nom": "jeanne", "newage": 2, "gender": "F"}]
-        tbl2 = IterRow(None, l)
+        le = [{"nom": "j", "newage": 10, "gender": "M"},
+              {"nom": "jean", "newage": 40, "gender": "M"},
+              {"nom": "jeanne", "newage": 2, "gender": "F"}]
+        tbl2 = IterRow(None, le)
 
         iter = tbl.unionall(tbl2, merge_schema=True)
         res = list(iter)
@@ -105,6 +105,7 @@ class TestSelectUnion (unittest.TestCase):
 
         if res != exp:
             raise ValueError(str(res))
+
 
 if __name__ == "__main__":
     unittest.main()

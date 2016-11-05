@@ -47,10 +47,10 @@ class TestSelectOrderBy (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [{"nom": "j", "age": 10, "gender": "M"},
-             {"nom": "jean", "age": 40, "gender": "M"},
-             {"nom": "jeanne", "age": 2, "gender": "F"}]
-        tbl = IterRow(None, l)
+        le = [{"nom": "j", "age": 10, "gender": "M"},
+              {"nom": "jean", "age": 40, "gender": "M"},
+              {"nom": "jeanne", "age": 2, "gender": "F"}]
+        tbl = IterRow(None, le)
 
         iter = tbl.orderby(tbl.nom, tbl.age, ascending=False)
         res = list(iter)

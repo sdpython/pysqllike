@@ -47,19 +47,19 @@ class TestSelect (unittest.TestCase):
             __file__,
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
-        l = [("nom", 10), ("jean", 40)]
+        lr = [("nom", 10), ("jean", 40)]
         schema = [("nom", str), ("age", int)]
-        tbl = IterRow(schema, l)
-        l = list(tbl)
-        assert len(l) == 2
-        if l != [{'nom': 'nom', 'age': 10}, {'nom': 'jean', 'age': 40}]:
-            raise ValueError(str(l))
+        tbl = IterRow(schema, lr)
+        lr = list(tbl)
+        assert len(lr) == 2
+        if lr != [{'nom': 'nom', 'age': 10}, {'nom': 'jean', 'age': 40}]:
+            raise ValueError(str(lr))
 
-        tbl = IterRow(schema, l, as_dict=False)
-        l = list(tbl)
-        assert len(l) == 2
-        if l != [('nom', 10), ('jean', 40)]:
-            raise ValueError(str(l))
+        tbl = IterRow(schema, lr, as_dict=False)
+        lr = list(tbl)
+        assert len(lr) == 2
+        if lr != [('nom', 10), ('jean', 40)]:
+            raise ValueError(str(lr))
 
     def test_iter_simple_dict(self):
         fLOG(
@@ -69,10 +69,10 @@ class TestSelect (unittest.TestCase):
         l0 = [{"nom": "jean", "age": 10},
               {"nom": "j", "age": 20}]
         tbl = IterRow(None, l0)
-        l = list(tbl)
-        assert len(l) == 2
-        if l != l0:
-            raise ValueError(str(l))
+        lr = list(tbl)
+        assert len(lr) == 2
+        if lr != l0:
+            raise ValueError(str(lr))
 
     def test_iter_simple_dict2(self):
         fLOG(
@@ -83,24 +83,24 @@ class TestSelect (unittest.TestCase):
               {"nom": "j", "age": 20}]
         tbl = IterRow(None, l0)
         tbl2 = tbl.select(tbl.nom)
-        l = list(tbl2)
-        assert len(l) == 2
-        if l != [{"nom": "jean"}, {"nom": "j"}]:
-            raise ValueError(str(l))
+        lr = list(tbl2)
+        assert len(lr) == 2
+        if lr != [{"nom": "jean"}, {"nom": "j"}]:
+            raise ValueError(str(lr))
 
     def test_select_simple(self):
         fLOG(
             __file__,
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
-        l = [("jake", 10), ("jean", 40)]
+        lr = [("jake", 10), ("jean", 40)]
         schema = [("nom", str), ("age", int)]
-        tbl = IterRow(schema, l)
-        l = list(tbl.select(tbl.nom, tbl.age))
-        for _ in l:
+        tbl = IterRow(schema, lr)
+        lr = list(tbl.select(tbl.nom, tbl.age))
+        for _ in lr:
             fLOG("+", _)
-        if l != [{'age': 10, 'nom': 'jake'}, {'age': 40, 'nom': 'jean'}]:
-            raise Exception(str(l))
+        if lr != [{'age': 10, 'nom': 'jake'}, {'age': 40, 'nom': 'jean'}]:
+            raise Exception(str(lr))
 
     def test_select_simple2(self):
         fLOG(
@@ -108,17 +108,17 @@ class TestSelect (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [("nom", 10), ("jean", 40)]
+        lr = [("nom", 10), ("jean", 40)]
         schema = [("nom", str), ("age", int)]
-        tbl = IterRow(schema, l)
+        tbl = IterRow(schema, lr)
 
         iter = tbl.select(tbl.nom, age2=tbl.age * 2, age3=tbl.age * 3)
 
-        l = list(iter)
-        assert len(l) == 2
-        if l != [{'nom': 'nom', 'age2': 20, 'age3': 30},
-                 {'nom': 'jean', 'age2': 80, 'age3': 120}]:
-            raise Exception(str(l))
+        lr = list(iter)
+        assert len(lr) == 2
+        if lr != [{'nom': 'nom', 'age2': 20, 'age3': 30},
+                  {'nom': 'jean', 'age2': 80, 'age3': 120}]:
+            raise Exception(str(lr))
 
         iter = tbl.select(tbl.nom, age2=tbl.age * 2)
         sch = iter.Schema
@@ -131,20 +131,20 @@ class TestSelect (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [("nom", 10), ("jean", 40), ("jeanne", 2)]
+        lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
-        tbl = IterRow(schema, l)
+        tbl = IterRow(schema, lr)
 
         iter = tbl.select(tbl.nom, age2=tbl.age * 2)
         iter2 = iter.select(iter.nom, age4=iter.age2 * 2)
 
-        l = list(iter2)
-        assert len(l) == 3
+        lr = list(iter2)
+        assert len(lr) == 3
         fLOG(";".join([str(_) for _ in iter2.Schema]))
-        fLOG(l)
-        if l != [{'age4': 40, 'nom': 'nom'}, {
+        fLOG(lr)
+        if lr != [{'age4': 40, 'nom': 'nom'}, {
                 'age4': 160, 'nom': 'jean'}, {'age4': 8, 'nom': 'jeanne'}]:
-            raise Exception(str(l))
+            raise Exception(str(lr))
 
         sch = iter2.Schema
         assert sch[0].Name == "nom"
@@ -156,20 +156,20 @@ class TestSelect (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [("nom", 10), ("jean", 40), ("jeanne", 2)]
+        lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
-        tbl = IterRow(schema, l)
+        tbl = IterRow(schema, lr)
 
         iter = tbl.select(tbl.nom, age2=tbl.age, age3=tbl.age * 0.5)
         iter2 = iter.select(iter.nom, age4=iter.age2 * iter.age3)
 
-        l = list(iter2)
-        assert len(l) == 3
+        lr = list(iter2)
+        assert len(lr) == 3
         fLOG(";".join([str(_) for _ in iter2.Schema]))
-        fLOG(l)
-        if l != [{'age4': 50.0, 'nom': 'nom'}, {
+        fLOG(lr)
+        if lr != [{'age4': 50.0, 'nom': 'nom'}, {
                 'age4': 800.0, 'nom': 'jean'}, {'age4': 2.0, 'nom': 'jeanne'}]:
-            raise Exception(str(l))
+            raise Exception(str(lr))
 
         sch = iter2.Schema
         assert sch[0].Name == "nom"
@@ -181,9 +181,9 @@ class TestSelect (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [("nom", 10), ("jean", 40), ("jeanne", 2)]
+        lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
-        tbl = IterRow(schema, l)
+        tbl = IterRow(schema, lr)
 
         iter = tbl.select(tbl.nom, age2=tbl.age, age3=tbl.age * 0.5)
         try:
@@ -201,9 +201,9 @@ class TestSelect (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [("nom", 10), ("jean", 40), ("jeanne", 2)]
+        lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
-        tbl = IterRow(schema, l)
+        tbl = IterRow(schema, lr)
 
         iter = tbl.select(tbl.nom, age0=tbl.age,
                           agem=tbl.age * 0.5,
@@ -234,9 +234,9 @@ class TestSelect (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [("nom", 10), ("jean", 40), ("jeanne", 2)]
+        lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
-        tbl = IterRow(schema, l)
+        tbl = IterRow(schema, lr)
 
         iter = tbl.select(tbl.nom, formula=tbl.age + (tbl.age + 2) / 3)
 
@@ -255,9 +255,9 @@ class TestSelect (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [("nom", 10), ("jean", 40), ("jeanne", 2)]
+        lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
-        tbl = IterRow(schema, l)
+        tbl = IterRow(schema, lr)
 
         iter = tbl.where(tbl.age == 40)
         res = list(iter)
@@ -273,9 +273,9 @@ class TestSelect (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [("nom", 10), ("jean", 40), ("jeanne", 2)]
+        lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
-        tbl = IterRow(schema, l)
+        tbl = IterRow(schema, lr)
 
         iter = tbl.where(tbl.age >= 40)
         res = list(iter)
@@ -311,9 +311,9 @@ class TestSelect (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [("nom", 10), ("jean", 40), ("jeanne", 2)]
+        lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
-        tbl = IterRow(schema, l)
+        tbl = IterRow(schema, lr)
         iter = tbl.where(
             (tbl.age == 2).Or(
                 tbl.age == 40),

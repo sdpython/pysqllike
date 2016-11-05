@@ -49,9 +49,9 @@ class TestSelect2 (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [("nom", 10), ("jean", 40), ("jeanne", 2)]
+        lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
-        tbl = IterRow(schema, l)
+        tbl = IterRow(schema, lr)
 
         def myf(x, y):
             return x * 2.5 + y
@@ -71,10 +71,10 @@ class TestSelect2 (unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        l = [{"nom": "j", "age": 10},
-             {"nom": "jean", "age": 40},
-             {"nom": "jeanne", "age": 2}]
-        tbl = IterRow(None, l)
+        lr = [{"nom": "j", "age": 10},
+              {"nom": "jean", "age": 40},
+              {"nom": "jeanne", "age": 2}]
+        tbl = IterRow(None, lr)
 
         def myf(x, y):
             return x * 2.5 + y
