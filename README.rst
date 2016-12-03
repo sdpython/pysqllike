@@ -16,10 +16,6 @@ README
 .. image:: https://badge.fury.io/py/pysqllike.svg
     :target: http://badge.fury.io/py/pysqllike   
    
-.. image:: http://img.shields.io/pypi/dm/pysqllike.png
-    :alt: PYPI Package
-    :target: https://pypi.python.org/pypi/pysqllike
-
 .. image:: http://img.shields.io/github/issues/sdpython/pysqllike.png
     :alt: GitHub Issues
     :target: https://github.com/sdpython/pysqllike/issues
