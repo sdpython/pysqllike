@@ -242,3 +242,4 @@ auto_*.py
 auto_*.xml
 auto_*.db3
 *.pyproj
+_doc/sphinxdoc/source/auto_examples/*
