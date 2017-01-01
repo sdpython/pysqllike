@@ -108,7 +108,7 @@ class TestCodeCross (unittest.TestCase):
 
                 if i == len(functions) - 1:
                     fLOG("\nEXE:\n", exe, "\nEXP:\n", exp)
-                assert exe == exp
+                self.assertEqual(exe, exp)
 
                 nb += 1
         assert nb > 0
