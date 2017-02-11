@@ -8,7 +8,7 @@ README
     :target: https://travis-ci.org/sdpython/pysqllike
     :alt: Build status
 
-.. image:: https://ci.appveyor.com/api/projects/status/67ljkgh36klak07a?svg=true
+.. image:: https://ci.appveyor.com/api/projects/status/rrpks1pgivea23js?svg=true
     :target: https://ci.appveyor.com/project/sdpython/pysqllike
     :alt: Build Status Windows
 
