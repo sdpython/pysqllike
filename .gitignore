@@ -243,3 +243,4 @@ auto_*.xml
 auto_*.db3
 *.pyproj
 _doc/sphinxdoc/source/auto_examples/*
+_unittests/run_unittests.py.out
