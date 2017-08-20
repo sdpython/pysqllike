@@ -12,6 +12,9 @@ pysqllike documentation
         :target: https://ci.appveyor.com/project/sdpython/pysqllike
         :alt: Build Status Windows
 
+    .. image:: https://circleci.com/gh/sdpython/pysqllike/tree/master.svg?style=svg
+        :target: https://circleci.com/gh/sdpython/pysqllike/tree/master
+
     .. image:: https://badge.fury.io/py/pysqllike.svg
         :target: http://badge.fury.io/py/pysqllike
 
