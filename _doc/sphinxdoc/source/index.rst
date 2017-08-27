@@ -98,6 +98,7 @@ Quick start
 
     all_example
     all_notebooks
+    blog/blogindex
 
 Indices and tables
 ------------------

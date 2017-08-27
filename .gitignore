@@ -244,3 +244,5 @@ auto_*.db3
 *.pyproj
 _doc/sphinxdoc/source/auto_examples/*
 _unittests/run_unittests.py.out
+_doc/sphinxdoc/source/phdoc_static/style_notebook_snippet.css
+_doc/sphinxdoc/source/phdoc_static/require.js
