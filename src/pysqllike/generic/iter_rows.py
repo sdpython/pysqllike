@@ -12,34 +12,36 @@ from .others_types import NoSortClass, GroupByContainer, NA
 class IterRow(object):
 
     """
-    defines an iterator which mimic SQL behavior
+    Defines an iterator which mimic SQL behavior.
     """
 
     def __init__(self, schema=None, anyset=None, as_dict=True):
         """
-        initiates the iterator
+        Initializes the iterator.
 
         @param      schema      list of tuple [ (name, type) ], type can be None id it is unknown or a list of @see cl ColumnType
         @param      anyset      any set or iterator following the previous schema (or None if there is not any)
         @param      as_dict     in that case, the class iterator returns a list of dictionaries for each row
 
-        schema can be None if anyset if a list of dictionaries [ {"col1":value1, ... } ].
+        *schema* can be None if anyset if a list of dictionaries ``[ {"col1":value1, ... } ]``.
         In that case, the construction will build the schema from the first row.
 
-        @example(IterRow with a list of dictionaries)
-        @code
-        l = [ {"nom": 10}, {"jean": 40} ]
-        tbl = IterRow (None, l)
-        @endcode
-        @endexample
+        .. exref::
+            :title: IterRow with a list of dictionaries
 
-        @example(IterRow with a schema)
-        @code
-        l = [ ("nom", 10), ("jean", 40) ]
-        schema = [ ("nom", str), ("age", int) ]
-        tbl = IterRow (schema, l)
-        @endcode
-        @endexample
+            ::
+
+                l = [ {"nom": 10}, {"jean": 40} ]
+                tbl = IterRow (None, l)
+
+        .. exref::
+            :title: IterRow with a schema
+
+            ::
+
+                l = [ ("nom", 10), ("jean", 40) ]
+                schema = [ ("nom", str), ("age", int) ]
+                tbl = IterRow (schema, l)
         """
         if schema is None:
             if len(anyset) == 0:
@@ -147,21 +149,23 @@ class IterRow(object):
         This function takes an undefined number of arguments.
         It can be used the following way:
 
-        @example(simple select)
-        @code
-        tbl = IterRow( ... )
-        it  = tbl.select ( tbl.name, tbl.age * 2, old = tbl.age )
-        @endcode
-        @endexample
+        .. exref::
+            :title: simple select
 
-        @example(chained select)
-        @code
-        tbl = IterRow ( ... )
-        iter = tbl.select(tbl.nom, age2=tbl.age, age3= tbl.age*0.5)
-        iter2 = iter.select(iter.nom, age4=iter.age2*iter.age3)
-        l = list ( iter2 )
-        @endcode
-        @endexample
+            ::
+
+                tbl = IterRow( ... )
+                it  = tbl.select ( tbl.name, tbl.age * 2, old = tbl.age )
+
+        .. exref::
+            :title: chained select
+
+            ::
+
+                tbl = IterRow ( ... )
+                iter = tbl.select(tbl.nom, age2=tbl.age, age3= tbl.age*0.5)
+                iter2 = iter.select(iter.nom, age4=iter.age2*iter.age3)
+                l = list ( iter2 )
 
         @param      nochange    list of fields to keep
         @param      changed     list of custom fields
@@ -170,15 +174,16 @@ class IterRow(object):
 
         @warning The function does not guarantee the order of the output columns.
 
-        @example(example with a function)
-        @code
-        def myf(x,y) :
-            return x*2.5 + y
-        tbl = IterRow ( ... )
-        iter = tbl.select(tbl.nom, age0= CFT(myf, tbl.age, tbl.age) )
-        res = list(iter)
-        @endcode
-        @endexample
+        .. exref::
+            :title: example with a function
+
+            ::
+
+                def myf(x,y) :
+                    return x*2.5 + y
+                tbl = IterRow ( ... )
+                iter = tbl.select(tbl.nom, age0= CFT(myf, tbl.age, tbl.age) )
+                res = list(iter)
         """
         # newschema = list(nochange) + [(k, None) for k in changed.keys()]
 
@@ -227,30 +232,33 @@ class IterRow(object):
 
     def where(self, condition, as_dict=True, append_condition=False):
         """
-        This function filters elements from an IterRow instance.
+        This function filters elements from an @see cl IterRow instance.
 
         @param      condition           a ColumnType or an expression of ColumnType
         @param      append_condition    append the condition to the schema (for debugging purpose)
         @param      as_dict             returns results as a list of dictionaries [ { "colname": value, ... } ]
         @return                         IterRow
 
-        @example(where)
-        @code
-        tbl = IterRow ( ... )
-        iter = tbl.where(tbl.age == 40)
-        res = list(iter)
-        @endcode
-        @endexample
+        .. exref::
+            :title: where
+
+            ::
+
+                tbl = IterRow ( ... )
+                iter = tbl.where(tbl.age == 40)
+                res = list(iter)
 
         @warning For operator ``or``, ``and``, ``not``, the syntax is different because they cannot be overriden in Python.
 
-        @example(where with or)
-        @code
-        tbl = IterRow ( ... )
-        iter = tbl.where( ( tbl.age == 2).Or( tbl.age == 40))
-        iter2 = tbl.where((tbl.age == 10).Not())
-        @endcode
-        @endexample
+        .. exref::
+            :title: where with or
+
+            ::
+
+
+                tbl = IterRow ( ... )
+                iter = tbl.where( ( tbl.age == 2).Or( tbl.age == 40))
+                iter2 = tbl.where((tbl.age == 10).Not())
         """
         if not isinstance(condition, ColumnType):
             raise TypeError(
@@ -291,17 +299,17 @@ class IterRow(object):
         @param      as_dict             returns results as a list of dictionaries [ { "colname": value, ... } ]
         @return                         IterRow
 
-        @example(order by)
-        @code
-        l = [   { "nom":"j", "age": 10, "gender":"M"} ,
-                {"nom":"jean", "age":40, "gender":"M"},
-                {"nom":"jeanne", "age":2, "gender":"F"} ]
-        tbl = IterRow (None, l)
+        .. exref::
+            :title: order by
 
-        iter = tbl.orderby(tbl.nom, tbl.age, ascending=False )
-        @endcode
-        @endexample
+            ::
 
+                l = [   { "nom":"j", "age": 10, "gender":"M"} ,
+                        {"nom":"jean", "age":40, "gender":"M"},
+                        {"nom":"jeanne", "age":2, "gender":"F"} ]
+                tbl = IterRow(None, l)
+
+                iter = tbl.orderby(tbl.nom, tbl.age, ascending=False )
         """
         schema = [v.copy(None)
                   for v in self._schema]  # we do not know the owner yet
@@ -361,17 +369,17 @@ class IterRow(object):
 
         @warning The function does not guarantee the order of the output columns.
 
-        @example(group by)
+        .. exref::
+            :title: group by
 
-        @code
-        l = [   { "nom":"j", "age": 10, "gender":"M"} ,
-                {"nom":"jean", "age":40, "gender":"M"},
-                {"nom":"jeanne", "age":2, "gender":"F"} ]
-        tbl = IterRow (None, l)
+            ::
 
-        iter = tbl.groupby(tbl.gender, len_nom=tbl.nom.len(), avg_age=tbl.age.avg())
-        @endcode
-        @endexample
+                l = [   { "nom":"j", "age": 10, "gender":"M"} ,
+                        {"nom":"jean", "age":40, "gender":"M"},
+                        {"nom":"jeanne", "age":2, "gender":"F"} ]
+                tbl = IterRow (None, l)
+
+                iter = tbl.groupby(tbl.gender, len_nom=tbl.nom.len(), avg_age=tbl.age.avg())
         """
         # selftbl = self.orderby(nochange, as_dict=as_dict)
         # newschema = list(nochange) + [(k, None) for k in changed.keys()]
@@ -476,32 +484,34 @@ class IterRow(object):
         @param      as_dict         returns results as a list of dictionaries [ { "colname": value, ... } ]
         @return                     IterRow
 
-        @example(union all)
-        @code
-        l = [   { "nom":"j", "age": 10, "gender":"M"} ,
-                {"nom":"jean", "age":40, "gender":"M"},
-                {"nom":"jeanne", "age":2, "gender":"F"} ]
-        tbl = IterRow (None, l)
+        .. exref::
+            :title: union all
 
-        iter = tbl.unionall(tbl)
-        @endcode
-        @endexample
+            ::
 
-        @example(union all with different schema)
-        @code
-        l = [   { "nom":"j", "age": 10, "gender":"M"} ,
-                {"nom":"jean", "age":40, "gender":"M"},
-                {"nom":"jeanne", "age":2, "gender":"F"} ]
-        tbl = IterRow (None, l)
+                l = [   { "nom":"j", "age": 10, "gender":"M"} ,
+                        {"nom":"jean", "age":40, "gender":"M"},
+                        {"nom":"jeanne", "age":2, "gender":"F"} ]
+                tbl = IterRow (None, l)
 
-        l = [   { "nom":"j", "newage": 10, "gender":"M"} ,
-                {"nom":"jean", "newage":40, "gender":"M"},
-                {"nom":"jeanne", "newage":2, "gender":"F"} ]
-        tbl2 = IterRow (None, l)
+                iter = tbl.unionall(tbl)
 
-        iter = tbl.unionall(tbl2, merge_schema = True)
-        @endcode
-        @endexample
+        .. exref::
+            :title: union all with different schema
+
+            ::
+
+                l = [   { "nom":"j", "age": 10, "gender":"M"} ,
+                        {"nom":"jean", "age":40, "gender":"M"},
+                        {"nom":"jeanne", "age":2, "gender":"F"} ]
+                tbl = IterRow (None, l)
+
+                l = [   { "nom":"j", "newage": 10, "gender":"M"} ,
+                        {"nom":"jean", "newage":40, "gender":"M"},
+                        {"nom":"jeanne", "newage":2, "gender":"F"} ]
+                tbl2 = IterRow (None, l)
+
+                iter = tbl.unionall(tbl2, merge_schema = True)
         """
 
         if merge_schema:

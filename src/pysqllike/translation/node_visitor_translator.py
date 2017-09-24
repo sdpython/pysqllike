@@ -11,56 +11,29 @@ class CodeNodeVisitor(ast.NodeVisitor):
     """
     Defines a visitor which walks though the syntax tree of the code.
 
-    @example(get the tree of a simple function)
+    .. exref::
+        :title: Get the tree of a simple function
 
-    The following code uses Python syntax but follows a SQL logic.
+        The following code uses Python syntax but follows a SQL logic.
 
-    @code
-    def myjob(input):
-        iter = input.select (input.age, input.nom, age2 = input.age2*input.age2)
-        wher = iter.where( (iter.age > 60).Or(iter.age < 25))
-        return wher
+        .. runpython::
+            :showcode:
 
-    code = inspect.getsource(myjob)
-    node = ast.parse(code)
-    v = CodeNodeVisitor()
-    v.visit(node)
-    for r in v.Rows :
-        print("{0}{1}: {2}".format("    " * r["indent"], r["type"], r["str"]))
-    @endcode
+            import ast
+            import inspect
+            from pysqllike.translation.node_visitor_translator import CodeNodeVisitor
 
-    The previous will produce the following output.
+            def myjob(input):
+                iter = input.select (input.age, input.nom, age2 = input.age2*input.age2)
+                wher = iter.where( (iter.age > 60).Or(iter.age < 25))
+                return wher
 
-    @code
-    Module:
-        FunctionDef: myjob
-            arguments:
-                arg: input
-            Assign:
-                Name: iter
-                Call: select
-                    Attribute: input.select
-                    Attribute: input.age
-                    Attribute: input.nom
-                    keyword: age2
-                        BinOp:
-                            Attribute: input.age2
-                            Mult:
-                            Attribute: input.age2
-            Assign:
-                Name: wher
-                Call: where
-                    Attribute: iter.where
-                    Call: Or
-                        Attribute: age.Or
-                        Compare:
-                            Attribute: iter.age
-                            Lt:
-                            Num: 25
-            Return:
-                Name: wher
-    @endcode
-    @endexample
+            code = inspect.getsource(myjob)
+            node = ast.parse(code)
+            v = CodeNodeVisitor()
+            v.visit(node)
+            for r in v.Rows :
+                print("{0}{1}: {2}".format("    " * r["indent"], r["type"], r["str"]))
     """
 
     def __init__(self):
@@ -74,19 +47,19 @@ class CodeNodeVisitor(ast.NodeVisitor):
 
     def push(self, row):
         """
-        push an element into a list
+        Pushes an element into a list.
         """
         self._rows.append(row)
 
     def generic_visit(self, node, row):
         """
-        override generic_visit to keep track of the indentation
-        and the node parent
-
-        the function will add field row["children"] = visited nodes from here
+        Overrides ``generic_visit`` to keep track of the indentation
+        and the node parent. The function will add field
+        ``row["children"] = visited`` nodes from here.
 
         @param      node        node which needs to be visited
         @param      row         row (a dictionary)
+        @return                 See ``ast.NodeVisitor.generic_visit``
         """
         self._indent += 1
         last = len(self._rows)
@@ -99,20 +72,20 @@ class CodeNodeVisitor(ast.NodeVisitor):
 
     def visit(self, node):
         """
-        Visit a node, a method must exist for every object class
+        Visits a node, a method must exist for every object class.
         """
         method = 'visit_' + node.__class__.__name__
         visitor = getattr(self, method, None)
         if visitor is None:
             raise TypeError("unable to find a method: " + method)
         res = visitor(node)
-        #print(method, CodeNodeVisitor.print_node(node))
+        # print(method, CodeNodeVisitor.print_node(node))
         return res
 
     @staticmethod
     def print_node(node):
         """
-        debugging purpose
+        Debugging purpose.
         """
         r = []
         for att in ["s", "name", "str", "id", "body", "n",
@@ -123,7 +96,8 @@ class CodeNodeVisitor(ast.NodeVisitor):
 
     def print_tree(self):
         """
-        display the tree of instruction
+        Displays the tree of instructions.
+
         @return     string
         """
         rows = []

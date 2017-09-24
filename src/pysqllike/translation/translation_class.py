@@ -12,13 +12,13 @@ from .node_visitor_translator import CodeNodeVisitor
 class TranslateClass:
 
     """
-    interface for a class which translates a code
-    written in pseudo-SQL syntax into another language
+    Interface for a class which translates a code
+    written in pseudo-SQL syntax into another language.
     """
 
     def __init__(self, code_func):
         """
-        constructor
+        Constructor.
 
         @param  code_func   code (str) or function(func)
         """
@@ -30,8 +30,8 @@ class TranslateClass:
 
     def init(self, code):
         """
-        parse the function code and add it the class,
-        it complements the constructor
+        Parses the function code and add it the class,
+        it complements the constructor.
 
         @param  code        function code
         """
@@ -44,13 +44,13 @@ class TranslateClass:
 
     def __str__(self):
         """
-        return a string representing a tree
+        Returns a string representing a tree.
         """
         return self.to_str()
 
     def to_str(self, fields=[]):
         """
-        return a string representing a tree
+        Returns a string representing a tree.
 
         @param      fields      additional fields to add at the end of each row
         @return                 string
@@ -68,8 +68,8 @@ class TranslateClass:
 
     def Code(self):
         """
-        returns the code of the initial Python function
-        into another language
+        Returns the code of the initial Python function
+        into another language.
 
         @return     str
         """
@@ -98,7 +98,7 @@ class TranslateClass:
 
     def RaiseCodeException(self, message, field="processed", code_rows=[]):
         """
-        raises an exception when interpreting the code
+        Raises an exception when interpreting the code.
 
         @param  field       field to add to the message exception
         @param  code_rows   list of rows to display
@@ -121,7 +121,7 @@ class TranslateClass:
 
     def interpretFunction(self, obj):
         """
-        starts the interpretation of node which begins a function
+        Starts the interpretation of node which begins a function.
 
         @param      obj     obj to begin with (a function)
         @return             list of strings
@@ -171,7 +171,7 @@ class TranslateClass:
 
     def Signature(self, name, rows):
         """
-        build the signature of a function based on its name and its children
+        Build the signature of a function based on its name and its children.
 
         @param      name        name
         @param      rows        node where type == arguments
@@ -181,7 +181,7 @@ class TranslateClass:
 
     def Intruction(self, rows):
         """
-        build an instruction of a function based on its name and its children
+        Builds an instruction of a function based on its name and its children.
 
         @param      rows        node where type == Assign
         @return                 list of strings (code)
@@ -232,7 +232,7 @@ class TranslateClass:
 
     def Select(self, name, table, rows):
         """
-        interpret a select statement
+        Interprets a select statement.
 
         @param      name        name of the table which receives the results
         @param      table       name of the table it applies to
@@ -243,7 +243,7 @@ class TranslateClass:
 
     def Where(self, name, table, rows):
         """
-        interpret a select statement
+        Interprets a select statement.
 
         @param      name        name of the table which receives the results
         @param      table       name of the table it applies to
@@ -256,7 +256,7 @@ class TranslateClass:
 
     def ResolveExpression(self, node, prefixAtt):
         """
-        produces an expression based on a a node and its children
+        Produces an expression based on a a node and its children.
 
         @param      node        node
         @param      prefixAtt   prefix to add before an attribute (usually _)
@@ -390,7 +390,7 @@ class TranslateClass:
 
     def interpretReturn(self, obj):
         """
-        starts the interpretation of a node which sets a return
+        Starts the interpretation of a node which sets a return.
 
         @param      obj     obj to begin with (a function)
         @return             list of strings
@@ -408,7 +408,7 @@ class TranslateClass:
 
     def setReturn(self, nodes):
         """
-        indicates all nodes containing information about returned results
+        Indicates all nodes containing information about returned results.
 
         @param      node        list of nodes
         @return                 list of string

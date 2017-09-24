@@ -7,7 +7,7 @@
 class long:
 
     """
-    defines the long type as int
+    Defines the long type as int.
     """
 
     def __init__(self, v):
@@ -38,7 +38,7 @@ class long:
 class NA:
 
     """
-    defines the missing type
+    Defines the missing type.
     """
 
     def __init__(self):
@@ -70,7 +70,7 @@ class EmptyGroup:
 class NoSortClass:
 
     """
-    container which overloads the sort operator to return 0 all the times
+    Container which overloads the sort operator to return 0 all the times.
     """
 
     def __init__(self, value):

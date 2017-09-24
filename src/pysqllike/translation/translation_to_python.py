@@ -9,8 +9,7 @@ from .translation_class import TranslateClass
 class Translate2Python(TranslateClass):
 
     """
-    translate a code into Python
-
+    Translates a code into :epkg:`Python`.
     """
 
     def __init__(self, code_func):
@@ -23,7 +22,7 @@ class Translate2Python(TranslateClass):
 
     def Signature(self, name, args):
         """
-        build the signature of a function based on its name and its children
+        Builds the signature of a function based on its name and its children.
 
         @param      name        name
         @param      args        list of argumens
@@ -34,7 +33,7 @@ class Translate2Python(TranslateClass):
 
     def Select(self, name, table, rows):
         """
-        interpret a select statement
+        Interprets a select statement.
 
         @param      name        name of the table which receives the results
         @param      table       name of the table it applies to
@@ -97,7 +96,7 @@ class Translate2Python(TranslateClass):
 
     def Where(self, name, table, rows):
         """
-        interpret a where statement
+        Interprets a where statement.
 
         @param      name        name of the table which receives the results
         @param      table       name of the table it applies to
@@ -136,7 +135,7 @@ class Translate2Python(TranslateClass):
 
     def setReturn(self, nodes):
         """
-        indicates all nodes containing information about returned results
+        Indicates all nodes containing information about returned results.
 
         @param      nodes       list of nodes
         @return                 list of string
@@ -148,7 +147,7 @@ class Translate2Python(TranslateClass):
 
     def GroupBy(self, name, table, rows):
         """
-        interpret a select statement
+        Interprets a select statement.
 
         @param      name        name of the table which receives the results
         @param      table       name of the table it applies to

@@ -23,7 +23,7 @@ def private_function_type():
 class ColumnType:
 
     """
-    defines a column of a table
+    Defines a column of a table.
     """
 
     _default_name = "__unk__"
@@ -192,7 +192,7 @@ class ColumnType:
 
     def set(self, value):
         """
-        sets a value for this column
+        Sets a value for this column.
 
         @param      value       anything in [int,float,long,str, function ]
         """
@@ -214,7 +214,7 @@ class ColumnType:
 
     def set_none(self):
         """
-        after a loop on a database, we should put None back as a value
+        After a loop on a database, we should put None back as a value.
         """
         for p in self._parent:
             p.set_none()
@@ -222,7 +222,7 @@ class ColumnType:
 
     def set_name(self, new_name):
         """
-        changes the name of the column
+        Changes the name of the column.
 
         @param      newname     new name
         """
@@ -230,7 +230,7 @@ class ColumnType:
 
     def set_owner(self, new_owner):
         """
-        changes the owner of the column
+        Changes the owner of the column.
 
         @param      newname     new name
         """
@@ -238,7 +238,7 @@ class ColumnType:
 
     def print_parent(self):
         """
-        returns a string showing the dependencies of this columns
+        Returns a string showing the dependencies of this columns.
 
         Example:
         @code
@@ -264,7 +264,7 @@ class ColumnType:
 
     def copy(self, new_owner):
         """
-        return a copy of this class
+        Returns a copy of this class.
 
         @param      new_owner       new owner
         @return                     ColumnType
@@ -278,8 +278,8 @@ class ColumnType:
 
     def __mul__(self, column):
         """
-        these operators should be able to translate an expression
-        into function operating on the values
+        These operators should be able to translate an expression
+        into function operating on the values.
 
         @param      column      a function or an int or a float or a long or a str or a ColumnType
         @return                 a ColumnType
@@ -292,8 +292,8 @@ class ColumnType:
 
     def __add__(self, column):
         """
-        these operators should be able to translate an expression
-        into function operating on the values
+        These operators should be able to translate an expression
+        into function operating on the values.
 
         @param      column      a function or an int or a float or a long or a str or a ColumnType
         @return                 a ColumnType
@@ -306,8 +306,8 @@ class ColumnType:
 
     def __sub__(self, column):
         """
-        these operators should be able to translate an expression
-        into function operating on the values
+        These operators should be able to translate an expression
+        into function operating on the values.
 
         @param      column      a function or an int or a float or a long or a str or a ColumnType
         @return                 a ColumnType
@@ -320,8 +320,8 @@ class ColumnType:
 
     def __truediv__(self, column):
         """
-        these operators should be able to translate an expression
-        into function operating on the values
+        These operators should be able to translate an expression
+        into function operating on the values.
 
         @param      column      a function or an int or a float or a long or a str or a ColumnType
         @return                 a ColumnType
@@ -334,8 +334,8 @@ class ColumnType:
 
     def __floordiv__(self, column):
         """
-        these operators should be able to translate an expression
-        into function operating on the values
+        These operators should be able to translate an expression
+        into function operating on the values.
 
         @param      column      a function or an int or a float or a long or a str or a ColumnType
         @return                 a ColumnType

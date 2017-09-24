@@ -7,6 +7,6 @@
 class CodeException(Exception):
 
     """
-    custom exception for this subfolder
+    Custom exception for this subfolder.
     """
     pass
