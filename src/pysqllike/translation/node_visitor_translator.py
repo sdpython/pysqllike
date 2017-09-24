@@ -18,6 +18,7 @@ class CodeNodeVisitor(ast.NodeVisitor):
 
         .. runpython::
             :showcode:
+            :process:
 
             import ast
             import inspect

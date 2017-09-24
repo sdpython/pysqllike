@@ -246,3 +246,5 @@ _doc/sphinxdoc/source/auto_examples/*
 _unittests/run_unittests.py.out
 _doc/sphinxdoc/source/phdoc_static/style_notebook_snippet.css
 _doc/sphinxdoc/source/phdoc_static/require.js
+_doc/sphinxdoc/source/pysqllike/*
+_doc/sphinxdoc/source/notebooks/*
