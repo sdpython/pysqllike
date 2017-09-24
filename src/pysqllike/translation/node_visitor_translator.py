@@ -21,6 +21,7 @@ class CodeNodeVisitor(ast.NodeVisitor):
 
             import ast
             import inspect
+            import textwrap
             from pysqllike.translation.node_visitor_translator import CodeNodeVisitor
 
             def myjob(input):
@@ -28,7 +29,7 @@ class CodeNodeVisitor(ast.NodeVisitor):
                 wher = iter.where( (iter.age > 60).Or(iter.age < 25))
                 return wher
 
-            code = inspect.getsource(myjob)
+            code = textwrap.dedent(inspect.getsource(myjob))
             node = ast.parse(code)
             v = CodeNodeVisitor()
             v.visit(node)
