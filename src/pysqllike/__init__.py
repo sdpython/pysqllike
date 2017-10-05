@@ -1,7 +1,9 @@
 #-*- coding: utf-8 -*-
 """
-Documentation for this file.
-
+@file
+@brief Module *pysqllike*.
+Parses :epkg:`Python` and produces equivalent
+code in other languages in a map reduce logic.
 """
 
 __version__ = "0.1"
