@@ -70,7 +70,9 @@ this job using Python syntax as follows:
     output = myjob(input)
 
 When the job is ready, it can be translated into a `PIG <https://pig.apache.org/>`_
-job::
+job:
+
+::
 
     input = LOAD '...' USING PigStorage('\t') AS (nom, age);
     iter = FOREACH input GENERATE age, nom, age*age AS age2 ;
@@ -89,8 +91,9 @@ Design
 ------
 
 This project contains various helper about logging functions, unit tests and help generation.
-   * a source folder: ``src``
-   * a unit test folder: ``_unittests``, go to this folder and run ``run_unittests.py``
-   * a _doc folder: ``_doc``, it will contains the documentation
-   * a file ``setup.py`` to build and to install the module
-   * a file ``make_help.py`` to build the sphinx documentation
+
+* a source folder: ``src``
+* a unit test folder: ``_unittests``, go to this folder and run ``run_unittests.py``
+* a _doc folder: ``_doc``, it will contains the documentation
+* a file ``setup.py`` to build and to install the module
+* a file ``make_help.py`` to build the sphinx documentation
