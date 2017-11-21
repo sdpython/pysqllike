@@ -28,10 +28,6 @@ README
         :alt: MIT License
         :target: http://opensource.org/licenses/MIT
 
-    .. image:: https://landscape.io/github/sdpython/pysqllike/master/landscape.svg?style=flat
-       :target: https://landscape.io/github/sdpython/pysqllike/master
-       :alt: Code Health
-
     .. image:: https://requires.io/github/sdpython/pysqllike/requirements.svg?branch=master
          :target: https://requires.io/github/sdpython/pysqllike/requirements/?branch=master
          :alt: Requirements Status
