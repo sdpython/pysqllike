@@ -4,36 +4,34 @@
 README
 ======
 
-.. only:: html
+.. image:: https://travis-ci.org/sdpython/pysqllike.svg?branch=master
+    :target: https://travis-ci.org/sdpython/pysqllike
+    :alt: Build status
 
-    .. image:: https://travis-ci.org/sdpython/pysqllike.svg?branch=master
-        :target: https://travis-ci.org/sdpython/pysqllike
-        :alt: Build status
+.. image:: https://ci.appveyor.com/api/projects/status/rrpks1pgivea23js?svg=true
+    :target: https://ci.appveyor.com/project/sdpython/pysqllike
+    :alt: Build Status Windows
 
-    .. image:: https://ci.appveyor.com/api/projects/status/rrpks1pgivea23js?svg=true
-        :target: https://ci.appveyor.com/project/sdpython/pysqllike
-        :alt: Build Status Windows
+.. image:: https://circleci.com/gh/sdpython/pysqllike/tree/master.svg?style=svg
+    :target: https://circleci.com/gh/sdpython/pysqllike/tree/master
 
-    .. image:: https://circleci.com/gh/sdpython/pysqllike/tree/master.svg?style=svg
-        :target: https://circleci.com/gh/sdpython/pysqllike/tree/master
+.. image:: https://badge.fury.io/py/pysqllike.svg
+    :target: http://badge.fury.io/py/pysqllike
 
-    .. image:: https://badge.fury.io/py/pysqllike.svg
-        :target: http://badge.fury.io/py/pysqllike
+.. image:: http://img.shields.io/github/issues/sdpython/pysqllike.png
+    :alt: GitHub Issues
+    :target: https://github.com/sdpython/pysqllike/issues
 
-    .. image:: http://img.shields.io/github/issues/sdpython/pysqllike.png
-        :alt: GitHub Issues
-        :target: https://github.com/sdpython/pysqllike/issues
+.. image:: https://img.shields.io/badge/license-MIT-blue.svg
+    :alt: MIT License
+    :target: http://opensource.org/licenses/MIT
 
-    .. image:: https://img.shields.io/badge/license-MIT-blue.svg
-        :alt: MIT License
-        :target: http://opensource.org/licenses/MIT
+.. image:: https://requires.io/github/sdpython/pysqllike/requirements.svg?branch=master
+     :target: https://requires.io/github/sdpython/pysqllike/requirements/?branch=master
+     :alt: Requirements Status
 
-    .. image:: https://requires.io/github/sdpython/pysqllike/requirements.svg?branch=master
-         :target: https://requires.io/github/sdpython/pysqllike/requirements/?branch=master
-         :alt: Requirements Status
-
-    .. image:: https://codecov.io/github/sdpython/pysqllike/coverage.svg?branch=master
-        :target: https://codecov.io/github/sdpython/pysqllike?branch=master
+.. image:: https://codecov.io/github/sdpython/pysqllike/coverage.svg?branch=master
+    :target: https://codecov.io/github/sdpython/pysqllike?branch=master
 
 **Links:**
 
