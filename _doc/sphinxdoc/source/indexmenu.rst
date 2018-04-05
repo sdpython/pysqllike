@@ -7,9 +7,6 @@ through documentation
     .. toctree::
         :maxdepth: 2
 
-        doctestunit
-        generatedoc
-        generatesetup
         installation
         all_example
         all_FAQ
@@ -26,9 +23,6 @@ through documentation
     .. toctree::
         :maxdepth: 2
 
-        doctestunit
-        generatedoc
-        generatesetup
         installation
         all_example
         all_FAQ
