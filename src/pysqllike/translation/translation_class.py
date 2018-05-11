@@ -48,13 +48,15 @@ class TranslateClass:
         """
         return self.to_str()
 
-    def to_str(self, fields=[]):
+    def to_str(self, fields=None):
         """
         Returns a string representing a tree.
 
         @param      fields      additional fields to add at the end of each row
         @return                 string
         """
+        if fields is None:
+            fields = []
         if len(fields) == 0:
             rows = ["{0}{1}: {2} - nbch {3}".format("    " * r["indent"], r["type"], r["str"], len(r.get("children", [])))
                     for r in self._rows]
@@ -90,13 +92,13 @@ class TranslateClass:
 
         for row in self._rows:
             if not row["processed"]:
-                self.RaiseCodeException(
+                return self.RaiseCodeException(
                     "the function was unable to interpret all the lines",
                     code_rows=code_rows)
 
         return "\n".join(code_rows)
 
-    def RaiseCodeException(self, message, field="processed", code_rows=[]):
+    def RaiseCodeException(self, message, field="processed", code_rows=None):
         """
         Raises an exception when interpreting the code.
 
@@ -105,6 +107,8 @@ class TranslateClass:
 
         :raises: CodeException
         """
+        if code_rows is None:
+            code_rows = []
         if len(code_rows) > 0:
             if "_status" in self.__dict__ and len(self._status) > 0:
                 code_rows = code_rows + ["", "-- STATUS --", ""] + self._status
@@ -127,9 +131,9 @@ class TranslateClass:
         @return             list of strings
         """
         if "children" not in obj:
-            self.RaiseCodeException("children key is missing")
+            return self.RaiseCodeException("children key is missing")
         if "name" not in obj:
-            self.RaiseCodeException("name is missing")
+            return self.RaiseCodeException("name is missing")
 
         obj["processed"] = True
         chil = obj["children"]
@@ -166,7 +170,7 @@ class TranslateClass:
             elif an["type"] == "arguments":
                 pass
             else:
-                self.RaiseCodeException("unexpected type: " + an["type"])
+                return self.RaiseCodeException("unexpected type: " + an["type"])
         return code_rows
 
     def Signature(self, name, rows):
@@ -177,7 +181,7 @@ class TranslateClass:
         @param      rows        node where type == arguments
         @return                 list of strings (code)
         """
-        self.RaiseCodeException("not implemented")
+        return self.RaiseCodeException("not implemented")
 
     def Intruction(self, rows):
         """
@@ -190,12 +194,12 @@ class TranslateClass:
         chil = rows["children"]
         name = [_ for _ in chil if _["type"] == "Name"]
         if len(name) != 1:
-            self.RaiseCodeException(
+            return self.RaiseCodeException(
                 "expecting only one row not %d" %
                 len(chil))
         call = [_ for _ in chil if _["type"] == "Call"]
         if len(call) != 1:
-            self.RaiseCodeException(
+            return self.RaiseCodeException(
                 "expecting only one row not %d" %
                 len(call))
 
@@ -213,7 +217,7 @@ class TranslateClass:
         method["processed"] = True
         table, meth = method["str"].split(".")
         if meth != kind:
-            self.RaiseCodeException(
+            return self.RaiseCodeException(
                 "cannot go further, expects: {0}=={1}".format(
                     kind,
                     meth))
@@ -228,7 +232,7 @@ class TranslateClass:
             top = call["children"][1:]
             return self.GroupBy(varn, table, top)
         else:
-            self.RaiseCodeException("not implemented for: " + kind)
+            return self.RaiseCodeException("not implemented for: " + kind)
 
     def Select(self, name, table, rows):
         """
@@ -239,7 +243,7 @@ class TranslateClass:
         @param      rows        rows to consider
         @return                 list of strings (code)
         """
-        self.RaiseCodeException("not implemented")
+        return self.RaiseCodeException("not implemented")
 
     def Where(self, name, table, rows):
         """
@@ -250,7 +254,7 @@ class TranslateClass:
         @param      rows        rows to consider
         @return                 list of strings (code)
         """
-        self.RaiseCodeException("not implemented")
+        return self.RaiseCodeException("not implemented")
 
     _symbols = {"Lt": "<", "Gt": ">", "Mult": "*", }
 
@@ -268,7 +272,7 @@ class TranslateClass:
                 node["processed"] = True
                 return self.ResolveExpression(chil[0], prefixAtt)
             else:
-                self.RaiseCodeException(
+                return self.RaiseCodeException(
                     "not implemented for type: " +
                     node["type"])
 
@@ -286,7 +290,7 @@ class TranslateClass:
                 ex = "{0}{1}{2}".format(ex1, ex2, ex3)
                 return ex, fi1, fu1
             else:
-                self.RaiseCodeException(
+                return self.RaiseCodeException(
                     "not implemented for type: " +
                     node["type"])
 
@@ -313,9 +317,9 @@ class TranslateClass:
                 for chil in node["children"]:
                     if chil["type"] == "Attribute":
                         if chil["str"] != node["str"]:
-                            self.RaiseCodeException("incoherence")
+                            return self.RaiseCodeException("incoherence")
                         elif len(chil["children"]) != 1:
-                            self.RaiseCodeException("incoherence")
+                            return self.RaiseCodeException("incoherence")
                         else:
                             chil["processed"] = True
                             ex, fi, fu = self.ResolveExpression(
@@ -348,7 +352,7 @@ class TranslateClass:
                         funcName = chil["str"]
                         funcs[chil["str"]] = chil["str"]
                     else:
-                        self.RaiseCodeException(
+                        return self.RaiseCodeException(
                             "unexpected configuration: " +
                             node["type"])
                     chil["processed"] = True
@@ -372,19 +376,19 @@ class TranslateClass:
                         funcName = chil["str"]
                         funcs[chil["str"]] = chil["str"]
                     else:
-                        self.RaiseCodeException(
+                        return self.RaiseCodeException(
                             "unexpected configuration: " +
                             node["type"])
                     chil["processed"] = True
                 expre.append("{0}({1})".format(funcName, ",".join(subexp)))
             else:
-                self.RaiseCodeException(
+                return self.RaiseCodeException(
                     "not implemented for function: " +
                     node["str"])
             return " ".join(expre), field, funcs
 
         else:
-            self.RaiseCodeException(
+            return self.RaiseCodeException(
                 "not implemented for type: " +
                 node["type"])
 
@@ -396,14 +400,14 @@ class TranslateClass:
         @return             list of strings
         """
         if "children" not in obj:
-            self.RaiseCodeException("children key is missing")
+            return self.RaiseCodeException("children key is missing")
         allret = []
         obj["processed"] = True
         for node in obj["children"]:
             if node["type"] == "Name":
                 allret.append(node)
             else:
-                self.RaiseCodeException("unexpected type: " + node["type"])
+                return self.RaiseCodeException("unexpected type: " + node["type"])
         return self.setReturn(allret)
 
     def setReturn(self, nodes):
@@ -413,4 +417,4 @@ class TranslateClass:
         @param      node        list of nodes
         @return                 list of string
         """
-        self.RaiseCodeException("not implemented")
+        return self.RaiseCodeException("not implemented")

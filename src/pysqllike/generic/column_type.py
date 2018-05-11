@@ -8,7 +8,8 @@ import collections
 from .iter_exceptions import IterException, NotAllowedOperation
 from .others_types import long, NA, EmptyGroup, GroupByContainer
 
-from .column_operator import OperatorId, OperatorMul, ColumnOperator, OperatorAdd, OperatorDiv, OperatorPow, OperatorSub, OperatorDivN, OperatorMod
+from .column_operator import OperatorId, OperatorMul, ColumnOperator, OperatorAdd
+from .column_operator import OperatorDiv, OperatorPow, OperatorSub, OperatorDivN, OperatorMod
 from .column_operator import OperatorEq, OperatorNe, OperatorGe, OperatorLe, OperatorGt, OperatorLt
 from .column_operator import OperatorNot, OperatorOr, OperatorAnd
 from .column_operator import OperatorFunc
@@ -17,6 +18,7 @@ from .column_group_operator import OperatorGroupLen, OperatorGroupAvg
 
 
 def private_function_type():
+    "no documentation"
     pass
 
 
@@ -194,11 +196,9 @@ class ColumnType:
         """
         Sets a value for this column.
 
-        @param      value       anything in [int,float,long,str, function ]
+        @param      value       anything in ``[int, float, long, str, function]``
         """
-        if isinstance(value, int) or isinstance(value, str) or \
-                isinstance(value, float) or isinstance(value, long) or \
-                isinstance(value, NA):
+        if isinstance(value, (int, str, float, long, NA)):
             self._value = value
         elif isinstance(value, EmptyGroup):
             # for an empty group
@@ -562,9 +562,7 @@ class ColumnConstantType(ColumnType):
         self._const = const
         self._owner = None
 
-        if isinstance(const, int) or isinstance(const, float) or \
-           isinstance(const, long) or isinstance(const, str) or \
-           isinstance(const, NA):
+        if isinstance(const, (int, float, long, str, NA)):
             pass
         else:
             raise ValueError(

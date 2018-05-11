@@ -58,7 +58,17 @@ class TestCodeStyle(unittest.TestCase):
 
         thi = os.path.abspath(os.path.dirname(__file__))
         src_ = os.path.normpath(os.path.join(thi, "..", "..", "src"))
-        check_pep8(src_, fLOG=fLOG, extended=[("fLOG", _extended_refactoring)])
+        check_pep8(src_, fLOG=fLOG, extended=[("fLOG", _extended_refactoring)],
+                   pylint_ignore=('C0103', 'C1801', 'R0201', 'R1705', 'W0108', 'W0613',
+                                  'W0231', 'W0212', 'C0111'),
+                   skip=["Redefining built-in 'iter'",
+                         "iter_rows.py:340",
+                         "translation_class.py",
+                         "translation_to_python.py:118",
+                         "translation_to_python.py:185",
+                         "translation_to_python.py:244",
+                         ]
+                   )
 
     def test_code_style_test(self):
         fLOG(
@@ -74,11 +84,17 @@ class TestCodeStyle(unittest.TestCase):
 
         thi = os.path.abspath(os.path.dirname(__file__))
         test = os.path.normpath(os.path.join(thi, "..", ))
-        check_pep8(test, fLOG=fLOG, neg_filter="temp_.*",
+        check_pep8(test, fLOG=fLOG, neg_pattern="temp_.*",
+                   pylint_ignore=('C0111', 'C0103', 'W0622', 'C1801', 'C0412',
+                                  'R0201', 'W0122', 'W0123', 'E1101', 'R1705'),
                    skip=["src' imported but unused",
                          "skip_' imported but unused",
                          "skip__' imported but unused",
                          "skip___' imported but unused",
+                         "Unused variable 'skip_'",
+                         "Unused import src",
+                         "Unused variable 'skip_",
+                         "imported as skip_",
                          ],
                    extended=[("fLOG", _extended_refactoring)])
 

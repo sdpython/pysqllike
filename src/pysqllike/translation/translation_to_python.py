@@ -20,15 +20,16 @@ class Translate2Python(TranslateClass):
         """
         TranslateClass.__init__(self, code_func)
 
-    def Signature(self, name, args):
+    def Signature(self, name, rows):
         """
-        Builds the signature of a function based on its name and its children.
+        Builds the signature of a function based
+        on its name and its children.
 
         @param      name        name
-        @param      args        list of argumens
+        @param      rows        list of arguments
         @return                 list of strings (code)
         """
-        code_rows = ["def {0}({1}):".format(name, ", ".join(args))]
+        code_rows = ["def {0}({1}):".format(name, ", ".join(rows))]
         return code_rows
 
     def Select(self, name, table, rows):
@@ -237,16 +238,13 @@ class Translate2Python(TranslateClass):
 
         code_rows.append("for gr,rows in __groupby__.items():")
         code_rows.append("    r = {")
-        for i in range(len(keys)):
-            code_rows.append("      '{0}':gr[{1}],".format(keys[i], i))
+        for i, key in enumerate(keys):
+            code_rows.append("      '{0}':gr[{1}],".format(key, i))
         code_rows.append("      }")
-        for newatt, funcname, table, att in agg_function:
+        for newatt, funcname, tablel, att in agg_function:
             c = "[ d['{0}'] for d in rows ]".format(att)
             code_rows.append(
-                "    r['{0}'] = {1} ( {2} )".format(
-                    newatt,
-                    funcname,
-                    c))
+                "    r['{0}'] = {1} ( {2} )".format(newatt, funcname, c))
         code_rows.append("    iter.append( r )")
 
         return ["    " + _ for _ in code_rows]

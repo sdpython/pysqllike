@@ -499,7 +499,7 @@ class OperatorNot(ColumnOperator):
             raise TypeError("we expect a tuple here")
         for c in columns:
             c.IsColumnType()
-        return not (columns[0]())
+        return not columns[0]()
 
 
 class OperatorFunc(ColumnOperator):

@@ -10,15 +10,14 @@ from .column_operator import ColumnOperator
 from .others_types import NA
 
 
-class ColumnGroupOperator (ColumnOperator):
-
+class ColumnGroupOperator(ColumnOperator):
     """
-    defines an operation between two columns
+    Defines an operation between two columns.
     """
 
     def __init__(self):
         """
-        initiates the operator
+        Initiates the operator.
 
         @param      name        name of the column
         """

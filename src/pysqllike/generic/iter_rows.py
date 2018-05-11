@@ -140,7 +140,7 @@ class IterRow(object):
         calls @see me print_parent on each column
         """
         rows = ["number of columns={0}".format(len(self._schema))]
-        for i, sch in enumerate(self._schema):
+        for sch in self._schema:
             rows.append(sch.print_parent())
         return "\n".join(rows)
 
@@ -425,11 +425,11 @@ class IterRow(object):
                 return res
             else:
                 raise NotImplementedError()
-                res = []
-                for i in range(0, len(mat[0])):
-                    res.append(GroupByContainer(m[i] for m in mat))
-                    self._schema[i].set(res[-1])
-                return res
+                # res = []
+                # for i in range(0, len(mat[0])):
+                #     res.append(GroupByContainer(m[i] for m in mat))
+                #     self._schema[i].set(res[-1])
+                # return res
 
         def itervalues():
             colsi = None

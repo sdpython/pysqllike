@@ -53,7 +53,13 @@ class CodeNodeVisitor(ast.NodeVisitor):
         """
         self._rows.append(row)
 
-    def generic_visit(self, node, row):
+    def generic_visit(self, node):
+        """
+        Overrides ``generic_visit`` to check it is not used.
+        """
+        raise AttributeError("generic_visit_args should be used.")
+
+    def generic_visit_args(self, node, row):
         """
         Overrides ``generic_visit`` to keep track of the indentation
         and the node parent. The function will add field
@@ -127,7 +133,7 @@ class CodeNodeVisitor(ast.NodeVisitor):
             "node": node,
             "value": node.s}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_Name(self, node):
         cont = {
@@ -138,7 +144,7 @@ class CodeNodeVisitor(ast.NodeVisitor):
             "id": node.id,
             "ctx": node.ctx}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_Module(self, node):
         cont = {
@@ -148,38 +154,38 @@ class CodeNodeVisitor(ast.NodeVisitor):
             "body": node.body,
             "node": node}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_FunctionDef(self, node):
         cont = {"indent": self._indent, "type": "FunctionDef", "str": node.name, "name": node.name, "body": node.body,
                 "node": node, "returns": node.returns}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_arguments(self, node):
         cont = {"indent": self._indent, "type": "arguments", "str": "",
                 "node": node, "args": node.args}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_arg(self, node):
         cont = {"indent": self._indent, "type": "arg", "str": node.arg,
                 "node": node,
                 "arg": node.arg, "annotation": node.annotation}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_Assign(self, node):
         cont = {"indent": self._indent, "type": "Assign", "str": "", "node": node,
                 "targets": node.targets, "value": node.value}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_Store(self, node):
         #cont = { "indent":self._indent, "type": "Store", "str": "" }
         # self.push(cont)
         cont = {}
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_Call(self, node):
         if "attr" in node.func.__dict__:
@@ -189,14 +195,14 @@ class CodeNodeVisitor(ast.NodeVisitor):
             cont = {"indent": self._indent, "type": "Call", "str": node.func.id,
                     "node": node, "func": node.func}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_Attribute(self, node):
         cont = {"indent": self._indent, "type": "Attribute", "str": node.attr,
                 "node": node, "value": node.value, "ctx": node.ctx, "attr": node.attr}
         self.push(cont)
         # last = len(self._rows)
-        res = self.generic_visit(node, cont)
+        res = self.generic_visit_args(node, cont)
 
         if len(cont["children"]) > 0:
             fir = cont["children"][0]
@@ -210,13 +216,13 @@ class CodeNodeVisitor(ast.NodeVisitor):
         #cont = { "indent":self._indent, "type": "Load", "str": "" }
         # self.push(cont)
         cont = {}
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_keyword(self, node):
         cont = {"indent": self._indent, "type": "keyword", "str": "{0}".format(node.arg),
                 "node": node, "arg": node.arg, "value": node.value}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_BinOp(self, node):
         cont = {
@@ -225,7 +231,7 @@ class CodeNodeVisitor(ast.NodeVisitor):
             "str": "",
             "node": node}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_Mult(self, node):
         cont = {
@@ -234,7 +240,7 @@ class CodeNodeVisitor(ast.NodeVisitor):
             "str": "",
             "node": node}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_Compare(self, node):
         cont = {
@@ -243,17 +249,17 @@ class CodeNodeVisitor(ast.NodeVisitor):
             "str": "",
             "node": node}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_Gt(self, node):
         cont = {"indent": self._indent, "type": "Gt", "str": "", "node": node}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_Lt(self, node):
         cont = {"indent": self._indent, "type": "Lt", "str": "", "node": node}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_Num(self, node):
         cont = {
@@ -264,13 +270,13 @@ class CodeNodeVisitor(ast.NodeVisitor):
                 node.n),
             'n': node.n}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_Return(self, node):
         cont = {"indent": self._indent, "type": "Return", "node": node, "str": "",
                 'value': node.value}
         self.push(cont)
-        return self.generic_visit(node, cont)
+        return self.generic_visit_args(node, cont)
 
     def visit_(self, node):
         help(node)
