@@ -75,9 +75,8 @@ class TestCodeStyle(unittest.TestCase):
                          "skip__' imported but unused",
                          "skip___' imported but unused",
                          "Unused variable 'skip_'",
-                         "Unused import src",
-                         "Unused variable 'skip_",
                          "imported as skip_",
+                         "Unused import src",
                          ],
                    extended=[("fLOG", _extended_refactoring)])
 
