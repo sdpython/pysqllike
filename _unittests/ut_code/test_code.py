@@ -7,6 +7,8 @@ import os
 import unittest
 import inspect
 import ast
+from pyquickhelper.loghelper import fLOG
+
 
 try:
     import src
@@ -21,22 +23,7 @@ except ImportError:
         sys.path.append(path)
     import src
 
-try:
-    import pyquickhelper as skip_
-except ImportError:
-    path = os.path.abspath(
-        os.path.join(
-            os.path.split(__file__)[0],
-            "..",
-            "..",
-            "..",
-            "pyquickhelper",
-            "src"))
-    sys.path.append(path)
-    import pyquickhelper as skip_
 
-
-from pyquickhelper.loghelper import fLOG
 from src.pysqllike.translation.node_visitor_translator import CodeNodeVisitor
 from src.pysqllike.translation.translation_class import TranslateClass
 from src.pysqllike.translation.translation_to_python import Translate2Python
