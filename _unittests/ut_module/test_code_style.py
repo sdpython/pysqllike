@@ -33,8 +33,7 @@ class TestCodeStyle(unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        if sys.version_info[0] == 2 or "Anaconda" in sys.executable \
-                or "condavir" in sys.executable:
+        if sys.version_info[0] == 2:
             warnings.warn(
                 "skipping test_code_style because of Python 2 or " + sys.executable)
             return
@@ -59,8 +58,7 @@ class TestCodeStyle(unittest.TestCase):
             self._testMethodName,
             OutputPrint=__name__ == "__main__")
 
-        if sys.version_info[0] == 2 or "Anaconda" in sys.executable \
-                or "condavir" in sys.executable:
+        if sys.version_info[0] == 2:
             warnings.warn(
                 "skipping test_code_style because of Python 2 or " + sys.executable)
             return
