@@ -49,6 +49,7 @@ class TestCodeStyle(unittest.TestCase):
                          "translation_to_python.py:118",
                          "translation_to_python.py:185",
                          "translation_to_python.py:244",
+                         "node_visitor_translator.py:74: E1111",
                          ]
                    )
 

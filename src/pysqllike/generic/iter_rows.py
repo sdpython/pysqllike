@@ -9,7 +9,7 @@ from .column_type import ColumnType, ColumnTableType, ColumnGroupType
 from .others_types import NoSortClass, GroupByContainer, NA
 
 
-class IterRow(object):
+class IterRow:
 
     """
     Defines an iterator which mimic SQL behavior.
@@ -76,7 +76,7 @@ class IterRow(object):
                         str(_)))
             truesch.append(c)
 
-        names = set([_.Name for _ in truesch])
+        names = set(_.Name for _ in truesch)
         if len(names) < len(truesch):
             raise IterException(
                 "some columns share the same name: " +
