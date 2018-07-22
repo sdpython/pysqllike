@@ -50,6 +50,9 @@ class OperatorGroupLen(ColumnGroupOperator):
         """
         returns the results of this operation between a list of columns
         """
+        if not hasattr(columns, '__iter__'):
+            raise TypeError(
+                "we expect an iterator here not " + str(type(columns)))
         return len(columns)
 
 
@@ -70,6 +73,10 @@ class OperatorGroupAvg(ColumnGroupOperator):
         returns the results of this operation between a list of columns,
         it returns @see cl NA for a null set
         """
+        if not hasattr(columns, '__iter__'):
+            raise TypeError(
+                "we expect an iterator here not " + str(type(columns)))
+
         # we walk through the set only once
         nb = 0
         for val in columns:

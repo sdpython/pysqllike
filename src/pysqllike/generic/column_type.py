@@ -726,7 +726,8 @@ class ColumnGroupType(ColumnType):
         @param      value       anything in [int,float,long,str, function ]
         """
         self._value = value
-        if not isinstance(value, str) and \
+        if hasattr(value, "__iter__") and \
+                not isinstance(value, str) and \
                 not isinstance(value, GroupByContainer):
             raise IterException(
                 "type of value should be GroupByContainer not {0} for the column {1}".format(
