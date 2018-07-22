@@ -4,7 +4,6 @@
 @brief Classes which defines column for class @see cl IterRow
 """
 from inspect import isfunction
-import collections
 from .iter_exceptions import IterException, NotAllowedOperation
 from .others_types import long, NA, EmptyGroup, GroupByContainer
 
@@ -727,8 +726,7 @@ class ColumnGroupType(ColumnType):
         @param      value       anything in [int,float,long,str, function ]
         """
         self._value = value
-        if isinstance(value, collections.Iterable) and \
-                not isinstance(value, str) and \
+        if not isinstance(value, str) and \
                 not isinstance(value, GroupByContainer):
             raise IterException(
                 "type of value should be GroupByContainer not {0} for the column {1}".format(

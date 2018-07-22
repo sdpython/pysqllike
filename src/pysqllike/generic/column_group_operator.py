@@ -4,8 +4,6 @@
 @brief Creates custom classes to interpret Python expression as column operations.
 """
 
-import collections
-
 from .column_operator import ColumnOperator
 from .others_types import NA
 
@@ -52,9 +50,6 @@ class OperatorGroupLen(ColumnGroupOperator):
         """
         returns the results of this operation between a list of columns
         """
-        if not isinstance(columns, collections.Iterable):
-            raise TypeError(
-                "we expect an iterator here not " + str(type(columns)))
         return len(columns)
 
 
@@ -75,10 +70,6 @@ class OperatorGroupAvg(ColumnGroupOperator):
         returns the results of this operation between a list of columns,
         it returns @see cl NA for a null set
         """
-        if not isinstance(columns, collections.Iterable):
-            raise TypeError(
-                "we expect an iterator here not " + str(type(columns)))
-
         # we walk through the set only once
         nb = 0
         for val in columns:
