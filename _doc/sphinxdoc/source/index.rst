@@ -96,7 +96,6 @@ Quick start
 .. toctree::
     :maxdepth: 1
 
-    all_example
     all_notebooks
     blog/blogindex
 

@@ -8,7 +8,6 @@ through documentation
         :maxdepth: 2
 
         installation
-        all_example
         all_FAQ
         all_notebooks
         glossary
@@ -24,7 +23,6 @@ through documentation
         :maxdepth: 2
 
         installation
-        all_example
         all_FAQ
         all_notebooks
         glossary
