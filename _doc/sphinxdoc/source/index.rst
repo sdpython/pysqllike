@@ -65,8 +65,8 @@ this job using Python syntax as follows:
     input = IterRow (None, [ {"nom": 10}, {"jean": 40} ] )
     output = myjob(input)
 
-When the job is ready, it can be translated into a `PIG <https://pig.apache.org/>`_
-job::
+When the job is ready, it can be translated into a
+`PIG <https://pig.apache.org/>`_ job::
 
     input = LOAD '...' USING PigStorage('\t') AS (nom, age);
     iter = FOREACH input GENERATE age, nom, age*age AS age2 ;
@@ -75,6 +75,10 @@ job::
 
 It should also be translated into
 `SQL <http://fr.wikipedia.org/wiki/Structured_Query_Language>`_.
+The module relies on `ast <https://docs.python.org/3/library/ast.html>`_
+and intents to produce a streaming function 
+:math:`f : stream \rightarrow stream`. The project
+is discontinued.
 
 Installation
 ------------
