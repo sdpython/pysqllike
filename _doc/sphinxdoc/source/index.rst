@@ -38,8 +38,7 @@ pysqllike documentation
 `documentation <http://www.xavierdupre.fr/app/pysqllike/helpsphinx/index.html>`_,
 `wheel <http://www.xavierdupre.fr/site2013/index_code.html#pysqllike>`_,
 :ref:`l-README`,
-:ref:`blog <ap-main-0>`,
-:ref:`l-issues-todolist`
+:ref:`blog <ap-main-0>`
 
 What is it?
 -----------
