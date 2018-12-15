@@ -119,7 +119,7 @@ if is_local():
         requirements=["pyquickhelper", "jyquickhelper"],
         additional_notebook_path=["pyquickhelper", "jyquickhelper"],
         unittest_modules=["pyquickhelper", "jyquickhelper"],
-        github_owner='sdpython', fLOG=logging_function,
+        github_owner='sdpython', fLOG=logging_function, layout=['html'],
         covtoken=("48330d77-e22b-41b7-83f4-8dbc39abd93b", "'_UT_37_std' in outfile"))
     if not r and not ({"bdist_msi", "sdist",
                        "bdist_wheel", "publish", "publish_doc", "register",
