@@ -75,7 +75,7 @@ When the job is ready, it can be translated into a
 It should also be translated into
 `SQL <http://fr.wikipedia.org/wiki/Structured_Query_Language>`_.
 The module relies on `ast <https://docs.python.org/3/library/ast.html>`_
-and intents to produce a streaming function 
+and intents to produce a streaming function
 :math:`f : stream \rightarrow stream`. The project
 is discontinued.
 

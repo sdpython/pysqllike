@@ -61,8 +61,8 @@ class TranslateClass:
             rows = ["{0}{1}: {2} - nbch {3}".format("    " * r["indent"], r["type"], r["str"], len(r.get("children", [])))
                     for r in self._rows]
         else:
-            rows = ["{0}{1}: {2} - nbch {3}".format("    " * r["indent"], r["type"], r["str"], len(r.get("children", []))) +
-                    " --- " + ",".join(["%s=%s" %
+            rows = ["{0}{1}: {2} - nbch {3}".format("    " * r["indent"], r["type"], r["str"], len(r.get("children", [])))
+                    + " --- " + ",".join(["%s=%s" %
                                         (_, r.get(_, "")) for _ in fields])
                     for r in self._rows]
 
@@ -112,16 +112,16 @@ class TranslateClass:
         if len(code_rows) > 0:
             if "_status" in self.__dict__ and len(self._status) > 0:
                 code_rows = code_rows + ["", "-- STATUS --", ""] + self._status
-            raise CodeException(message + "\n---tree:\n" +
-                                self.to_str(["processed"]) + "\n\n---so far:\n" +
-                                "\n".join(code_rows))
+            raise CodeException(message + "\n---tree:\n"
+                                + self.to_str(["processed"]) + "\n\n---so far:\n"
+                                + "\n".join(code_rows))
         elif "_status" in self.__dict__:
-            raise CodeException(message + "\n---tree:\n" +
-                                self.to_str(["processed"]) + "\n\n-- STATUS --\n" +
-                                "\n".join(self._status))
+            raise CodeException(message + "\n---tree:\n"
+                                + self.to_str(["processed"]) + "\n\n-- STATUS --\n"
+                                + "\n".join(self._status))
         else:
-            raise CodeException(message + "\n---tree:\n" +
-                                self.to_str(["processed"]))
+            raise CodeException(message + "\n---tree:\n"
+                                + self.to_str(["processed"]))
 
     def interpretFunction(self, obj):
         """
@@ -273,8 +273,8 @@ class TranslateClass:
                 return self.ResolveExpression(chil[0], prefixAtt)
             else:
                 return self.RaiseCodeException(
-                    "not implemented for type: " +
-                    node["type"])
+                    "not implemented for type: "
+                    + node["type"])
 
         elif node["type"] == "BinOp" or node["type"] == "Compare":
             chil = node["children"]
@@ -291,8 +291,8 @@ class TranslateClass:
                 return ex, fi1, fu1
             else:
                 return self.RaiseCodeException(
-                    "not implemented for type: " +
-                    node["type"])
+                    "not implemented for type: "
+                    + node["type"])
 
         elif node["type"] in TranslateClass._symbols:
             node["processed"] = True
@@ -353,8 +353,8 @@ class TranslateClass:
                         funcs[chil["str"]] = chil["str"]
                     else:
                         return self.RaiseCodeException(
-                            "unexpected configuration: " +
-                            node["type"])
+                            "unexpected configuration: "
+                            + node["type"])
                     chil["processed"] = True
                 expre.append("{0}({1})".format(funcName, ",".join(subexp)))
 
@@ -377,20 +377,20 @@ class TranslateClass:
                         funcs[chil["str"]] = chil["str"]
                     else:
                         return self.RaiseCodeException(
-                            "unexpected configuration: " +
-                            node["type"])
+                            "unexpected configuration: "
+                            + node["type"])
                     chil["processed"] = True
                 expre.append("{0}({1})".format(funcName, ",".join(subexp)))
             else:
                 return self.RaiseCodeException(
-                    "not implemented for function: " +
-                    node["str"])
+                    "not implemented for function: "
+                    + node["str"])
             return " ".join(expre), field, funcs
 
         else:
             return self.RaiseCodeException(
-                "not implemented for type: " +
-                node["type"])
+                "not implemented for type: "
+                + node["type"])
 
     def interpretReturn(self, obj):
         """
