@@ -50,6 +50,7 @@ class TestCodeStyle(unittest.TestCase):
                          "translation_to_python.py:185",
                          "translation_to_python.py:244",
                          "node_visitor_translator.py:74: E1111",
+                         "R1720",
                          ]
                    )
 
@@ -77,6 +78,7 @@ class TestCodeStyle(unittest.TestCase):
                          "Unused variable 'skip_'",
                          "imported as skip_",
                          "Unused import src",
+                         "R1720",
                          ],
                    extended=[("fLOG", _extended_refactoring)])
 
