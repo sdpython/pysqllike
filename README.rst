@@ -1,9 +1,4 @@
 
-.. _l-README:
-
-README
-======
-
 .. image:: https://travis-ci.org/sdpython/pysqllike.svg?branch=master
     :target: https://travis-ci.org/sdpython/pysqllike
     :alt: Build status
@@ -33,14 +28,12 @@ README
 .. image:: https://codecov.io/github/sdpython/pysqllike/coverage.svg?branch=master
     :target: https://codecov.io/github/sdpython/pysqllike?branch=master
 
-**Links:**
+.. _l-README:
 
-* `GitHub/pysqllike <https://github.com/sdpython/pysqllike>`_
-* `documentation <http://www.xavierdupre.fr/app/pysqllike/helpsphinx/index.html>`_
-* `Blog <http://www.xavierdupre.fr/app/pysqllike/helpsphinx/blog/main_0000.html#ap-main-0>`_
+pysqllike
+=========
 
-Description
------------
+*The project is not actively developed.*
 
 Writing a map/reduce job
 (using `PIG <https://pig.apache.org/>`_ for example),
@@ -48,7 +41,7 @@ usually requires to switch from local files to remote files
 (on `Hadoop <http://hadoop.apache.org/>`_).
 On way to work is extract a small sample of the data which will be processed
 by a map/reduce job. The job is then locally developped. And when it works,
-it is run on a parallized environment.
+it is run on a parallized environment. 
 
 The goal of this extension is allow the implementation of
 this job using Python syntax as follows:
@@ -76,18 +69,8 @@ job:
 It should also be translated into
 `SQL <http://fr.wikipedia.org/wiki/Structured_Query_Language>`_.
 
-Functionalities
----------------
+**Links:**
 
-* not yet ready
-
-Design
-------
-
-This project contains various helper about logging functions, unit tests and help generation.
-
-* a source folder: ``src``
-* a unit test folder: ``_unittests``, go to this folder and run ``run_unittests.py``
-* a _doc folder: ``_doc``, it will contains the documentation
-* a file ``setup.py`` to build and to install the module
-* a file ``make_help.py`` to build the sphinx documentation
+* `GitHub/pysqllike <https://github.com/sdpython/pysqllike>`_
+* `documentation <http://www.xavierdupre.fr/app/pysqllike/helpsphinx/index.html>`_
+* `Blog <http://www.xavierdupre.fr/app/pysqllike/helpsphinx/blog/main_0000.html#ap-main-0>`_
