@@ -1,33 +1,14 @@
 """
 @brief      test log(time=1s)
 """
-
-import sys
-import os
 import unittest
 import inspect
 import ast
 from pyquickhelper.loghelper import fLOG
-
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-
-from src.pysqllike.translation.node_visitor_translator import CodeNodeVisitor
-from src.pysqllike.translation.translation_class import TranslateClass
-from src.pysqllike.translation.translation_to_python import Translate2Python
-from src.pysqllike.translation.code_exception import CodeException
+from pysqllike.translation.node_visitor_translator import CodeNodeVisitor
+from pysqllike.translation.translation_class import TranslateClass
+from pysqllike.translation.translation_to_python import Translate2Python
+from pysqllike.translation.code_exception import CodeException
 
 
 def myjob(input):

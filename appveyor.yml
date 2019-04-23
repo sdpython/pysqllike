@@ -20,11 +20,11 @@ install:
   - "%PYTHON%\\Scripts\\pip install pymyinstall"
   - "%PYTHON%\\Scripts\\pymy_install3 --set=pyquickhelper"
   - "%PYTHON%\\Scripts\\pip install pyquickhelper"
+  - set PYTHONPATH=src
 
 build: off
 
 test_script:
-  - "%PYTHON%\\python -u setup.py build_script"
   - "%PYTHON%\\python -u setup.py unittests"
 
 after_test:

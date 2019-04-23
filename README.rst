@@ -41,7 +41,7 @@ usually requires to switch from local files to remote files
 (on `Hadoop <http://hadoop.apache.org/>`_).
 On way to work is extract a small sample of the data which will be processed
 by a map/reduce job. The job is then locally developped. And when it works,
-it is run on a parallized environment. 
+it is run on a parallized environment.
 
 The goal of this extension is allow the implementation of
 this job using Python syntax as follows:

@@ -1,5 +1,5 @@
 coverage
 jyquickhelper
-pyquickhelper>=1.8.2602
+pyquickhelper>=1.9
 Pillow
 wheel

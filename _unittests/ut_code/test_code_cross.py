@@ -1,30 +1,10 @@
 """
 @brief      test log(time=2s)
 """
-
-import sys
-import os
 import unittest
-from pyquickhelper.loghelper import fLOG
-
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-
-from src.pysqllike.generic.iter_rows import IterRow
-from src.pysqllike.translation.translation_to_python import Translate2Python
-from src.pysqllike.generic.column_type import CFT
+from pysqllike.generic.iter_rows import IterRow
+from pysqllike.translation.translation_to_python import Translate2Python
+from pysqllike.generic.column_type import CFT
 
 
 def myjob1(input):
@@ -58,10 +38,6 @@ data1 = [{"ext": "pysqllike", "num": 3, "year": 2014},
 class TestCodeCross (unittest.TestCase):
 
     def test_translation(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
         functions = [myjob1, myjob2, myjob3]
         translate = [Translate2Python]
 
@@ -77,9 +53,6 @@ class TestCodeCross (unittest.TestCase):
                 obj = tr(f)
                 code = obj.Code()
 
-                if i == len(functions) - 1:
-                    fLOG("\n" + code)
-
                 try:
                     co = exec(code)
                 except Exception as e:
@@ -92,8 +65,6 @@ class TestCodeCross (unittest.TestCase):
                 except Exception as e:
                     raise Exception("unable to execute\n" + code) from e
 
-                if i == len(functions) - 1:
-                    fLOG("\nEXE:\n", exe, "\nEXP:\n", exp)
                 if exe != exp:
                     exe.reverse()
                     self.assertEqual(exe, exp)

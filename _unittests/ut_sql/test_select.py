@@ -2,37 +2,13 @@
 """
 @brief      test log(time=1s)
 """
-
-import sys
-import os
 import unittest
-from pyquickhelper.loghelper import fLOG
-
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-
-from src.pysqllike.generic.iter_rows import IterRow, IterException
+from pysqllike.generic.iter_rows import IterRow, IterException
 
 
 class TestSelect (unittest.TestCase):
 
     def test_iter_simple(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
         lr = [("nom", 10), ("jean", 40)]
         schema = [("nom", str), ("age", int)]
         tbl = IterRow(schema, lr)
@@ -48,10 +24,6 @@ class TestSelect (unittest.TestCase):
             raise ValueError(str(lr))
 
     def test_iter_simple_dict(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
         l0 = [{"nom": "jean", "age": 10},
               {"nom": "j", "age": 20}]
         tbl = IterRow(None, l0)
@@ -61,10 +33,6 @@ class TestSelect (unittest.TestCase):
             raise ValueError(str(lr))
 
     def test_iter_simple_dict2(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
         l0 = [{"nom": "jean", "age": 10},
               {"nom": "j", "age": 20}]
         tbl = IterRow(None, l0)
@@ -75,25 +43,14 @@ class TestSelect (unittest.TestCase):
             raise ValueError(str(lr))
 
     def test_select_simple(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
         lr = [("jake", 10), ("jean", 40)]
         schema = [("nom", str), ("age", int)]
         tbl = IterRow(schema, lr)
         lr = list(tbl.select(tbl.nom, tbl.age))
-        for _ in lr:
-            fLOG("+", _)
         if lr != [{'age': 10, 'nom': 'jake'}, {'age': 40, 'nom': 'jean'}]:
             raise Exception(str(lr))
 
     def test_select_simple2(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         lr = [("nom", 10), ("jean", 40)]
         schema = [("nom", str), ("age", int)]
         tbl = IterRow(schema, lr)
@@ -112,11 +69,6 @@ class TestSelect (unittest.TestCase):
         assert sch[1].Name == "age2"
 
     def test_select_simple3(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
         tbl = IterRow(schema, lr)
@@ -126,8 +78,6 @@ class TestSelect (unittest.TestCase):
 
         lr = list(iter2)
         assert len(lr) == 3
-        fLOG(";".join([str(_) for _ in iter2.Schema]))
-        fLOG(lr)
         if lr != [{'age4': 40, 'nom': 'nom'}, {
                 'age4': 160, 'nom': 'jean'}, {'age4': 8, 'nom': 'jeanne'}]:
             raise Exception(str(lr))
@@ -137,11 +87,6 @@ class TestSelect (unittest.TestCase):
         assert sch[1].Name == "age4"
 
     def test_select_simple_square(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
         tbl = IterRow(schema, lr)
@@ -151,8 +96,6 @@ class TestSelect (unittest.TestCase):
 
         lr = list(iter2)
         assert len(lr) == 3
-        fLOG(";".join([str(_) for _ in iter2.Schema]))
-        fLOG(lr)
         if lr != [{'age4': 50.0, 'nom': 'nom'}, {
                 'age4': 800.0, 'nom': 'jean'}, {'age4': 2.0, 'nom': 'jeanne'}]:
             raise Exception(str(lr))
@@ -162,11 +105,6 @@ class TestSelect (unittest.TestCase):
         assert sch[1].Name == "age4"
 
     def test_select_mismatch(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
         tbl = IterRow(schema, lr)
@@ -177,16 +115,10 @@ class TestSelect (unittest.TestCase):
             raise TypeError(
                 "we should not be able to reach this code due to confusion between iter and tbl")
         except IterException as e:
-            fLOG(e)
             assert "mismatch" in str(e)
         # however we do not check formulas...
 
     def test_select_operators(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
         tbl = IterRow(schema, lr)
@@ -215,11 +147,6 @@ class TestSelect (unittest.TestCase):
             raise ValueError(str(res))
 
     def test_select_bracket(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
         tbl = IterRow(schema, lr)
@@ -236,11 +163,6 @@ class TestSelect (unittest.TestCase):
             raise ValueError(str(res))
 
     def test_where(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
         tbl = IterRow(schema, lr)
@@ -254,11 +176,6 @@ class TestSelect (unittest.TestCase):
             raise ValueError(str(res))
 
     def test_where2(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
         tbl = IterRow(schema, lr)
@@ -292,11 +209,6 @@ class TestSelect (unittest.TestCase):
         assert len(res) == 2
 
     def test_where_or(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         lr = [("nom", 10), ("jean", 40), ("jeanne", 2)]
         schema = [("nom", str), ("age", int)]
         tbl = IterRow(schema, lr)

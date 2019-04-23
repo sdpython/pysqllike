@@ -1,39 +1,14 @@
 """
 @brief      test log(time=1s)
 """
-
-import sys
-import os
 import unittest
-from pyquickhelper.loghelper import fLOG
-
-
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-
-from src.pysqllike.generic.iter_rows import IterRow
-from src.pysqllike.generic.column_type import NA
+from pysqllike.generic.iter_rows import IterRow
+from pysqllike.generic.column_type import NA
 
 
 class TestSelectUnion (unittest.TestCase):
 
     def test_select_union(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         lr = [{"nom": "j", "age": 10, "gender": "M"},
               {"nom": "jean", "age": 40, "gender": "M"},
               {"nom": "jeanne", "age": 2, "gender": "F"}]
@@ -54,11 +29,6 @@ class TestSelectUnion (unittest.TestCase):
             raise ValueError(str(res))
 
     def test_select_union_notin(self):
-        fLOG(
-            __file__,
-            self._testMethodName,
-            OutputPrint=__name__ == "__main__")
-
         le = [{"nom": "j", "age": 10, "gender": "M"},
               {"nom": "jean", "age": 40, "gender": "M"},
               {"nom": "jeanne", "age": 2, "gender": "F"}]
