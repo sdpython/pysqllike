@@ -56,16 +56,8 @@ class TestCodeStyle(unittest.TestCase):
         check_pep8(test, fLOG=fLOG, neg_pattern="temp_.*",
                    pylint_ignore=('C0111', 'C0103', 'W0622', 'C1801', 'C0412',
                                   'R0201', 'W0122', 'W0123', 'E1101', 'R1705',
-                                  'W0107'),
-                   skip=["src' imported but unused",
-                         "skip_' imported but unused",
-                         "skip__' imported but unused",
-                         "skip___' imported but unused",
-                         "Unused variable 'skip_'",
-                         "imported as skip_",
-                         "Unused import src",
-                         "R1720",
-                         ],
+                                  'W0107', 'R1720'),
+                   skip=[],
                    extended=[("fLOG", _extended_refactoring)])
 
 
