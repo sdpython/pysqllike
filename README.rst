@@ -1,4 +1,12 @@
 
+.. image:: https://github.com/sdpython/pysqllike/blob/master/_doc/sphinxdoc/source/phdoc_static/project_ico.png?raw=true
+    :target: https://github.com/sdpython/pysqllike/
+
+.. _l-README:
+
+pysqllike: pseudo map/reduce in python
+======================================
+
 .. image:: https://travis-ci.org/sdpython/pysqllike.svg?branch=master
     :target: https://travis-ci.org/sdpython/pysqllike
     :alt: Build status
@@ -27,11 +35,18 @@
 
 .. image:: https://codecov.io/github/sdpython/pysqllike/coverage.svg?branch=master
     :target: https://codecov.io/github/sdpython/pysqllike?branch=master
+    
+.. image:: https://pepy.tech/badge/pysqllike/month
+    :target: https://pepy.tech/project/pysqllike/month
+    :alt: Downloads
 
-.. _l-README:
+.. image:: https://img.shields.io/github/forks/sdpython/pysqllike.svg
+    :target: https://github.com/sdpython/pysqllike/
+    :alt: Forks
 
-pysqllike
-=========
+.. image:: https://img.shields.io/github/stars/sdpython/pysqllike.svg
+    :target: https://github.com/sdpython/pysqllike/
+    :alt: Stars
 
 *The project is not actively developed.*
 
