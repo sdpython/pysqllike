@@ -35,7 +35,7 @@ pysqllike: pseudo map/reduce in python
 
 .. image:: https://codecov.io/github/sdpython/pysqllike/coverage.svg?branch=master
     :target: https://codecov.io/github/sdpython/pysqllike?branch=master
-    
+
 .. image:: https://pepy.tech/badge/pysqllike/month
     :target: https://pepy.tech/project/pysqllike/month
     :alt: Downloads

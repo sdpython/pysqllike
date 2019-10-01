@@ -31,7 +31,7 @@ class TestCode (unittest.TestCase):
         while len(stack) > 0:
             ind, n = stack[-1]
             del stack[-1]
-            att = {name: ch for name, ch in ast.iter_fields(n)}
+            att = {name: ch for name, ch in ast.iter_fields(n)}  # pylint: disable=R1721
             fLOG("  " * ind, type(n), att.get("name", "--"), att)
             for ch in ast.iter_child_nodes(n):
                 stack.append((ind + 1, ch))
