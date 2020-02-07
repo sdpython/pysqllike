@@ -3,11 +3,13 @@ language: python
 
 python:
   - { PATH: "{{Python37}}", VERSION: 3.7, DIST: std, PYINT: python3.7, PYTHONPATH: src }
+  - { PATH: "{{Python38}}", VERSION: 3.8, DIST: std, PYINT: python3.8, PYTHONPATH: src }
   
 virtualenv:
   - path: {{ospathjoin(root_path, pickname("$NAME_JENKINS", project_name + "_$VERSION_$DIST_$NAME"), "_venv")}}
   
 install:
+  - $PYINT -m pip install --upgrade pip
   - $PYINT -m pip install --no-cache-dir --no-deps --index http://localhost:8067/simple/ jyquickhelper pyquickhelper --extra-index-url=https://pypi.python.org/simple/
   - $PYINT -m pip install -r requirements.txt
   - $PYINT --version
