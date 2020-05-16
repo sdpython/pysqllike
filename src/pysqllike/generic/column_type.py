@@ -783,12 +783,12 @@ class CFT(ColumnType):
     defines a function
     """
 
-    def __init__(self, func, *l):
+    def __init__(self, func, *args):
         """
         constructor (a function cannot accept keywords)
 
         @param      func        contained function
-        @param      l           list of ColumnType
+        @param      args        list of @see cl ColumnType
         """
         self._name = None
         self._func = None
@@ -797,11 +797,12 @@ class CFT(ColumnType):
         self._type = type(private_function_type)
         self._owner = None
         self._thisfunc = func
-        self._parent = tuple(l)
+        self._parent = tuple(args)
 
-        for _ in l:
+        for _ in args:
             if not isinstance(_, ColumnType):
-                raise TypeError("expecting a column type, not " + str(type(_)))
+                raise TypeError(
+                    "Expecting a column type, not {}".format(type(_)))
 
     @property
     def ShortName(self):

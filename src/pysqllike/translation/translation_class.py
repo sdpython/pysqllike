@@ -63,7 +63,7 @@ class TranslateClass:
         else:
             rows = ["{0}{1}: {2} - nbch {3}".format("    " * r["indent"], r["type"], r["str"], len(r.get("children", [])))
                     + " --- " + ",".join(["%s=%s" %
-                                        (_, r.get(_, "")) for _ in fields])
+                                          (_, r.get(_, "")) for _ in fields])
                     for r in self._rows]
 
         return "\n".join(rows)
@@ -113,11 +113,13 @@ class TranslateClass:
             if "_status" in self.__dict__ and len(self._status) > 0:
                 code_rows = code_rows + ["", "-- STATUS --", ""] + self._status
             raise CodeException(message + "\n---tree:\n"
-                                + self.to_str(["processed"]) + "\n\n---so far:\n"
+                                + self.to_str(["processed"]) +
+                                "\n\n---so far:\n"
                                 + "\n".join(code_rows))
         elif "_status" in self.__dict__:
             raise CodeException(message + "\n---tree:\n"
-                                + self.to_str(["processed"]) + "\n\n-- STATUS --\n"
+                                + self.to_str(["processed"]) +
+                                "\n\n-- STATUS --\n"
                                 + "\n".join(self._status))
         else:
             raise CodeException(message + "\n---tree:\n"
