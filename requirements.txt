@@ -1,5 +1,10 @@
+autopep8
 coverage
 jyquickhelper
-pyquickhelper>=1.9
+matplotlib
+pycodestyle
+pylint
+pyquickhelper
 Pillow
+sphinx
 wheel
