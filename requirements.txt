@@ -7,4 +7,5 @@ pylint
 pyquickhelper
 Pillow
 sphinx
+sphinxcontrib.imagesvg
 wheel
