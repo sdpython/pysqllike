@@ -3,6 +3,7 @@ coverage
 jupyter_sphinx
 jyquickhelper
 matplotlib
+nbconvert<6.0
 pandas
 pycodestyle
 pylint
