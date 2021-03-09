@@ -28,7 +28,7 @@ class TestCodeStyle(unittest.TestCase):
         src_ = os.path.normpath(os.path.join(thi, "..", "..", "src"))
         check_pep8(src_, fLOG=fLOG, extended=[("fLOG", _extended_refactoring)],
                    pylint_ignore=('C0103', 'C1801', 'R0201', 'R1705', 'W0108', 'W0613',
-                                  'W0231', 'W0212', 'C0111', 'W0107'),
+                                  'W0231', 'W0212', 'C0111', 'W0107', 'R1728'),
                    skip=["Redefining built-in 'iter'",
                          "iter_rows.py:340",
                          "translation_class.py",
