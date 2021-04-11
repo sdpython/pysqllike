@@ -8,6 +8,7 @@ pandas
 pycodestyle
 pylint
 pyquickhelper
+pyquicksetup>=0.2
 Pillow
 sphinx
 sphinxcontrib.imagesvg
