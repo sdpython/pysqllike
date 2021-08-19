@@ -29,10 +29,6 @@ pysqllike: pseudo map/reduce in python
     :alt: MIT License
     :target: http://opensource.org/licenses/MIT
 
-.. image:: https://requires.io/github/sdpython/pysqllike/requirements.svg?branch=master
-     :target: https://requires.io/github/sdpython/pysqllike/requirements/?branch=master
-     :alt: Requirements Status
-
 .. image:: https://codecov.io/github/sdpython/pysqllike/coverage.svg?branch=master
     :target: https://codecov.io/github/sdpython/pysqllike?branch=master
 
