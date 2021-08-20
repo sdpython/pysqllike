@@ -5,7 +5,7 @@ pysqllike documentation
 .. only:: html
 
     .. image:: https://travis-ci.com/sdpython/pysqllike.svg?branch=master
-        :target: https://travis-ci.com/sdpython/pysqllike
+        :target: https://app.travis-ci.com/github/sdpython/pysqllike
         :alt: Build status
 
     .. image:: https://ci.appveyor.com/api/projects/status/rrpks1pgivea23js?svg=true
