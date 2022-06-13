@@ -21,7 +21,7 @@ class TestCodeStyle(unittest.TestCase):
         thi = os.path.abspath(os.path.dirname(__file__))
         src_ = os.path.normpath(os.path.join(thi, "..", "..", "src"))
         check_pep8(src_, fLOG=fLOG, extended=[("fLOG", _extended_refactoring)],
-                   pylint_ignore=('C0103', 'C1801', 'R0201', 'R1705', 'W0108', 'W0613',
+                   pylint_ignore=('C0103', 'C1801', 'R1705', 'W0108', 'W0613',
                                   'W0231', 'W0212', 'C0111', 'W0107', 'R1728',
                                   'C0209'),
                    skip=["Redefining built-in 'iter'",
@@ -45,7 +45,7 @@ class TestCodeStyle(unittest.TestCase):
         test = os.path.normpath(os.path.join(thi, "..", ))
         check_pep8(test, fLOG=fLOG, neg_pattern="temp_.*",
                    pylint_ignore=('C0111', 'C0103', 'W0622', 'C1801', 'C0412',
-                                  'R0201', 'W0122', 'W0123', 'E1101', 'R1705',
+                                  'W0122', 'W0123', 'E1101', 'R1705',
                                   'W0107', 'R1720', 'C0209', 'R1721'),
                    skip=[],
                    extended=[("fLOG", _extended_refactoring)])

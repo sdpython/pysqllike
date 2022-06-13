@@ -249,9 +249,9 @@ class ColumnType:
         @endcode
         """
         if self._parent is None:
-            return self.__str__()
+            return self.__str__()  # pylint: disable=C2801
         else:
-            rows = [self.__str__()]
+            rows = [self.__str__()]  # pylint: disable=C2801
             for p in self._parent:
                 rs = ["    " + _ for _ in p.print_parent().split("\n")]
                 rows.extend(rs)
@@ -485,7 +485,7 @@ class ColumnType:
         """
         ``or`` cannot be overriden
         """
-        return self.__or__(column)
+        return self.__or__(column)  # pylint: disable=C2801
 
     def __or__(self, column):
         """
@@ -505,7 +505,7 @@ class ColumnType:
         """
         ``and`` cannot be overriden
         """
-        return self.__and__(column)
+        return self.__and__(column)  # pylint: disable=C2801
 
     def __and__(self, column):
         """

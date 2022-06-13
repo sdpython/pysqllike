@@ -6,7 +6,7 @@ matplotlib
 nbconvert>=6.0.2
 pandas
 pycodestyle
-pylint
+pylint>=2.14.0
 pyquickhelper
 pyquicksetup>=0.2
 Pillow
